@@ -23,8 +23,10 @@ public interface Othello {
 	/**
 	 * Returns the nodes that will be swapped for a move at the given nodeId.
 	 * 
-	 * @param playerId the id of the player making the move
-	 * @param nodeId the id of the node where the move is made
+	 * @param playerId
+	 *            the id of the player making the move
+	 * @param nodeId
+	 *            the id of the node where the move is made
 	 * @return the list of nodes that will be swapped for the given move
 	 */
 	public List<Node> getNodesToSwap(String playerId, String nodeId);
@@ -46,7 +48,8 @@ public interface Othello {
 	/**
 	 * Determines if a player has any valid move.
 	 * 
-	 * @param playerId the id of the player
+	 * @param playerId
+	 *            the id of the player
 	 * @return true if the player has a valid move
 	 */
 	public boolean hasValidMove(String playerId);
@@ -61,28 +64,37 @@ public interface Othello {
 	/**
 	 * Determines if a player is allowed to make a move at the given node.
 	 * 
-	 * @param playerId the id of the player making the move
-	 * @param nodeId the node id where the player wants to play
+	 * @param playerId
+	 *            the id of the player making the move
+	 * @param nodeId
+	 *            the node id where the player wants to play
 	 * @return true if the move is valid
 	 */
 	public boolean isMoveValid(String playerId, String nodeId);
 
 	/**
-	 * If the player in turn is a computer than this computer makes a move and updates the player in turn. 
+	 * If the player in turn is a computer than this computer makes a move and
+	 * updates the player in turn.
 	 * 
-	 * @return the nodes that where swapped for this move, including the node where the player made the move
-	 * @throws IllegalStateException if there is not a computer in turn
+	 * @return the nodes that where swapped for this move, including the node
+	 *         where the player made the move
+	 * @throws IllegalStateException
+	 *             if there is not a computer in turn
 	 */
 	public List<Node> move();
 
 	/**
-	 * Validates if the move is correct and if the player is in turn. If so, then the move is made which updates the
-	 * board and the player in turn. 
+	 * Validates if the move is correct and if the player is in turn. If so,
+	 * then the move is made which updates the board and the player in turn.
 	 * 
-	 * @param playerId the id of the player that makes the move
-	 * @param nodeId the id of the node where the player wants to move
-	 * @return the nodes that where swapped for this move, including the node where the player made the move
-	 * @throws IllegalArgumentException if the move is not valid, or if the player is not in turn
+	 * @param playerId
+	 *            the id of the player that makes the move
+	 * @param nodeId
+	 *            the id of the node where the player wants to move
+	 * @return the nodes that where swapped for this move, including the node
+	 *         where the player made the move
+	 * @throws IllegalArgumentException
+	 *             if the move is not valid, or if the player is not in turn
 	 */
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException;
 
@@ -94,7 +106,8 @@ public interface Othello {
 	/**
 	 * Starts the game.
 	 * 
-	 * @param playerId the id of the player that will start the game.
+	 * @param playerId
+	 *            the id of the player that will start the game.
 	 */
 	public void start(String playerId);
 }

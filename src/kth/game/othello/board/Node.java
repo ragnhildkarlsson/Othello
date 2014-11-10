@@ -1,14 +1,16 @@
 package kth.game.othello.board;
 
 /**
- * The responsibility of a node is to keep information of which player is occupying it.
+ * The responsibility of a node is to keep information of which player is
+ * occupying it.
  * 
  * @author Tomas Ekholm
  */
 public interface Node {
 
 	/**
-	 * The unique identifier of a node. A node should be identified uniquely given the x- and y-coordinate
+	 * The unique identifier of a node. A node should be identified uniquely
+	 * given the x- and y-coordinate
 	 * 
 	 * @return the id
 	 */
