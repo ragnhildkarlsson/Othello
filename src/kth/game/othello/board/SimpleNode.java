@@ -14,7 +14,6 @@ public final class SimpleNode implements Node {
 		int idCode = xCoordinate << 16;
 		idCode = idCode | yCoordinate;
 		this.nodeId = Integer.toString(idCode);
-
 	}
 
 	/**
@@ -65,9 +64,9 @@ public final class SimpleNode implements Node {
 	 */
 	@Override
 	public boolean isMarked() {
-		if(occupantPlayerId != null){
+		if (occupantPlayerId != null) {
 			return true;
-		} 
+		}
 		return false;
 	}
 }
