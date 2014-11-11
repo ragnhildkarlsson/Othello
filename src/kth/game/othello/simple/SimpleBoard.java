@@ -15,7 +15,7 @@ public final class SimpleBoard implements Board {
 	/**
 	 * The different type of directions on the board
 	 */
-	public enum Direction {
+	protected enum Direction {
 		NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST
 	}
 
