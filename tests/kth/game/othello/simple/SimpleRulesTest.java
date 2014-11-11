@@ -1,4 +1,4 @@
-package kth.game.othello;
+package kth.game.othello.simple;
 
 import static org.junit.Assert.fail;
 

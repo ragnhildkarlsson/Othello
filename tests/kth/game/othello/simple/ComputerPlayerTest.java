@@ -1,7 +1,8 @@
-package kth.game.othello.player;
+package kth.game.othello.simple;
 
 import static org.junit.Assert.fail;
 
+import kth.game.othello.simple.ComputerPlayer;
 import org.junit.Test;
 
 public class ComputerPlayerTest {

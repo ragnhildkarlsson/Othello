@@ -1,4 +1,7 @@
-package kth.game.othello;
+package kth.game.othello.simple;
+
+import kth.game.othello.Othello;
+import kth.game.othello.OthelloFactory;
 
 /**
  * Created by

@@ -1,4 +1,6 @@
-package kth.game.othello.board;
+package kth.game.othello.simple;
+
+import kth.game.othello.board.Node;
 
 public final class SimpleNode implements Node {
 

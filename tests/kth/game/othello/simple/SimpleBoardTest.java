@@ -1,7 +1,8 @@
-package kth.game.othello.board;
+package kth.game.othello.simple;
 
+import kth.game.othello.board.Node;
+import kth.game.othello.simple.SimpleBoard;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;

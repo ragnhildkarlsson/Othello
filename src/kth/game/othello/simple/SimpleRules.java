@@ -1,10 +1,9 @@
-package kth.game.othello;
+package kth.game.othello.simple;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import kth.game.othello.board.Node;
-import kth.game.othello.board.SimpleBoard;
 
 /**
  * Represent the rules of Othello

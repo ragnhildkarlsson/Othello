@@ -1,11 +1,10 @@
-package kth.game.othello;
+package kth.game.othello.simple;
 
 import java.util.List;
 
+import kth.game.othello.Othello;
 import kth.game.othello.board.Board;
-import kth.game.othello.board.BoardFactory;
 import kth.game.othello.board.Node;
-import kth.game.othello.player.ComputerPlayer;
 import kth.game.othello.player.Player;
 
 /**
