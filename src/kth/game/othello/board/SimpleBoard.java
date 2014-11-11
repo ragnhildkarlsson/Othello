@@ -35,6 +35,7 @@ public class SimpleBoard implements Board {
 	 *         id exist on board
 	 */
 	public Node getNodeById(String NodeId) {
+
 		// TODO Method stub
 		return null;
 	}
