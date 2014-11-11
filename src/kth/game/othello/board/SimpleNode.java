@@ -7,6 +7,14 @@ public final class SimpleNode implements Node {
 	private final int xCoordinate;
 	private final int yCoordinate;
 
+	/**
+	 * Construct a node given its coordinates and an optional player ID.
+	 * 
+	 * @param xCoordinate
+	 * @param yCoordinate
+	 * @param playerId
+	 *            optional, set to null if the node is unmarked.
+	 */
 	public SimpleNode(int xCoordinate, int yCoordinate, String playerId) {
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
