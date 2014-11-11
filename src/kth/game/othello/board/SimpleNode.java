@@ -1,6 +1,22 @@
 package kth.game.othello.board;
 
-public class SimpleNode implements Node {
+public final class SimpleNode implements Node {
+
+	private final String nodeId;
+	private final String occupantPlayerId;
+	private final int xCoordinate;
+	private final int yCoordinate;
+
+	public SimpleNode(int xCoordinate, int yCoordinate, String playerId) {
+		this.xCoordinate = xCoordinate;
+		this.yCoordinate = yCoordinate;
+		this.occupantPlayerId = playerId;
+		int idCode = xCoordinate << 16;
+		idCode = idCode | yCoordinate;
+		this.nodeId = Integer.toString(idCode);
+
+	}
+
 	/**
 	 * The unique identifier of a node. A node should be identified uniquely
 	 * given the x- and y-coordinate
@@ -9,8 +25,7 @@ public class SimpleNode implements Node {
 	 */
 	@Override
 	public String getId() {
-		// TODO Method stub
-		return null;
+		return this.nodeId;
 	}
 
 	/**
@@ -20,8 +35,7 @@ public class SimpleNode implements Node {
 	 */
 	@Override
 	public String getOccupantPlayerId() {
-		// TODO Method stub
-		return null;
+		return this.occupantPlayerId;
 	}
 
 	/**
@@ -31,8 +45,7 @@ public class SimpleNode implements Node {
 	 */
 	@Override
 	public int getXCoordinate() {
-		// TODO Method stub
-		return 0;
+		return this.xCoordinate;
 	}
 
 	/**
@@ -42,8 +55,7 @@ public class SimpleNode implements Node {
 	 */
 	@Override
 	public int getYCoordinate() {
-		// TODO Method stub
-		return 0;
+		return this.yCoordinate;
 	}
 
 	/**
@@ -53,7 +65,9 @@ public class SimpleNode implements Node {
 	 */
 	@Override
 	public boolean isMarked() {
-		// TODO Method stub
+		if(occupantPlayerId != null){
+			return true;
+		} 
 		return false;
 	}
 }
