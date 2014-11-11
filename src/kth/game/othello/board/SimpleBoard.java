@@ -8,7 +8,7 @@ public class SimpleBoard implements Board {
 	/**
 	 * Returns an ordered list of rows using the natural order in x- and then
 	 * y-coordinate of the nodes.
-	 *
+	 * 
 	 * @return the nodes of the board
 	 */
 	@Override
@@ -26,6 +26,15 @@ public class SimpleBoard implements Board {
 	 *         board.
 	 */
 	protected Node getNodeAtCoordinates(int x, int y) {
+		// TODO Method stub
+		return null;
+	}
+
+	/**
+	 * @return Returns the node with the given id or null if no node with given
+	 *         id exist on board
+	 */
+	public Node getNodeById(String NodeId) {
 		// TODO Method stub
 		return null;
 	}
