@@ -1,9 +1,25 @@
 package kth.game.othello.board;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleBoard implements Board {
-	private List<Node> nodes;
+/**
+ * @author Daniel Schlaug
+ */
+public final class SimpleBoard implements Board {
+	private final List<Node> nodes;
+
+	/**
+	 * Creates a SimpleBoard from the provided nodes. Assumes a square board.
+	 *
+	 * @param nodes
+	 *            the nodes from which to create the board. Must be a full
+	 *            board.
+	 */
+	protected SimpleBoard(List<Node> nodes) {
+		this.nodes = new ArrayList<Node>();
+		this.nodes.addAll(nodes);
+	}
 
 	/**
 	 * Returns an ordered list of rows using the natural order in x- and then
@@ -13,12 +29,9 @@ public class SimpleBoard implements Board {
 	 */
 	@Override
 	public List<Node> getNodes() {
-		// TODO Must return a copy of the list. (Add a test for this.)
-		return null;
-	}
-
-	protected SimpleBoard(List<Node> nodes) {
-		this.nodes = nodes;
+		ArrayList<Node> nodesClone = new ArrayList<Node>();
+		nodesClone.addAll(nodes);
+		return nodesClone;
 	}
 
 	/**
@@ -26,7 +39,8 @@ public class SimpleBoard implements Board {
 	 *         board.
 	 */
 	protected Node getNodeAtCoordinates(int x, int y) {
-		// TODO Method stub
-		return null;
+		int boardSide = (int) Math.sqrt(nodes.size());
+        int index = boardSide * y + x;
+		return this.nodes.get(index);
 	}
 }
