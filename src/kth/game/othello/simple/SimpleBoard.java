@@ -51,7 +51,7 @@ public final class SimpleBoard implements Board {
 	 * @return Returns the node with the given id or null if no node with given
 	 *         id exist on board
 	 */
-	public Node getNodeById(String NodeId) {
+	protected Node getNodeById(String NodeId) {
 
 		// TODO Method stub
 		return null;

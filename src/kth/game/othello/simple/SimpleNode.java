@@ -17,7 +17,7 @@ public final class SimpleNode implements Node {
 	 * @param playerId
 	 *            optional, set to null if the node is unmarked.
 	 */
-	public SimpleNode(int xCoordinate, int yCoordinate, String playerId) {
+	protected SimpleNode(int xCoordinate, int yCoordinate, String playerId) {
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
 		this.occupantPlayerId = playerId;
