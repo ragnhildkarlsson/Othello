@@ -15,7 +15,8 @@ public interface Player {
 	}
 
 	/**
-	 * The id is a unique identifier of this player in the context of all players
+	 * The id is a unique identifier of this player in the context of all
+	 * players
 	 * 
 	 * @return the id
 	 */

@@ -10,7 +10,8 @@ import java.util.List;
 public interface Board {
 
 	/**
-	 * Returns an ordered list of rows using the natural order in x- and then y-coordinate of the nodes.
+	 * Returns an ordered list of rows using the natural order in x- and then
+	 * y-coordinate of the nodes.
 	 * 
 	 * @return the nodes of the board
 	 */
