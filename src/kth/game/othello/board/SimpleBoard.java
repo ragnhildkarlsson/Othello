@@ -24,7 +24,7 @@ public final class SimpleBoard implements Board {
 	/**
 	 * Returns an ordered list of rows using the natural order in x- and then
 	 * y-coordinate of the nodes.
-	 *
+	 * 
 	 * @return the nodes of the board
 	 */
 	@Override
@@ -42,5 +42,15 @@ public final class SimpleBoard implements Board {
 		int boardSide = (int) Math.sqrt(nodes.size());
         int index = boardSide * y + x;
 		return this.nodes.get(index);
+	}
+
+	/**
+	 * @return Returns the node with the given id or null if no node with given
+	 *         id exist on board
+	 */
+	public Node getNodeById(String NodeId) {
+
+		// TODO Method stub
+		return null;
 	}
 }
