@@ -30,7 +30,7 @@ public class BoardFactory {
 		int higherMiddlePosition = BOARD_SIZE / 2;
 		int lowerMiddlePosition = higherMiddlePosition - 1;
 
-		for (int x = BOARD_SIZE - 1; x < BOARD_SIZE; x--) {
+		for (int x = BOARD_SIZE - 1; x >= 0; x--) {
 			for (int y = 0; y < BOARD_SIZE; y++) {
 				SimpleNode node;
 				// If we are in the middle of the board, set nodes to occupied
@@ -66,7 +66,7 @@ public class BoardFactory {
 			throws IllegalArgumentException {
 		//assert(nodesToSwap.size() == BOARD_SIZE*BOARD_SIZE);
 		List<Node> nodes = new ArrayList<Node>();
-		for (int x = BOARD_SIZE - 1; x < BOARD_SIZE; x--){
+		for (int x = BOARD_SIZE - 1; x >= 0; x--){
 			for (int y = 0; y < BOARD_SIZE; y++){
 				// See if this node needs to be swapped
 				Node newNode;
