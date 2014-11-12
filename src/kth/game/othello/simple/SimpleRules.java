@@ -43,8 +43,8 @@ public class SimpleRules {
 	}
 
 	/**
-	 * Returns a list wiht the nodes that will be swapped for the given move,
-	 * exclusive the node that is placed by the player
+	 * Returns a list with the nodes that will be swapped for the given move,
+	 * excluding the node that is placed by the player
 	 * 
 	 * @param board
 	 *            the board where the game is played
@@ -53,7 +53,7 @@ public class SimpleRules {
 	 * @param node
 	 *            a node on the board that the player want to play
 	 * @return the list of nodes that will be swapped for the given move,
-	 *         exclusive the node that is placed by the player
+	 *         excluding the node that is placed by the player
 	 */
 
 	protected List<Node> getNodesToSwap(SimpleBoard board, Node node, String playerId) {
@@ -89,7 +89,7 @@ public class SimpleRules {
 	 *            The node on the board where the player want play
 	 * @param direction
 	 *            The direction.
-	 * @return the nodes in the given direction that are swapped if the player
+	 * @return the nodes in the given direction that would be swapped should the player
 	 *         with the given playerId play on the given node.
 	 */
 
