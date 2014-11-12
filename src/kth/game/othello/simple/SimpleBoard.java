@@ -43,7 +43,9 @@ public final class SimpleBoard implements Board {
 	 */
 	protected Node getNodeAtCoordinates(int x, int y) {
 		int boardSide = (int) Math.sqrt(nodes.size());
-        int index = boardSide * y + x;
+        int row = (boardSide - 1) - y;
+        int column = x;
+        int index = boardSide * row + column;
 		return this.nodes.get(index);
 	}
 
