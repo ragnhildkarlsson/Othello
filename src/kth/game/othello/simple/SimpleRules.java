@@ -7,7 +7,7 @@ import kth.game.othello.board.Node;
 import kth.game.othello.simple.SimpleBoard.Direction;
 
 /**
- * Represent the rules of Othello
+ * Represents the rules of Othello
  * 
  * @author ragnhild karlsson
  * 
@@ -44,7 +44,7 @@ public class SimpleRules {
 
 	/**
 	 * Returns a list wiht the nodes that will be swapped for the given move,
-	 * exclusive the node that is placed by the player
+	 * exclusive the node where the the player want to play
 	 * 
 	 * @param board
 	 *            the board where the game is played

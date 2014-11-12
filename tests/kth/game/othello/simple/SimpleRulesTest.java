@@ -57,8 +57,8 @@ public class SimpleRulesTest {
 	 * <pre>
 	 * Test that given a board with the following nodes
 	 *   0 1 2 3 4 5  
-	 * 0   	 *   o	
-	 * 1 x o o * o x
+	 * 1   	 *   o	
+	 * 0 x o o * o x
 	 *  where:
 	 *  x mark nodes occupied by player 1
 	 *  o mark nodes occupied by player 2
@@ -72,48 +72,39 @@ public class SimpleRulesTest {
 		String player1Id = "1";
 		String player2Id = "2";
 		SimpleBoard mockBoard = Mockito.mock(SimpleBoard.class);
-		ArrayList<Node> nodesOnBoard = new ArrayList<>();
 		// add node 1
-		Node boardNode20 = getMockedNode(null);
-		nodesOnBoard.add(boardNode20);
-		Node boardNode40 = getMockedNode(player2Id);
-		nodesOnBoard.add(boardNode40);
-		Node boardNode01 = getMockedNode(player1Id);
-		nodesOnBoard.add(boardNode01);
-		Node boardNode11 = getMockedNode(player2Id);
-		nodesOnBoard.add(boardNode11);
-		Node boardNode21 = getMockedNode(player2Id);
-		nodesOnBoard.add(boardNode21);
-		Node boardNode31 = getMockedNode(null);
-		nodesOnBoard.add(boardNode31);
+		Node boardNode21 = getMockedNode(null);
 		Node boardNode41 = getMockedNode(player2Id);
-		nodesOnBoard.add(boardNode11);
-		Node boardNode51 = getMockedNode(player1Id);
-		nodesOnBoard.add(boardNode51);
+		Node boardNode00 = getMockedNode(player1Id);
+		Node boardNode10 = getMockedNode(player2Id);
+		Node boardNode20 = getMockedNode(player2Id);
+		Node boardNode30 = getMockedNode(null);
+		Node boardNode40 = getMockedNode(player2Id);
+		Node boardNode50 = getMockedNode(player1Id);
 
 		// set up behavior for getNextNodeInDirection;
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode31, Direction.NORTH)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode31, Direction.NORTHEAST)).thenReturn(boardNode40);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode31, Direction.NORTHWEST)).thenReturn(boardNode20);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode31, Direction.EAST)).thenReturn(boardNode41);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode31, Direction.SOUTH)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode31, Direction.SOUTHEAST)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode31, Direction.SOUTHWEST)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode31, Direction.WEST)).thenReturn(boardNode21);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode30, Direction.NORTH)).thenReturn(null);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode30, Direction.NORTHEAST)).thenReturn(boardNode41);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode30, Direction.NORTHWEST)).thenReturn(boardNode21);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode30, Direction.EAST)).thenReturn(boardNode40);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode30, Direction.SOUTH)).thenReturn(null);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode30, Direction.SOUTHEAST)).thenReturn(null);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode30, Direction.SOUTHWEST)).thenReturn(null);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode30, Direction.WEST)).thenReturn(boardNode20);
 
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode40, Direction.NORTHEAST)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode20, Direction.NORTHWEST)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode41, Direction.EAST)).thenReturn(boardNode51);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode51, Direction.EAST)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode21, Direction.WEST)).thenReturn(boardNode11);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode11, Direction.WEST)).thenReturn(boardNode01);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode01, Direction.WEST)).thenReturn(null);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode41, Direction.NORTHEAST)).thenReturn(null);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode21, Direction.NORTHWEST)).thenReturn(null);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode40, Direction.EAST)).thenReturn(boardNode50);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode50, Direction.EAST)).thenReturn(null);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode20, Direction.WEST)).thenReturn(boardNode10);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode10, Direction.WEST)).thenReturn(boardNode00);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode00, Direction.WEST)).thenReturn(null);
 
 		SimpleRules rules = new SimpleRules();
-		assertEquals(true, rules.getNodesToSwap(mockBoard, boardNode31, player1Id).contains(boardNode11));
-		assertEquals(true, rules.getNodesToSwap(mockBoard, boardNode31, player1Id).contains(boardNode21));
-		assertEquals(true, rules.getNodesToSwap(mockBoard, boardNode31, player1Id).contains(boardNode41));
-		assertEquals(3, rules.getNodesToSwap(mockBoard, boardNode31, player1Id).size());
+		assertEquals(true, rules.getNodesToSwap(mockBoard, boardNode30, player1Id).contains(boardNode10));
+		assertEquals(true, rules.getNodesToSwap(mockBoard, boardNode30, player1Id).contains(boardNode20));
+		assertEquals(true, rules.getNodesToSwap(mockBoard, boardNode30, player1Id).contains(boardNode40));
+		assertEquals(3, rules.getNodesToSwap(mockBoard, boardNode30, player1Id).size());
 
 	}
 
