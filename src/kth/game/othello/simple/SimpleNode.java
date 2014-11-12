@@ -79,4 +79,24 @@ public final class SimpleNode implements Node {
 		}
 		return false;
 	}
+
+	/**
+	 * Two nodes are equal if they have the same coordinates and the same
+	 * occupying player
+	 * 
+	 * @return true if the nodes have the same coordinates and the same
+	 *         occupying player
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof SimpleNode) {
+			SimpleNode node = (SimpleNode) obj;
+			if (this.xCoordinate == node.xCoordinate && this.yCoordinate == node.yCoordinate
+					&& this.occupantPlayerId == node.occupantPlayerId) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
