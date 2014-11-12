@@ -94,11 +94,11 @@ public class SimpleBoardTest {
 
         // Mock upper right node to look for
 		Node upperLeftNode = Mockito.mock(Node.class);
-		Mockito.when(upperLeftNode.getId()).thenReturn("upperRight");
+		Mockito.when(upperLeftNode.getId()).thenReturn("dskjjhd687");
 
         // Mock lower left node to look for
         Node lowerRightNode = Mockito.mock(Node.class);
-        Mockito.when(lowerRightNode.getId()).thenReturn("lowerLeft");
+        Mockito.when(lowerRightNode.getId()).thenReturn("dsjkhds728563");
 
         // Get dummy nodes
         List<Node> dummyNodes = generateNDummyNodes(boardSize);
