@@ -109,8 +109,8 @@ public class SimpleRulesTest {
 	}
 
 	/**
-	 * Test given a board with an occupied node will it be an invalid move for
-	 * any player to play on this node
+	 * Test that given a board with an occupied node it's an invalid move for
+	 * any player to play at this node.
 	 */
 	@Test
 	public void testMoveOnOccupiedNodeShouldBeInvalid() {
@@ -123,11 +123,11 @@ public class SimpleRulesTest {
 	}
 
 	/**
-	 * Test that given a board with an occupied node will getNodesToSwap return
-	 * a empty list if any player plays on this node
+	 * Test that given a board with an occupied node getNodesToSwap will return
+	 * an empty list if any player plays on this node
 	 */
 	@Test
-	public void testMoveOnOccupiedNodeShouldSwappNoNodes() {
+	public void testMoveOnOccupiedNodeShouldSwapNoNodes() {
 		String player1Id = "1";
 		Node boardNode = getMockedNode(player1Id);
 		SimpleRules rules = new SimpleRules();
@@ -136,9 +136,9 @@ public class SimpleRulesTest {
 	}
 
 	/*
-	 * Return a mocked node, if playerId is not null will isMarked() return true
-	 * and getOccupantPlayerId() return the given playerId Else will false
-	 * respectively null be returned for these method calls;
+	 * Return a mocked node, if playerId is not null isMarked() will return true
+	 * and getOccupantPlayerId() return the given playerId. Otherwise false and
+	 * null, respectively, will be returned for these method calls.
 	 */
 	private Node getMockedNode(String playerId) {
 		Node mockNode = Mockito.mock(Node.class);
