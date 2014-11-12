@@ -58,4 +58,19 @@ public final class SimpleBoard implements Board {
 		// TODO Method stub
 		return null;
 	}
+
+	/**
+	 * Return the next node in the given direction relative to the node with the
+	 * given id. If no node with the given id exists on board of no next node in
+	 * the given direction exist null will be returned
+	 * 
+	 * @param board
+	 * @param nodeId
+	 * @param direction
+	 * @return
+	 */
+	protected Node getNextNodeInDirection(String nodeId, Direction direction) {
+		// TODO Method-stub
+		return null;
+	}
 }
