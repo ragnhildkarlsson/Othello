@@ -12,7 +12,7 @@ import kth.game.othello.board.Node;
  *
  * @author Daniel Schlaug
  */
-public final class SimpleBoard implements Board {
+public class SimpleBoard implements Board {
 	private final List<Node> nodes;
 	private final int boardSide;
 
