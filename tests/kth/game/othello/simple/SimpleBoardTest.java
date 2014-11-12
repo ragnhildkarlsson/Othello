@@ -1,6 +1,7 @@
 package kth.game.othello.simple;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -28,16 +29,24 @@ public class SimpleBoardTest {
         return dummyNodes;
     }
 
-	@Test
-	public void testGetNodesShouldReturnCopy() throws Exception {
+    private SimpleBoard generateBoardWithSide(int boardSide) {
 
-        final int boardSize = 4;
+        final int boardSize = boardSide * boardSide;
 
         // Mock dummy nodes
         List<Node> dummyNodes = generateNDummyNodes(boardSize);
 
         // Create board and retrieve its nodes
         SimpleBoard board = new SimpleBoard(dummyNodes);
+
+        return board;
+
+    }
+
+	@Test
+	public void testGetNodesShouldReturnCopy() throws Exception {
+
+        SimpleBoard board = generateBoardWithSide(2);
         List<Node> retrievedNodes = board.getNodes();
 
         // Mock one node to try and insert
@@ -54,7 +63,26 @@ public class SimpleBoardTest {
 
 	}
 
-	@Test
+    @Test
+    public void testGetNodeOutOfBoundsShouldReturnNull() throws Exception {
+
+        final int boardSide = 8;
+
+        SimpleBoard board = generateBoardWithSide(boardSide);
+
+        Node nodeOutOfRightRange = board.getNodeAtCoordinates(8,0);
+        Node nodeOutOfLeftRange = board.getNodeAtCoordinates(-1,0);
+        Node nodeOutOfTopRange = board.getNodeAtCoordinates(0,8);
+        Node nodeOutOfBottomRange = board.getNodeAtCoordinates(0,-1);
+
+        assertNull(nodeOutOfBottomRange);
+        assertNull(nodeOutOfTopRange);
+        assertNull(nodeOutOfRightRange);
+        assertNull(nodeOutOfLeftRange);
+
+    }
+
+    @Test
 	public void testGetNodeAtCoordinatesShouldBeCartesian() throws Exception {
 
         final int boardSide = 8;
