@@ -118,6 +118,8 @@ public class SimpleRulesTest {
 		String player2Id = "2";
 		Node boardNode = getMockedNode(player1Id);
 		SimpleRules rules = new SimpleRules();
+		// By giving null as the argument board, this test will fail if the
+		// method validMove() tries to calculate if this move is valid
 		assertEquals(false, rules.validMove(null, boardNode, player1Id));
 		assertEquals(false, rules.validMove(null, boardNode, player2Id));
 	}
@@ -131,6 +133,8 @@ public class SimpleRulesTest {
 		String player1Id = "1";
 		Node boardNode = getMockedNode(player1Id);
 		SimpleRules rules = new SimpleRules();
+		// By giving null as the argument board, this test will fail if the
+		// method getNodesToSwap() tries to calculate the nodes to swap
 		assertEquals(true, rules.getNodesToSwap(null, boardNode, null).isEmpty());
 		assertEquals(true, rules.getNodesToSwap(null, boardNode, player1Id).isEmpty());
 	}
