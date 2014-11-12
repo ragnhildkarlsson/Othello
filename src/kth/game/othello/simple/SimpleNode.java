@@ -99,4 +99,15 @@ public final class SimpleNode implements Node {
 		return false;
 	}
 
+	/**
+	 * Generates a hash code based on the coordinates and the occupying playerId
+	 * 
+	 * @return a hash code based on the coordinates and the occupying playerId
+	 */
+	@Override
+	public int hashCode() {
+		String hash = this.xCoordinate + this.yCoordinate + this.occupantPlayerId;
+		return hash.hashCode();
+	}
+
 }
