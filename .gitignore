@@ -5,3 +5,4 @@ bin/
 .idea
 Othello.iml
 .DS_Store
+out
