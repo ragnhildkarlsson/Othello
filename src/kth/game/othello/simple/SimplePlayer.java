@@ -9,7 +9,7 @@ public class SimplePlayer implements Player {
 	private final Type type;
 
 	/**
-	 * A player has a unique id, name and type.
+	 * A player has a unique id, a name and a type.
 	 * 
 	 * @param playerId
 	 *            unique id of the player
