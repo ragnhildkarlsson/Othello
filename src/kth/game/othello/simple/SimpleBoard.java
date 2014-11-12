@@ -69,18 +69,19 @@ public class SimpleBoard implements Board {
 	}
 
 	/**
-     * Returns the node with the given id or null if no such node exists.
-     *
-	 * @return Returns the node with the given id or null if no such node exists.
+	 * Returns the node with the given id or null if no such node exists.
+	 *
+	 * @return Returns the node with the given id or null if no such node
+	 *         exists.
 	 */
 	protected Node getNodeById(String nodeId) {
 
-        Node foundNode = null;
+		Node foundNode = null;
 
 		for (Node node : nodes) {
-            if (node.getId() == nodeId) {
-                foundNode = node;
-            }
+			if (node.getId() == nodeId) {
+				foundNode = node;
+			}
 		}
 
 		return foundNode;
@@ -137,11 +138,11 @@ public class SimpleBoard implements Board {
 			break;
 		}
 
-        if (!coordinatesAreWithinTheBoard(x, y)) {
-            return null;
-        } else {
-            return getNodeAtCoordinates(x, y);
-        }
+		if (!coordinatesAreWithinTheBoard(x, y)) {
+			return null;
+		} else {
+			return getNodeAtCoordinates(x, y);
+		}
 
 	}
 
