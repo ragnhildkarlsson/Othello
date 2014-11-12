@@ -77,41 +77,34 @@ public class SimpleRules {
 
 	}
 
-	/**
+	/*
 	 * Return the nodes in the given direction (in relation to the given node)
 	 * that are swapped if the player with the given playerId play on the given
 	 * node.
-	 * 
-	 * @param board
-	 *            The board where the game is played
-	 * @param playerId
-	 *            the id of the player making the move
-	 * @param node
-	 *            The node on the board where the player want play
-	 * @param direction
-	 *            The direction.
-	 * @return the nodes in the given direction that would be swapped should the
-	 *         player with the given playerId play on the given node.
 	 */
 
-	private ArrayList<Node> getSwappableNodesInDirection(SimpleBoard board, String playerId, Node node,
+	private ArrayList<Node> getSwappableNodesInDirection(SimpleBoard board, String playerId, Node originNode,
 			Direction direction) {
 
 		ArrayList<Node> result = new ArrayList<>();
-		// Check that neighbor node belong to other player otherwise return
-		// empty list
-		Node nextNodeInDirection = board.getNextNodeInDirection(node, direction);
+		// Check that the direct neighbor in the given direction belong to other
+		// player
+		// otherwise returns an empty list
+		Node nextNodeInDirection = board.getNextNodeInDirection(originNode, direction);
 		if (nextNodeInDirection == null) {
 			return result;
 		}
 		if (nextNodeInDirection.getOccupantPlayerId() == null || nextNodeInDirection.getOccupantPlayerId() == playerId) {
 			return result;
 		}
-		result.add(nextNodeInDirection);
-		node = nextNodeInDirection;
 
+		result.add(nextNodeInDirection);
+		originNode = nextNodeInDirection;
+		// check that the following nodes in the given direction belongs to the
+		// other player until we reach a node
+		// marked by the given player. Otherwise is an empty list returned
 		while (true) {
-			nextNodeInDirection = board.getNextNodeInDirection(node, direction);
+			nextNodeInDirection = board.getNextNodeInDirection(originNode, direction);
 			if (nextNodeInDirection == null) {
 				// reached edge return empty list
 				result.clear();
@@ -121,7 +114,7 @@ public class SimpleRules {
 				return result;
 			}
 			result.add(nextNodeInDirection);
-			node = nextNodeInDirection;
+			originNode = nextNodeInDirection;
 		}
 	}
 
