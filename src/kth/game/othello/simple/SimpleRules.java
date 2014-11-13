@@ -30,6 +30,8 @@ public class SimpleRules {
 	 * @param PlayerID
 	 *            the id of the player making the move
 	 * @param board
+	 * 
+	 * @return true if move is valid else false;
 	 */
 	protected boolean validMove(SimpleBoard board, Node node, String playerId) {
 
@@ -39,6 +41,38 @@ public class SimpleRules {
 			return true;
 		}
 		// else return false
+		return false;
+	}
+
+	/**
+	 * Returns true if it exists a node (A) on the board that is not occupied
+	 * and it exist a node(B) on the board such as B is occupied with the given
+	 * playerID and it exist at least one straight (horizontal, vertical, or
+	 * diagonal) line between A and B where all nodes are occupied by the other
+	 * player. Else return false
+	 * 
+	 * @param PlayerID
+	 *            the id of the player making the move
+	 * @param board
+	 */
+	protected boolean hasValidMove(SimpleBoard board, String playerId) {
+		for (Node node : board.getNodes()) {
+			if (validMove(board, node, playerId)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns false if any of the two players can make a valid move. else
+	 * return false
+	 * 
+	 * @board
+	 * @return
+	 */
+	protected boolean isGameOver(SimpleBoard board) {
+		// TODO Implement
 		return false;
 	}
 
