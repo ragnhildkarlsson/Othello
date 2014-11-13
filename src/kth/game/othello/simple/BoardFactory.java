@@ -92,20 +92,8 @@ public class BoardFactory {
 		return newBoard;
 	}
 
-	/**
-	 * Search for a node with a given x and y coordinate in nodes, return null
-	 * if not found.
-	 * 
-	 * @param nodes
-	 *            the nodes to search in
-	 * @param xCoordinate
-	 *            the x coordinate to find
-	 * @param yCoordinate
-	 *            the y coordinate to find
-	 * @return the node found, or if no node is found, null is returned.
-	 */
-	private Node findNodeByCoordinates(List<Node> nodes, int xCoordinate, int yCoordinate) {
-		for (Node node : nodes) {
+	private Node findNodeByCoordinates(List<Node> nodesToSearch, int xCoordinate, int yCoordinate) {
+		for (Node node : nodesToSearch) {
 			if (node.getXCoordinate() == xCoordinate && node.getYCoordinate() == yCoordinate)
 				return node;
 		}

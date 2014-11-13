@@ -27,16 +27,20 @@ public class BoardFactoryITest {
 		BoardFactory bf = new BoardFactory("white", "black");
 		SimpleBoard board = bf.newStartingBoard();
 		List<Node> nodes = board.getNodes();
-		int numberOfNodes = BOARD_SIZE * BOARD_SIZE;
-		assertEquals("The size of the new board should be equal to BOARD_SIZE*BOARD_SIZE", numberOfNodes, nodes.size());
+		int expectedNumberOfNodes = BOARD_SIZE * BOARD_SIZE;
+		assertEquals("The size of the new board should be equal to BOARD_SIZE*BOARD_SIZE", expectedNumberOfNodes,
+				nodes.size());
 
 		// Check that the coordinate system is correct, the first node in the
-		// list should be (0,0), last should be (maxX,maxY)
+		// list should be (0,0),(1,0),(2,0) ... last should be (maxX,maxY)
 		int maxCoordinateValue = BOARD_SIZE - 1;
 		Node firstNode = nodes.get(0);
-		Node lastNode = nodes.get(numberOfNodes - 1);
+		Node secondNode = nodes.get(1);
+		Node lastNode = nodes.get(nodes.size() - 1);
 		assertTrue("First node in list should be (0, 0)",
 				(firstNode.getXCoordinate() == 0) && (firstNode.getYCoordinate() == 0));
+		assertTrue("Second node in list should be (1, 0)",
+				(secondNode.getXCoordinate() == 1) && (secondNode.getYCoordinate() == 0));
 		assertTrue("Last node in list should be (maxCoordinateValue, maxCoordinateValue)",
 				(lastNode.getXCoordinate() == maxCoordinateValue) && (lastNode.getYCoordinate() == maxCoordinateValue));
 
@@ -95,5 +99,10 @@ public class BoardFactoryITest {
 		nodes = newBoard.getNodes();
 		assertSame("First node should be swapped", playerId, nodes.get(0).getOccupantPlayerId());
 		assertSame("Last node should be swapped", playerId, nodes.get(nodes.size() - 1).getOccupantPlayerId());
+		// Check that no other has been swapped
+		for (int i = 1; i < nodes.size() - 1; i++) {
+			assertSame("no other node should be swapped", null, nodes.get(i).getOccupantPlayerId());
+
+		}
 	}
 }
