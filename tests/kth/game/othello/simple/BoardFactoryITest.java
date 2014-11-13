@@ -30,35 +30,35 @@ public class BoardFactoryITest {
 		int numberOfNodes = BOARD_SIZE * BOARD_SIZE;
 		assertEquals("The size of the new board should be equal to BOARD_SIZE*BOARD_SIZE", numberOfNodes, nodes.size());
 
-		// Check that the Cartesian coordinate system is used properly
+		// Check that the coordinate system is correct, the first node in the
+		// list should be (0,0), last should be (maxX,maxY)
 		int maxCoordinateValue = BOARD_SIZE - 1;
 		Node firstNode = nodes.get(0);
 		Node lastNode = nodes.get(numberOfNodes - 1);
-		assertTrue("First node in list should be (maxCoordinateValue, 0)",
-				(firstNode.getXCoordinate() == maxCoordinateValue) && (firstNode.getYCoordinate() == 0));
-		assertTrue("Last node in list should be (0, maxCoordinateValue)",
-				(lastNode.getXCoordinate() == 0) && (lastNode.getYCoordinate() == maxCoordinateValue));
+		assertTrue("First node in list should be (0, 0)",
+				(firstNode.getXCoordinate() == 0) && (firstNode.getYCoordinate() == 0));
+		assertTrue("Last node in list should be (maxCoordinateValue, maxCoordinateValue)",
+				(lastNode.getXCoordinate() == maxCoordinateValue) && (lastNode.getYCoordinate() == maxCoordinateValue));
 
 		// Check that the start board is correctly marked
 		int higherMiddlePosition = BOARD_SIZE / 2;
 		int lowerMiddlePosition = higherMiddlePosition - 1;
 
-		for (int x = BOARD_SIZE - 1; x >= 0; x--) {
-			for (int y = 0; y < BOARD_SIZE; y++) {
+		for (int y = 0; y < BOARD_SIZE; y++) {
+			for (int x = 0; x < BOARD_SIZE; x++) {
 				// If we are in the middle of the board, nodes should be
 				// occupied like
-				// 1 X O
-				// 0 O X
 				// - 0 1
-				System.err.println(" x and y is " + x + " " + y);
-				if ((x == higherMiddlePosition || x == lowerMiddlePosition)
-						&& (y == higherMiddlePosition || y == lowerMiddlePosition)) {
-					if (x == y) { // equally colored marks should be diagonal to
+				// 0 X O
+				// 1 O X
+				if ((y == higherMiddlePosition || y == lowerMiddlePosition)
+						&& (x == higherMiddlePosition || x == lowerMiddlePosition)) {
+					if (y == x) { // equally colored marks should be diagonal to
 									// each other.
-						assertSame("Should be marked black", "black", board.getNodeAtCoordinates(x, y)
+						assertSame("Should be marked white", "white", board.getNodeAtCoordinates(x, y)
 								.getOccupantPlayerId());
 					} else {
-						assertSame("Should be marked white", "white", board.getNodeAtCoordinates(x, y)
+						assertSame("Should be marked black", "black", board.getNodeAtCoordinates(x, y)
 								.getOccupantPlayerId());
 					}
 				} else {// else the node should be unmarked
@@ -84,8 +84,8 @@ public class BoardFactoryITest {
 		board = new SimpleBoard(nodes);
 		// Generate a list with nodes to swap
 		List<Node> nodesToSwap = new ArrayList<Node>();
-		Node firstNode = new SimpleNode(maxIndex, 0, null);
-		Node lastNode = new SimpleNode(0, maxIndex, null);
+		Node firstNode = new SimpleNode(0, 0, null);
+		Node lastNode = new SimpleNode(maxIndex, maxIndex, null);
 		nodesToSwap.add(firstNode);
 		nodesToSwap.add(lastNode);
 
