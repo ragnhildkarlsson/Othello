@@ -10,7 +10,7 @@ public final class SimpleNode implements Node {
 	private final int yCoordinate;
 
 	/**
-	 * Construct a node given its coordinates and an optional player ID.
+	 * Construct a immutable node given its coordinates and an optional player ID.
 	 * 
 	 * @param xCoordinate
 	 * @param yCoordinate
