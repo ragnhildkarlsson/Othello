@@ -56,7 +56,7 @@ public class ComputerPlayer implements Player {
 	 *            The board where the move should be made
 	 * @return
 	 */
-	protected Node makeMove(SimpleRules rules, SimpleBoard board) {
+	protected Node getMove(SimpleRules rules, SimpleBoard board) {
 		Node result = null;
 		// Check if player have any valid move;
 		for (Node move : board.getNodes()) {
