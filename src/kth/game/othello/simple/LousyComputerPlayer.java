@@ -6,12 +6,12 @@ import kth.game.othello.player.Player;
 /**
  * Created by spike on 11/10/14.
  */
-public class ComputerPlayer implements Player {
+public class LousyComputerPlayer implements Player {
 
 	private String id;
 	private String name;
 
-	protected ComputerPlayer(String id, String name) {
+	protected LousyComputerPlayer(String id, String name) {
 		this.id = id;
 		this.name = name;
 	}
