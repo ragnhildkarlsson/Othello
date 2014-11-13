@@ -9,7 +9,7 @@ import kth.game.othello.board.Node;
 /**
  * A simple implementation of the {@link kth.game.othello.board.Board}
  * interface.
- *
+ * 
  * @author Daniel Schlaug
  */
 public class SimpleBoard implements Board {
@@ -18,12 +18,26 @@ public class SimpleBoard implements Board {
 
 	/**
 	 * The different type of directions on the board
+	 * 
+	 * <pre>
+	 * 	 0 1 2 3 4 5 6 7 8  
+	 * 0
+	 * 1
+	 * 2        NORTH
+	 * 3          ^
+	 * 4 WEST <       > EAST
+	 * 5          V			
+	 * 6        SOUTH
+	 * 7
+	 * 8
+	 * </pre>
 	 */
 	protected enum Direction {
 		NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST
 	}
 
 	/**
+	 * 
 	 * Creates a SimpleBoard from the provided nodes. Assumes a square board
 	 * with coordinates in the following order of (x, y):
 	 * 
@@ -32,11 +46,11 @@ public class SimpleBoard implements Board {
 	 *  (0,1) (1,1) (2,1)
 	 *  (0,2) (1,2) (2,2)
 	 * </pre>
-	 *
+	 * 
 	 * @param nodes
 	 *            the nodes from which to create the board. Must be a full board
-	 *            with its nodes in rising order of x- and then
-	 *            y-coordinates of the nodes.
+	 *            with its nodes in rising order of x- and then y-coordinates of
+	 *            the nodes.
 	 */
 	protected SimpleBoard(List<Node> nodes) {
 		this.nodes = new ArrayList<>();
@@ -61,7 +75,7 @@ public class SimpleBoard implements Board {
 	 * Returns the node at the given coordinates. Throws
 	 * IllegalArgumentException if the given coordinates are not within the
 	 * board.
-	 *
+	 * 
 	 * @return The node at the given coordinates.
 	 */
 	protected Node getNodeAtCoordinates(int x, int y) {
@@ -72,15 +86,15 @@ public class SimpleBoard implements Board {
 		int row = y;
 		int column = x;
 		int index = boardSide * row + column;
-        Node result = this.nodes.get(index);
-        assert result.getXCoordinate() == x && result.getYCoordinate() == y;
+		Node result = this.nodes.get(index);
+		assert result.getXCoordinate() == x && result.getYCoordinate() == y;
 
 		return result;
 	}
 
 	/**
 	 * Returns the node with the given id or null if no such node exists.
-	 *
+	 * 
 	 * @return Returns the node with the given id or null if no such node
 	 *         exists.
 	 */
@@ -100,7 +114,7 @@ public class SimpleBoard implements Board {
 	/**
 	 * Return the next node in the given direction relative to the given node or
 	 * null if no such node exists.
-	 *
+	 * 
 	 * @param startPointNode
 	 *            the node from which to get the next.
 	 * @param direction
