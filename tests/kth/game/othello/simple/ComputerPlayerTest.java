@@ -12,8 +12,8 @@ import org.mockito.Mockito;
 public class ComputerPlayerTest {
 
 	/**
-	 * Tests that given a board with a move that is valid for the player should
-	 * the player return this valid move is returned for getMove
+	 * Tests that given a board with a valid move for the player, then getMove
+	 * should return this valid move.
 	 */
 	@Test
 	public void testWhenValidMoveExistsShouldGetMoveReturnValidMove() {
@@ -36,7 +36,8 @@ public class ComputerPlayerTest {
 	}
 
 	/**
-	 * Test that given that no valid move exist returns getMove null
+	 * Test that given a board where no valid moves exist, then should getMove
+	 * return null
 	 */
 	public void testWhenNoValidMoveExistsShouldGetMoveReturnNull() {
 		ArrayList<Node> nodesOnBoard = new ArrayList<>();
