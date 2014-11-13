@@ -2,7 +2,7 @@ package kth.game.othello.simple;
 
 import kth.game.othello.player.Player;
 
-public class SimplePlayer implements Player {
+public class HumanPlayer implements Player {
 
 	private final String playerId;
 	private final String name;
@@ -15,13 +15,11 @@ public class SimplePlayer implements Player {
 	 *            unique id of the player
 	 * @param name
 	 *            name of the player
-	 * @param type
-	 *            either HUMAN or COMPUTER player
 	 */
-	protected SimplePlayer(String playerId, String name, Type type) {
+	protected HumanPlayer(String playerId, String name) {
 		this.playerId = playerId;
 		this.name = name;
-		this.type = type;
+		this.type = Player.Type.HUMAN;
 
 	}
 
