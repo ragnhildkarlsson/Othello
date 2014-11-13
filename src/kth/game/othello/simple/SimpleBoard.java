@@ -24,15 +24,22 @@ public class SimpleBoard implements Board {
 	}
 
 	/**
-	 * Creates a SimpleBoard from the provided nodes. Assumes a square board.
+	 * Creates a SimpleBoard from the provided nodes. Assumes a square board
+	 * with coordinates in the following order of (x, y):
+	 * 
+	 * <pre>
+	 *  (0,0) (1,0) (2,0)
+	 *  (0,1) (1,1) (2,1)
+	 *  (0,2) (1,2) (2,2)
+	 * </pre>
 	 *
 	 * @param nodes
 	 *            the nodes from which to create the board. Must be a full board
-	 *            with its nodes in the natural order in x- and then
-	 *            y-coordinate of the nodes.
+	 *            with its nodes in rising order of x- and then
+	 *            y-coordinates of the nodes.
 	 */
 	protected SimpleBoard(List<Node> nodes) {
-		this.nodes = new ArrayList<Node>();
+		this.nodes = new ArrayList<>();
 		this.nodes.addAll(nodes);
 		this.boardSide = (int) Math.sqrt(nodes.size());
 	}
@@ -45,7 +52,7 @@ public class SimpleBoard implements Board {
 	 */
 	@Override
 	public List<Node> getNodes() {
-		ArrayList<Node> nodesClone = new ArrayList<Node>();
+		ArrayList<Node> nodesClone = new ArrayList<>();
 		nodesClone.addAll(nodes);
 		return nodesClone;
 	}
@@ -62,10 +69,13 @@ public class SimpleBoard implements Board {
 			throw new IllegalArgumentException("Tried to get a node outside of the board.");
 		}
 
-		int row = (boardSide - 1) - y;
+		int row = y;
 		int column = x;
 		int index = boardSide * row + column;
-		return this.nodes.get(index);
+        Node result = this.nodes.get(index);
+        assert result.getXCoordinate() == x && result.getYCoordinate() == y;
+
+		return result;
 	}
 
 	/**
@@ -79,7 +89,7 @@ public class SimpleBoard implements Board {
 		Node foundNode = null;
 
 		for (Node node : nodes) {
-			if (node.getId() == nodeId) {
+			if (node.getId().equals(nodeId)) {
 				foundNode = node;
 			}
 		}
@@ -109,31 +119,31 @@ public class SimpleBoard implements Board {
 
 		switch (direction) {
 		case NORTH:
-			y++;
+			y--;
 			break;
 		case EAST:
 			x++;
 			break;
 		case SOUTH:
-			y--;
+			y++;
 			break;
 		case WEST:
 			x--;
 			break;
 		case NORTHEAST:
-			y++;
+			y--;
 			x++;
 			break;
 		case SOUTHEAST:
-			y--;
+			y++;
 			x++;
 			break;
 		case SOUTHWEST:
-			y--;
+			y++;
 			x--;
 			break;
 		case NORTHWEST:
-			y++;
+			y--;
 			x--;
 			break;
 		}
