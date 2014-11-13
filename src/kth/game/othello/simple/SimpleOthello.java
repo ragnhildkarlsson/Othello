@@ -144,7 +144,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean hasValidMove(String playerId) {
-		return rules.hasValidMove(playerId);
+		return rules.hasValidMove(board, playerId);
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean isActive() {
-		return !rules.gameIsOver();
+		return !rules.isGameOver();
 	}
 
 	/**
@@ -189,10 +189,10 @@ public class SimpleOthello implements Othello {
 			throw new IllegalArgumentException("Tried to do an AI move using a human player.");
 		case COMPUTER:
 			ComputerPlayer computerPlayer = (ComputerPlayer) currentPlayer;
-			Node nodeToPlayAt = computerPlayer.makeMove(rules, board);
+			Node nodeToPlayAt = computerPlayer.getMove(rules, board);
 			return this.move(currentPlayer.getId(), nodeToPlayAt.getId());
 		}
-        throw new IllegalStateException("This should never be reached.");
+		throw new IllegalStateException("This should never be reached.");
 	}
 
 	/**
@@ -210,14 +210,14 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
-        if (!isMoveValid(playerId, nodeId)){
-            throw new IllegalArgumentException("Tried to make an invalid move.");
-        }
-        Node nodePlayedAt = board.getNodeById(nodeId);
-        List<Node> nodesToSwap = rules.getNodesToSwap(board, nodePlayedAt, playerId);
-        nodesToSwap.add(nodePlayedAt);
-        this.board = boardFactory.newBoardReplacingNodesInBoard(board, nodesToSwap, playerId);
-        this.switchPlayer();
+		if (!isMoveValid(playerId, nodeId)) {
+			throw new IllegalArgumentException("Tried to make an invalid move.");
+		}
+		Node nodePlayedAt = board.getNodeById(nodeId);
+		List<Node> nodesToSwap = rules.getNodesToSwap(board, nodePlayedAt, playerId);
+		nodesToSwap.add(nodePlayedAt);
+		this.board = boardFactory.newBoardReplacingNodesInBoard(board, nodesToSwap, playerId);
+		this.switchPlayer();
 		return nodesToSwap;
 	}
 
@@ -240,15 +240,16 @@ public class SimpleOthello implements Othello {
 	@Override
 	public void start(String playerId) {
 		this.board = boardFactory.newStartingBoard();
-		boolean foundPlayer = false;
 		for (int i = 0; i < nPlayers; i++) {
-			if (players.get(i).getId().equals(playerId)) {
+            String existingPlayerID = players.get(i).getId();
+			if (existingPlayerID.equals(playerId)) {
 				playerInTurn = i;
+                return;
 			}
 		}
-		if (!foundPlayer) {
-			throw new IllegalArgumentException("Tried to start with non-existing playerId: " + playerId);
-		}
+
+        // Could not find player with playerId
+        throw new IllegalArgumentException("Tried to start with non-existing playerId: " + playerId);
 	}
 
 	private void switchPlayer() {
