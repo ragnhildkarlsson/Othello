@@ -12,7 +12,8 @@ public class ComputerPlayer implements Player {
 	private String name;
 
 	protected ComputerPlayer(String id, String name) {
-
+		this.id = id;
+		this.name = name;
 	}
 
 	/**
@@ -54,7 +55,8 @@ public class ComputerPlayer implements Player {
 	 *            The rules of the present game
 	 * @param board
 	 *            The board where the move should be made
-	 * @return
+	 * @return A node representing a valid move on the board for the player. If
+	 *         no valid move exists returns null;
 	 */
 	protected Node getMove(SimpleRules rules, SimpleBoard board) {
 		Node result = null;
