@@ -7,7 +7,7 @@ import kth.game.othello.board.Node;
 import kth.game.othello.simple.SimpleBoard.Direction;
 
 /**
- * Represents the rules of Othello
+ * Represents the rules of simple Othello
  * 
  * @author ragnhild karlsson
  * 
@@ -15,6 +15,10 @@ import kth.game.othello.simple.SimpleBoard.Direction;
 
 public class SimpleRules {
 
+	/**
+	 * Creates a object that has the responsibility to tell the rules of
+	 * Othello.
+	 */
 	protected SimpleRules() {
 
 	}
@@ -66,14 +70,17 @@ public class SimpleRules {
 
 	/**
 	 * Returns false if any of the two players can make a valid move. else
-	 * return false
+	 * return true
 	 * 
-	 * @board
-	 * @return
+	 * @board the board where the game is played
+	 * @return Returns false if any of the two players can make a valid move.
+	 *         else return true
 	 */
-	protected boolean isGameOver(SimpleBoard board) {
-		// TODO Implement
-		return false;
+	protected boolean isGameOver(SimpleBoard board, String player1Id, String player2Id) {
+		if (hasValidMove(board, player1Id) || hasValidMove(board, player2Id)) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -128,7 +135,8 @@ public class SimpleRules {
 		if (nextNodeInDirection == null) {
 			return result;
 		}
-		if (nextNodeInDirection.getOccupantPlayerId() == null || nextNodeInDirection.getOccupantPlayerId() == playerId) {
+		if (nextNodeInDirection.getOccupantPlayerId() == null
+				|| nextNodeInDirection.getOccupantPlayerId().equals(playerId)) {
 			return result;
 		}
 
@@ -144,12 +152,11 @@ public class SimpleRules {
 				result.clear();
 				return result;
 			}
-			if (nextNodeInDirection.getOccupantPlayerId() == playerId) {
+			if (nextNodeInDirection.getOccupantPlayerId().equals(playerId)) {
 				return result;
 			}
 			result.add(nextNodeInDirection);
 			originNode = nextNodeInDirection;
 		}
 	}
-
 }
