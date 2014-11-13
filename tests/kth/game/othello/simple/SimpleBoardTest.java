@@ -57,7 +57,7 @@ public class SimpleBoardTest {
 		retrievedNodes.set(0, specificNode);
 
 		for (Node node : board.getNodes()) {
-			if (node.getId() == specificNode.getId()) {
+			if (node.getId().equals(specificNode.getId())) {
 				fail("SimpleBoard should be immutable but could be mutated through its returned list of nodes.");
 			}
 		}
