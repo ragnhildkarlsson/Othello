@@ -22,7 +22,7 @@ public class SimpleBoardTest {
 		Mockito.when(dummyNode.getId()).thenReturn(dummyID);
 
 		// Construct a list of dummy nodes
-		List<Node> dummyNodes = new ArrayList<Node>();
+		List<Node> dummyNodes = new ArrayList<>();
 		for (int i = 0; i < numberOfNodes; i++) {
 			dummyNodes.add(dummyNode);
 		}
@@ -38,9 +38,8 @@ public class SimpleBoardTest {
 		List<Node> dummyNodes = generateNDummyNodes(boardSize);
 
 		// Create board and retrieve its nodes
-		SimpleBoard board = new SimpleBoard(dummyNodes);
 
-		return board;
+		return new SimpleBoard(dummyNodes);
 
 	}
 
@@ -57,7 +56,7 @@ public class SimpleBoardTest {
 		retrievedNodes.set(0, specificNode);
 
 		for (Node node : board.getNodes()) {
-			if (node.getId() == specificNode.getId()) {
+			if (node.getId().equals(specificNode.getId())) {
 				fail("SimpleBoard should be immutable but could be mutated through its returned list of nodes.");
 			}
 		}
@@ -85,33 +84,33 @@ public class SimpleBoardTest {
 	}
 
 	@Test
-	public void testCoordinatesShouldBeCartesian() throws Exception {
+	public void testGetNodeAtCoordinatesShouldReturnCorrectNode() throws Exception {
 
 		final int boardSide = 8;
 		final int boardSize = boardSide * boardSide;
 
-		// Mock upper right node to look for
-		Node upperLeftNode = Mockito.mock(Node.class);
-		Mockito.when(upperLeftNode.getId()).thenReturn("dskjjhd687");
+		// First node to look for
+		Node lowerLeftNode = Mockito.mock(Node.class);
+		Mockito.when(lowerLeftNode.getId()).thenReturn("dskjjhd687");
 
-		// Mock lower left node to look for
-		Node lowerRightNode = Mockito.mock(Node.class);
-		Mockito.when(lowerRightNode.getId()).thenReturn("dsjkhds728563");
+		// Second node to look for
+		Node upperRightNode = Mockito.mock(Node.class);
+		Mockito.when(upperRightNode.getId()).thenReturn("dsjkhds728563");
 
 		// Get dummy nodes
 		List<Node> dummyNodes = generateNDummyNodes(boardSize);
 
 		// Carefully insert specific nodes at expected positions
 		int lastIndex = boardSize - 1;
-		dummyNodes.set(0, upperLeftNode);
-		dummyNodes.set(lastIndex, lowerRightNode);
+		dummyNodes.set(0, lowerLeftNode);
+		dummyNodes.set(lastIndex, upperRightNode);
 
 		// Create board
 		SimpleBoard board = new SimpleBoard(dummyNodes);
 
 		// Test board
-		assertEquals(board.getNodeAtCoordinates(0, 7).getId(), upperLeftNode.getId());
-		assertEquals(board.getNodeAtCoordinates(7, 0).getId(), lowerRightNode.getId());
+		assertEquals(board.getNodeAtCoordinates(0, 0).getId(), lowerLeftNode.getId());
+		assertEquals(board.getNodeAtCoordinates(7, 7).getId(), upperRightNode.getId());
 
 	}
 
@@ -129,16 +128,13 @@ public class SimpleBoardTest {
 	@Test
 	public void testGetNextNodeInDirection() throws Exception {
 
-		final int boardSide = 3;
-		final int boardSize = boardSide * boardSide;
-
 		/*-
 		 * Construct a board with nodeIDs like these:
 		 * NW N NE
 		 *  W D E Where NW, N, SE etc. are the 8 directions
 		 * SW S SE
 		 */
-		List<Node> nodes = new ArrayList<Node>();
+		List<Node> nodes = new ArrayList<>();
 		String middleID = "middle";
 		String[] directions = new String[] { SimpleBoard.Direction.NORTHWEST.name(),
 				SimpleBoard.Direction.NORTH.name(), SimpleBoard.Direction.NORTHEAST.name(),
