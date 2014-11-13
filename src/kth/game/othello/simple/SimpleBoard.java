@@ -23,7 +23,7 @@ public class SimpleBoard implements Board {
 	 * 	 0 1 2 3 4 5 6 7 8  
 	 * 0
 	 * 1
-	 * 2		NORTH
+	 * 2        NORTH
 	 * 3          ^
 	 * 4 WEST <       > EAST
 	 * 5          V			
