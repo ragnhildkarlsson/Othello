@@ -18,7 +18,7 @@ public class ComputerPlayerTest {
 	@Test
 	public void testWhenValidMoveExistsShouldGetMoveReturnValidMove() {
 		String testPlayerId = "id";
-		ComputerPlayer testPlayer = new ComputerPlayer(testPlayerId, null);
+		LousyComputerPlayer testPlayer = new LousyComputerPlayer(testPlayerId, null);
 
 		ArrayList<Node> nodesOnBoard = new ArrayList<>();
 		Node unvalidMove = Mockito.mock(Node.class);
@@ -46,7 +46,7 @@ public class ComputerPlayerTest {
 	@Test
 	public void testWhenNoValidMoveExistsShouldGetMoveReturnNull() {
 		String testPlayerId = "id";
-		ComputerPlayer testPlayer = new ComputerPlayer(testPlayerId, null);
+		LousyComputerPlayer testPlayer = new LousyComputerPlayer(testPlayerId, null);
 
 		ArrayList<Node> nodesOnBoard = new ArrayList<>();
 		Node unvalidMove = Mockito.mock(Node.class);
