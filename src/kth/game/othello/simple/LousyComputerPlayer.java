@@ -6,7 +6,7 @@ import kth.game.othello.player.Player;
 /**
  * Created by spike on 11/10/14.
  */
-public class LousyComputerPlayer implements Player {
+public class LousyComputerPlayer implements ComputerPlayer {
 
 	private String id;
 	private String name;
@@ -58,7 +58,7 @@ public class LousyComputerPlayer implements Player {
 	 * @return A node representing a valid move on the board for the player. If
 	 *         no valid move exists returns null;
 	 */
-	protected Node getMove(SimpleRules rules, SimpleBoard board) {
+	public Node getMove(SimpleRules rules, SimpleBoard board) {
 		Node result = null;
 		// Check if player have any valid move;
 		for (Node move : board.getNodes()) {
