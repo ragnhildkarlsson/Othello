@@ -22,38 +22,24 @@ public class SimpleRulesTest {
 	 *  * mark nodes not occupied by any player
 	 *  could player 1 play on the non occupied node
 	 * </pre>
-	 */
+	 **/
 	@Test
 	public void testValidMoveOnBoardEdgeShouldBeValid() {
 		String player1Id = "1";
 		String player2Id = "2";
-		SimpleBoard mockBoard = Mockito.mock(SimpleBoard.class);
-		ArrayList<Node> nodesOnBoard = new ArrayList<>();
-		// add node 1
-		Node boardNode1 = getMockedNode(player1Id);
-		nodesOnBoard.add(boardNode1);
-		Node boardNode2 = getMockedNode(player2Id);
-		nodesOnBoard.add(boardNode2);
-		Node boardNode3 = getMockedNode(null);
-		nodesOnBoard.add(boardNode3);
-		// set up behavior for getNextNodeInDirection;
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode3, Direction.NORTH)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode3, Direction.NORTHEAST)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode3, Direction.NORTHWEST)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode3, Direction.EAST)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode3, Direction.SOUTH)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode3, Direction.SOUTHEAST)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode3, Direction.SOUTHWEST)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode3, Direction.WEST)).thenReturn(boardNode2);
-
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, Direction.WEST)).thenReturn(boardNode1);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, Direction.WEST)).thenReturn(null);
+		SimpleBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
+		Node playAtNode = mockBoard.getNodes().get(2);
 		SimpleRules rules = new SimpleRules();
-		assertEquals(true, rules.validMove(mockBoard, boardNode3, player1Id));
+		boolean res = rules.validMove(mockBoard, playAtNode, player1Id);
+		for (Direction dir : Direction.values()) {
+			Mockito.verify(mockBoard).getNextNodeInDirection(playAtNode, dir);
+		}
+		assertEquals(true, res);
 
 	}
 
 	/**
+	 * 
 	 * <pre>
 	 * Test that given a board with the following nodes
 	 *   0 1 2 3 4 5  
@@ -159,6 +145,160 @@ public class SimpleRulesTest {
 		// method getNodesToSwap() tries to calculate the nodes to swap
 		assertEquals(true, rules.getNodesToSwap(null, boardNode, null).isEmpty());
 		assertEquals(true, rules.getNodesToSwap(null, boardNode, player1Id).isEmpty());
+	}
+
+	/**
+	 * <pre>
+	 * Test that given a board with the following nodes
+	 * x o *
+	 *  where:
+	 *  x mark nodes occupied by player 1
+	 *  o mark nodes occupied by player 2
+	 *  * mark nodes not occupied by any player
+	 *  then player 1 should have a valid move
+	 * </pre>
+	 */
+
+	@Test
+	public void testHasValidMoveShouldBeTrueIfPlayerHaveValidMove() {
+		String player1Id = "1";
+		String player2Id = "2";
+		SimpleBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
+		SimpleRules rules = new SimpleRules();
+		boolean res = rules.hasValidMove(mockBoard, player1Id);
+		assertEquals(true, res);
+	}
+
+	/**
+	 * <pre>
+	 * Test that given a board with the following nodes
+	 * x o *
+	 *  where:
+	 *  x mark nodes occupied by player 1
+	 *  o mark nodes occupied by player 2
+	 *  * mark nodes not occupied by any player
+	 *  has player 2 no valid move
+	 * </pre>
+	 */
+
+	@Test
+	public void testHasValidMoveShouldBeFalseIfPlayerHaveNoValidMove() {
+		String player1Id = "1";
+		String player2Id = "2";
+		SimpleBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
+		SimpleRules rules = new SimpleRules();
+		boolean res = rules.hasValidMove(mockBoard, player2Id);
+		assertEquals(false, res);
+	}
+
+	/**
+	 * Test that given a board where a player can make a move should isGameOver
+	 * return false
+	 */
+	@Test
+	public void testIsGameOverShouldReturnFalseIfAPlayerHasAValidMove() {
+		String player1Id = "1";
+		String player2Id = "2";
+		SimpleBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
+		SimpleRules rules = new SimpleRules();
+		boolean res = rules.isGameOver(mockBoard, player1Id, player2Id);
+		assertEquals(false, res);
+
+	}
+
+	/**
+	 * Test that given a board where no player can make a move should isGameOver
+	 * return true
+	 */
+	@Test
+	public void testIsGameOverShouldReturnTrueIfNoPlayerHasAValidMove() {
+		String player1Id = "1";
+		String player2Id = "2";
+		SimpleBoard mockBoard = Mockito.mock(SimpleBoard.class);
+		ArrayList<Node> nodesOnBoard = new ArrayList<Node>();
+		Node boardNode0 = getMockedNode(player1Id);
+		nodesOnBoard.add(boardNode0);
+		Node boardNode1 = getMockedNode(player1Id);
+		nodesOnBoard.add(boardNode1);
+		Node boardNode2 = getMockedNode(null);
+		nodesOnBoard.add(boardNode2);
+
+		for (Direction dir : Direction.values()) {
+			switch (dir) {
+			case EAST:
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(boardNode1);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(boardNode2);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(null);
+				break;
+			case WEST:
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(null);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(boardNode0);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(boardNode1);
+				break;
+			default:
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(null);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(null);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(null);
+				break;
+			}
+		}
+		Mockito.when(mockBoard.getNodes()).thenReturn(nodesOnBoard);
+		SimpleRules rules = new SimpleRules();
+		boolean res = rules.isGameOver(mockBoard, player1Id, player2Id);
+		assertEquals(true, res);
+	}
+
+	/**
+	 * 
+	 * <pre>
+	 * Return a minimal mockedBoard as following
+	 * 
+	 * 0 1 2 (node number)
+	 * x o *
+	 * where:
+	 * x mark node occupied by player 1,node number 0
+	 * o mark node occupied by player 2, node number 1 
+	 * * mark node not occupied, node number 2.
+	 * 
+	 * The mocked board are able to answer the question
+	 * getNextNodeInDirection for all nodes and all directions. Calling getNodes
+	 * on the mockedBoard will return a a list of nodes sorted in increasing
+	 * node number order.
+	 * 
+	 * <pre>
+	 */
+	private SimpleBoard getMinimalMockedBoard(String player1Id, String player2Id) {
+
+		SimpleBoard mockBoard = Mockito.mock(SimpleBoard.class);
+		ArrayList<Node> nodesOnBoard = new ArrayList<Node>();
+		Node boardNode0 = getMockedNode(player1Id);
+		nodesOnBoard.add(boardNode0);
+		Node boardNode1 = getMockedNode(player2Id);
+		nodesOnBoard.add(boardNode1);
+		Node boardNode2 = getMockedNode(null);
+		nodesOnBoard.add(boardNode2);
+
+		for (Direction dir : Direction.values()) {
+			switch (dir) {
+			case EAST:
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(boardNode1);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(boardNode2);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(null);
+				break;
+			case WEST:
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(null);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(boardNode0);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(boardNode1);
+				break;
+			default:
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(null);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(null);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(null);
+				break;
+			}
+		}
+		Mockito.when(mockBoard.getNodes()).thenReturn(nodesOnBoard);
+		return mockBoard;
 	}
 
 	/*
