@@ -1,13 +1,11 @@
 package kth.game.othello.simple;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
-import kth.game.othello.player.Player;
 
 /**
  * A simple implementation of the {@link kth.game.othello.board.Board}
