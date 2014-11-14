@@ -8,7 +8,7 @@ import kth.game.othello.board.Node;
 
 /**
  * A simple implementation of the {@link kth.game.othello.board.Board}
- * interface.
+ * interface, SimpleBoard is an immutable class.
  * 
  * @author Daniel Schlaug
  */

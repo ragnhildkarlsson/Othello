@@ -4,48 +4,13 @@ import kth.game.othello.board.Node;
 import kth.game.othello.player.Player;
 
 /**
- * Created by spike on 11/10/14.
+ * A representation of a computer player, i.e. a player that can generate moves
+ * using AI.
+ * 
+ * @author mikael
+ * 
  */
-public class ComputerPlayer implements Player {
-
-	private String id;
-	private String name;
-
-	protected ComputerPlayer(String id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-
-	/**
-	 * The id is a unique identifier of this player in the context of all
-	 * players
-	 * 
-	 * @return the id
-	 */
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * The name of the player
-	 * 
-	 * @return the name
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * The {@link kth.game.othello.player.Player.Type} of the player
-	 * 
-	 * @return the type
-	 */
-	@Override
-	public Type getType() {
-		return Type.COMPUTER;
-	}
+public interface ComputerPlayer extends Player {
 
 	/**
 	 * Returns a node representing a valid move on the board for the player. If
@@ -58,15 +23,5 @@ public class ComputerPlayer implements Player {
 	 * @return A node representing a valid move on the board for the player. If
 	 *         no valid move exists returns null;
 	 */
-	protected Node getMove(SimpleRules rules, SimpleBoard board) {
-		Node result = null;
-		// Check if player have any valid move;
-		for (Node move : board.getNodes()) {
-			if (rules.validMove(board, move, getId())) {
-				result = move;
-				break;
-			}
-		}
-		return result;
-	}
+	public Node getMove(SimpleRules rules, SimpleBoard board);
 }

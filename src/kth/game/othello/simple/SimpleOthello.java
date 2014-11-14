@@ -18,11 +18,11 @@ public class SimpleOthello implements Othello {
 
 	}
 
-	protected SimpleOthello(BoardFactory boardFactory, Player humanPlayer, ComputerPlayer computerPlayer) {
+	protected SimpleOthello(BoardFactory boardFactory, Player humanPlayer, LousyComputerPlayer computerPlayer) {
 
 	}
 
-	protected SimpleOthello(BoardFactory boardFactory, ComputerPlayer computerPlayer1, ComputerPlayer computerPlayer2) {
+	protected SimpleOthello(BoardFactory boardFactory, LousyComputerPlayer computerPlayer1, LousyComputerPlayer computerPlayer2) {
 
 	}
 
