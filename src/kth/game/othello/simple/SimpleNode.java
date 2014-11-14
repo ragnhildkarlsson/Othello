@@ -3,11 +3,11 @@ package kth.game.othello.simple;
 import kth.game.othello.board.Node;
 
 /**
-* A simple implementation of the {@link kth.game.othello.board.Node}
-* interface, SimpleNode is an immutable class.
-*
-* @author mikael
-*/
+ * A simple implementation of the {@link kth.game.othello.board.Node} interface,
+ * SimpleNode is an immutable class.
+ * 
+ * @author Mikael Eriksson
+ */
 public final class SimpleNode implements Node {
 
 	private final String nodeId;
@@ -16,7 +16,8 @@ public final class SimpleNode implements Node {
 	private final int yCoordinate;
 
 	/**
-	 * Construct an immutable node given its coordinates and an optional player ID.
+	 * Construct an immutable node given its coordinates and an optional player
+	 * ID.
 	 * 
 	 * @param xCoordinate
 	 * @param yCoordinate

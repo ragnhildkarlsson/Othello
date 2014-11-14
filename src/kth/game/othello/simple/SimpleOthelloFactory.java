@@ -4,9 +4,9 @@ import kth.game.othello.Othello;
 import kth.game.othello.OthelloFactory;
 
 /**
- * A factory for producing othello games.
+ * A factory for producing simple Othello games.
  * 
- * @author mikael
+ * @author Mikael Eriksson
  */
 public class SimpleOthelloFactory implements OthelloFactory {
 

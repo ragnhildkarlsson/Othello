@@ -11,7 +11,7 @@ import kth.game.othello.player.Player;
 
 /**
  * This class represents a simple Othello game.
- *
+ * 
  * @author Daniel Schlaug
  */
 public class SimpleOthello implements Othello {
@@ -27,7 +27,7 @@ public class SimpleOthello implements Othello {
 
 	/**
 	 * Creates an Othello game between two computers.
-	 *
+	 * 
 	 * @param boardFactory
 	 *            the factory that will be used to create the boards in the
 	 *            game.
@@ -45,7 +45,7 @@ public class SimpleOthello implements Othello {
 
 	/**
 	 * Creates an Othello game between a human and computer player.
-	 *
+	 * 
 	 * @param boardFactory
 	 *            the factory that will be used to create the boards in the
 	 *            game.
@@ -62,7 +62,7 @@ public class SimpleOthello implements Othello {
 
 	/**
 	 * Creates an Othello game between two human players.
-	 *
+	 * 
 	 * @param boardFactory
 	 *            the factory that will be used to create the boards in the
 	 *            game.
@@ -87,7 +87,7 @@ public class SimpleOthello implements Othello {
 
 	/**
 	 * The board on which the game is played.
-	 *
+	 * 
 	 * @return the state of the board
 	 */
 	@Override
@@ -97,7 +97,7 @@ public class SimpleOthello implements Othello {
 
 	/**
 	 * Returns the nodes that will be swapped for a move at the given nodeId.
-	 *
+	 * 
 	 * @param playerId
 	 *            the id of the player making the move
 	 * @param nodeId
@@ -114,7 +114,7 @@ public class SimpleOthello implements Othello {
 
 	/**
 	 * Get the player in turn or null if no player can move
-	 *
+	 * 
 	 * @return the player in turn
 	 */
 	@Override
@@ -124,7 +124,7 @@ public class SimpleOthello implements Othello {
 
 	/**
 	 * The players of the game. Computer players as well as human players.
-	 *
+	 * 
 	 * @return the list of players
 	 */
 	@Override
@@ -137,7 +137,7 @@ public class SimpleOthello implements Othello {
 
 	/**
 	 * Determines if a player has any valid move.
-	 *
+	 * 
 	 * @param playerId
 	 *            the id of the player
 	 * @return true if the player has a valid move
@@ -149,7 +149,7 @@ public class SimpleOthello implements Othello {
 
 	/**
 	 * Determines if the game is active or over
-	 *
+	 * 
 	 * @return false if the game is over
 	 */
 	@Override
@@ -159,7 +159,7 @@ public class SimpleOthello implements Othello {
 
 	/**
 	 * Determines if a player is allowed to make a move at the given node.
-	 *
+	 * 
 	 * @param playerId
 	 *            the id of the player making the move
 	 * @param nodeId
@@ -175,7 +175,7 @@ public class SimpleOthello implements Othello {
 	/**
 	 * If the player in turn is a computer then this computer makes a move and
 	 * updates the player in turn.
-	 *
+	 * 
 	 * @return the nodes that where swapped for this move, including the node
 	 *         where the player made the move
 	 * @throws IllegalStateException
@@ -198,7 +198,7 @@ public class SimpleOthello implements Othello {
 	/**
 	 * Validates if the move is correct and if the player is in turn. If so,
 	 * then the move is made which updates the board and the player in turn.
-	 *
+	 * 
 	 * @param playerId
 	 *            the id of the player that makes the move
 	 * @param nodeId
@@ -233,7 +233,7 @@ public class SimpleOthello implements Othello {
 
 	/**
 	 * Starts the game.
-	 *
+	 * 
 	 * @param playerId
 	 *            the id of the player that will start the game.
 	 */

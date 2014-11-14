@@ -9,7 +9,7 @@ import kth.game.othello.simple.SimpleBoard.Direction;
 /**
  * Represents the rules of simple Othello.
  * 
- * @author ragnhild karlsson
+ * @author Ragnhild Karlsson
  * 
  */
 
@@ -24,10 +24,10 @@ public class SimpleRules {
 	}
 
 	/**
-	 * Returns true iff the given node (A) is not occupied and there exist a node(B)
-	 * on the board such that B is occupied with the given playerID and there exist
-	 * at least one straight (horizontal, vertical, or diagonal) line between A
-	 * and B where all nodes are occupied by the other Player.
+	 * Returns true iff the given node (A) is not occupied and there exist a
+	 * node(B) on the board such that B is occupied with the given playerID and
+	 * there exist at least one straight (horizontal, vertical, or diagonal)
+	 * line between A and B where all nodes are occupied by the other Player.
 	 * 
 	 * @param Node
 	 *            the node on the board where the player wants to play.
@@ -50,9 +50,9 @@ public class SimpleRules {
 
 	/**
 	 * Returns true iff any node (A) is not occupied and there exist a node(B)
-	 * on the board such that B is occupied with the given playerID and there exist
-	 * at least one straight (horizontal, vertical, or diagonal) line between A
-	 * and B where all nodes are occupied by the other Player.
+	 * on the board such that B is occupied with the given playerID and there
+	 * exist at least one straight (horizontal, vertical, or diagonal) line
+	 * between A and B where all nodes are occupied by the other Player.
 	 * 
 	 * @param PlayerID
 	 *            the id of the player making the move.
@@ -117,14 +117,15 @@ public class SimpleRules {
 
 	/*
 	 * Returns the nodes in the given direction (in relation to the given node)
-	 * that would be swapped if the player with the given playerId would play at 
+	 * that would be swapped if the player with the given playerId would play at
 	 * the given node.
 	 */
 	private ArrayList<Node> getSwappableNodesInDirection(SimpleBoard board, String playerId, Node originNode,
 			Direction direction) {
 
 		ArrayList<Node> result = new ArrayList<>();
-		// Check that the direct neighbor in the given direction belongs to other
+		// Check that the direct neighbor in the given direction belongs to
+		// other
 		// player. Otherwise return an empty list.
 		Node nextNodeInDirection = board.getNextNodeInDirection(originNode, direction);
 		if (nextNodeInDirection == null) {
@@ -147,12 +148,12 @@ public class SimpleRules {
 				result.clear();
 				return result;
 			}
-			if(nextNodeInDirection.getOccupantPlayerId() == null){
+			if (nextNodeInDirection.getOccupantPlayerId() == null) {
 				// reached unmarked node, return empty list
 				result.clear();
 				return result;
 			}
-			
+
 			if (nextNodeInDirection.getOccupantPlayerId().equals(playerId)) {
 				return result;
 			}

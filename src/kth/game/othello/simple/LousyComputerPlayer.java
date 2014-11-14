@@ -3,7 +3,9 @@ package kth.game.othello.simple;
 import kth.game.othello.board.Node;
 
 /**
- * Created by spike on 11/10/14.
+ * A lousy computer player implementing the {@link ComputerPlayer} interface.
+ * 
+ * @author Ragnhild Karlsson
  */
 public class LousyComputerPlayer implements ComputerPlayer {
 

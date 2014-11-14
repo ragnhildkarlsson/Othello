@@ -7,7 +7,7 @@ import kth.game.othello.player.Player;
  * A representation of a computer player, i.e. a player that can generate moves
  * using AI.
  * 
- * @author mikael
+ * @author Mikael Eriksson
  * 
  */
 public interface ComputerPlayer extends Player {
