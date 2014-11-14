@@ -87,7 +87,6 @@ public class SimpleBoard implements Board {
 		int column = x;
 		int index = boardSide * row + column;
 		Node result = this.nodes.get(index);
-		assert result.getXCoordinate() == x && result.getYCoordinate() == y;
 
 		return result;
 	}
