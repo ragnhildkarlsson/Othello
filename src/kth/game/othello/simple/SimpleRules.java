@@ -123,40 +123,23 @@ public class SimpleRules {
 	private ArrayList<Node> getSwappableNodesInDirection(SimpleBoard board, String playerId, Node originNode,
 			Direction direction) {
 
-		ArrayList<Node> result = new ArrayList<>();
-		// Check that the direct neighbor in the given direction belongs to
-		// other
-		// player. Otherwise return an empty list.
-		Node nextNodeInDirection = board.getNextNodeInDirection(originNode, direction);
-		if (nextNodeInDirection == null) {
-			return result;
-		}
-		if (nextNodeInDirection.getOccupantPlayerId() == null
-				|| nextNodeInDirection.getOccupantPlayerId().equals(playerId)) {
-			return result;
-		}
-
-		result.add(nextNodeInDirection);
-		originNode = nextNodeInDirection;
-		// check that the following nodes in the given direction belongs to the
-		// other player until we reach a node
-		// marked by the given player. Otherwise is an empty list returned
-		while (true) {
-			nextNodeInDirection = board.getNextNodeInDirection(originNode, direction);
-			if (nextNodeInDirection == null) {
-				// reached edge return empty list
-				result.clear();
-				return result;
-			}
-			if (nextNodeInDirection.getOccupantPlayerId() == null) {
-				// reached unmarked node, return empty list
+        // check that the following nodes in the given direction belongs to the
+        // opponent until we reach a node marked by the given player. If this
+        // never happens, return an empty list.
+        ArrayList<Node> result = new ArrayList<>();
+        while (true) {
+			Node nextNodeInDirection = board.getNextNodeInDirection(originNode, direction);
+			if (nextNodeInDirection == null || nextNodeInDirection.getOccupantPlayerId() == null) {
+				// Reached edge or unmarked node - return empty list.
 				result.clear();
 				return result;
 			}
 
 			if (nextNodeInDirection.getOccupantPlayerId().equals(playerId)) {
+                // Found own node. Return nodes in between.
 				return result;
 			}
+
 			result.add(nextNodeInDirection);
 			originNode = nextNodeInDirection;
 		}

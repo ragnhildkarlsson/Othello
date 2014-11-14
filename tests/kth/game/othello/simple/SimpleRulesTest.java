@@ -20,7 +20,7 @@ public class SimpleRulesTest {
 	 *  x mark nodes occupied by player 1
 	 *  o mark nodes occupied by player 2
 	 *  * mark nodes not occupied by any player
-	 *  could player 1 play on the non occupied node
+	 *  player 1 could play on the non occupied node
 	 * </pre>
 	 **/
 	@Test
@@ -42,32 +42,43 @@ public class SimpleRulesTest {
 	 * 
 	 * <pre>
 	 * Test that given a board with the following nodes
-	 *   0 1 2 3 4 5  
-	 * 0   	 *   o	
+	 *   0 1 2 3 4 5 6
+	 * 0   	 *   o
 	 * 1 x o o * o x
+	 * 2     o * o
+	 * 3   o   x   *
+	 * 4             x
 	 *  
 	 *  where:
-	 *  x mark nodes occupied by player 1
-	 *  o mark nodes occupied by player 2
+	 *  x mark nodes occupied by xPlayer
+	 *  o mark nodes occupied by oPlayer
 	 *  * mark nodes not occupied by any player
-	 *  will getNodesToSwap return a list with the following nodes (with coordinates) (1,1) (2,1) (4,1)
+	 *  getNodesToSwap returns a list with the following nodes (with coordinates) (1,1) (2,1) (4,1)
 	 *  if player 1 plays on (3,1).
 	 * </pre>
 	 */
 	@Test
 	public void testValidMoveShouldGiveCorrectNumberOfSwapedNodes() {
-		String player1Id = "1";
-		String player2Id = "2";
+		String oPlayerID = "o";
+		String xPlayerID = "x";
 		SimpleBoard mockBoard = Mockito.mock(SimpleBoard.class);
-		// add node 1
+
+		// mock nodes
 		Node boardNode20 = getMockedNode(null);
-		Node boardNode40 = getMockedNode(player2Id);
-		Node boardNode01 = getMockedNode(player1Id);
-		Node boardNode11 = getMockedNode(player2Id);
-		Node boardNode21 = getMockedNode(player2Id);
+		Node boardNode40 = getMockedNode(oPlayerID);
+		Node boardNode01 = getMockedNode(xPlayerID);
+		Node boardNode11 = getMockedNode(oPlayerID);
+		Node boardNode21 = getMockedNode(oPlayerID);
 		Node playAtNode = getMockedNode(null);
-		Node boardNode41 = getMockedNode(player2Id);
-		Node boardNode51 = getMockedNode(player1Id);
+		Node boardNode41 = getMockedNode(oPlayerID);
+		Node boardNode51 = getMockedNode(xPlayerID);
+		Node boardNode22 = getMockedNode(oPlayerID);
+		Node boardNode32 = getMockedNode(null);
+		Node boardNode42 = getMockedNode(oPlayerID);
+		Node boardNode13 = getMockedNode(oPlayerID);
+		Node boardNode33 = getMockedNode(xPlayerID);
+		Node boardNode53 = getMockedNode(null);
+		Node boardNode64 = getMockedNode(xPlayerID);
 
 		// set up behavior for getNextNodeInDirection;
 
@@ -85,6 +96,15 @@ public class SimpleRulesTest {
 			case NORTHWEST:
 				Mockito.when(mockBoard.getNextNodeInDirection(playAtNode, dir)).thenReturn(boardNode20);
 				break;
+			case SOUTH:
+				Mockito.when(mockBoard.getNextNodeInDirection(playAtNode, dir)).thenReturn(boardNode32);
+				break;
+			case SOUTHWEST:
+				Mockito.when(mockBoard.getNextNodeInDirection(playAtNode, dir)).thenReturn(boardNode22);
+				break;
+			case SOUTHEAST:
+				Mockito.when(mockBoard.getNextNodeInDirection(playAtNode, dir)).thenReturn(boardNode42);
+				break;
 			default:
 				Mockito.when(mockBoard.getNextNodeInDirection(playAtNode, dir)).thenReturn(null);
 				break;
@@ -96,23 +116,36 @@ public class SimpleRulesTest {
 		Mockito.when(mockBoard.getNextNodeInDirection(boardNode41, Direction.EAST)).thenReturn(boardNode51);
 		Mockito.when(mockBoard.getNextNodeInDirection(boardNode21, Direction.WEST)).thenReturn(boardNode11);
 		Mockito.when(mockBoard.getNextNodeInDirection(boardNode11, Direction.WEST)).thenReturn(boardNode01);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode22, Direction.SOUTHWEST)).thenReturn(boardNode13);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode13, Direction.SOUTHWEST)).thenReturn(null);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode32, Direction.SOUTH)).thenReturn(boardNode33);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode42, Direction.SOUTHEAST)).thenReturn(boardNode53);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode53, Direction.SOUTHEAST)).thenReturn(boardNode64);
 
 		// Check that the right nodes (and no other nodes) where listed as nodes
 		// to swap
 		SimpleRules rules = new SimpleRules();
-		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode, player1Id).contains(boardNode41));
-		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode, player1Id).contains(boardNode21));
-		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode, player1Id).contains(boardNode11));
-		assertEquals(3, rules.getNodesToSwap(mockBoard, playAtNode, player1Id).size());
+		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode, xPlayerID).contains(boardNode41));
+		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode, xPlayerID).contains(boardNode21));
+		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode, xPlayerID).contains(boardNode11));
+		assertEquals(3, rules.getNodesToSwap(mockBoard, playAtNode, xPlayerID).size());
 
-		// Verify that all calls to getNextNodeInDirection() was made
+		final int callsToGetNodesToSwap = 4;
+
+		// Verify that all calls to getNextNodeInDirection() were made
 		for (Direction dir : Direction.values()) {
-			Mockito.verify(mockBoard, Mockito.times(4)).getNextNodeInDirection(playAtNode, dir);
+			Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(playAtNode, dir);
 		}
-		Mockito.verify(mockBoard, Mockito.times(4)).getNextNodeInDirection(boardNode40, Direction.NORTHEAST);
-		Mockito.verify(mockBoard, Mockito.times(4)).getNextNodeInDirection(boardNode41, Direction.EAST);
-		Mockito.verify(mockBoard, Mockito.times(4)).getNextNodeInDirection(boardNode21, Direction.WEST);
-		Mockito.verify(mockBoard, Mockito.times(4)).getNextNodeInDirection(boardNode11, Direction.WEST);
+		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode40,
+				Direction.NORTHEAST);
+		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode41,
+				Direction.EAST);
+		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode21,
+				Direction.WEST);
+		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode11,
+				Direction.WEST);
+		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode42,
+				Direction.SOUTHEAST);
 
 	}
 
