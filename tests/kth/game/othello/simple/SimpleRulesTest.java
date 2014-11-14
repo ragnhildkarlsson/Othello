@@ -155,7 +155,7 @@ public class SimpleRulesTest {
 	 *  x mark nodes occupied by player 1
 	 *  o mark nodes occupied by player 2
 	 *  * mark nodes not occupied by any player
-	 *  has player 1 a valid move
+	 *  then player 1 should have a valid move
 	 * </pre>
 	 */
 
