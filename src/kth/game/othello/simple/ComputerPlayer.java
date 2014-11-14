@@ -4,43 +4,24 @@ import kth.game.othello.board.Node;
 import kth.game.othello.player.Player;
 
 /**
- * Created by spike on 11/10/14.
+ * A representation of a computer player, i.e. a player that can generate moves
+ * using AI.
+ * 
+ * @author mikael
+ * 
  */
-public class ComputerPlayer implements Player {
+public interface ComputerPlayer extends Player {
 
 	/**
-	 * The id is a unique identifier of this player in the context of all
-	 * players
+	 * Returns a node representing a valid move on the board for the player. If
+	 * no valid move exists returns null;
 	 * 
-	 * @return the id
+	 * @param rules
+	 *            The rules of the present game
+	 * @param board
+	 *            The board where the move should be made
+	 * @return A node representing a valid move on the board for the player. If
+	 *         no valid move exists returns null;
 	 */
-	@Override
-	public String getId() {
-		return null;
-	}
-
-	/**
-	 * The name of the player
-	 * 
-	 * @return the name
-	 */
-	@Override
-	public String getName() {
-		return null;
-	}
-
-	/**
-	 * The {@link kth.game.othello.player.Player.Type} of the player
-	 * 
-	 * @return the type
-	 */
-	@Override
-	public Type getType() {
-		return null;
-	}
-
-	protected Node makeMove(SimpleRules rules, SimpleBoard board) {
-		// TODO Method stub
-		return null;
-	}
+	public Node getMove(SimpleRules rules, SimpleBoard board);
 }
