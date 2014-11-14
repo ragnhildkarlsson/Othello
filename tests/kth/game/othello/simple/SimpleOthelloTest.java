@@ -57,7 +57,9 @@ public class SimpleOthelloTest {
 
 		SimpleRules mockRules = Mockito.mock(SimpleRules.class);
 		when(mockRules.validMove(any(SimpleBoard.class), any(Node.class), eq(invalidMovePlayerID))).thenReturn(false);
-		when(mockRules.validMove(any(SimpleBoard.class), any(Node.class), AdditionalMatchers.not(eq(invalidMovePlayerID)))).thenReturn(true);
+		when(
+				mockRules.validMove(any(SimpleBoard.class), any(Node.class),
+						AdditionalMatchers.not(eq(invalidMovePlayerID)))).thenReturn(true);
 		List<Node> mockNodesToSwap = new ArrayList<>();
 		mockNodesToSwap.add(mockNodeWithId(otherNodeID));
 		when(mockRules.getNodesToSwap(any(SimpleBoard.class), any(Node.class), anyString()))
