@@ -1,7 +1,6 @@
 package kth.game.othello.simple;
 
 import kth.game.othello.board.Node;
-import kth.game.othello.player.Player;
 
 /**
  * Created by spike on 11/10/14.

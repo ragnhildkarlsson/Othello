@@ -17,7 +17,6 @@ import org.mockito.Mockito;
 public class SimpleOthelloTest {
 
 	final private String invalidMovePlayerID = "InvalidMove";
-	final private String validMovePlayerID = "ValidMove";
 
 	final private String player1ID = "player1";
 	final private String player2ID = "player2";
