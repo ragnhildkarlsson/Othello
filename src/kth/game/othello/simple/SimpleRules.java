@@ -7,7 +7,7 @@ import kth.game.othello.board.Node;
 import kth.game.othello.simple.SimpleBoard.Direction;
 
 /**
- * Represents the rules of simple Othello
+ * Represents the rules of simple Othello.
  * 
  * @author ragnhild karlsson
  * 
@@ -16,7 +16,7 @@ import kth.game.othello.simple.SimpleBoard.Direction;
 public class SimpleRules {
 
 	/**
-	 * Creates a object that has the responsibility to tell the rules of
+	 * Creates an object with the responsibility of telling the rules of
 	 * Othello.
 	 */
 	protected SimpleRules() {
@@ -24,18 +24,18 @@ public class SimpleRules {
 	}
 
 	/**
-	 * Return true if the given node (A) is not occupied and it exist a node(B)
-	 * on the board such as B is occupied with the given playerID and it exist
+	 * Returns true iff the given node (A) is not occupied and there exist a node(B)
+	 * on the board such that B is occupied with the given playerID and there exist
 	 * at least one straight (horizontal, vertical, or diagonal) line between A
-	 * and B where all nodes are occupied by the other Player. Else return false
+	 * and B where all nodes are occupied by the other Player.
 	 * 
 	 * @param Node
-	 *            a node on the board where the player wants to play
+	 *            the node on the board where the player wants to play.
 	 * @param PlayerID
-	 *            the id of the player making the move
+	 *            the id of the player making the move.
 	 * @param board
-	 * 
-	 * @return true if move is valid else false;
+	 *            the board where the move would be made.
+	 * @return true iff move is valid.
 	 */
 	protected boolean validMove(SimpleBoard board, Node node, String playerId) {
 
@@ -49,15 +49,16 @@ public class SimpleRules {
 	}
 
 	/**
-	 * Returns true if it exists a node (A) on the board that is not occupied
-	 * and it exist a node(B) on the board such as B is occupied with the given
-	 * playerID and it exist at least one straight (horizontal, vertical, or
-	 * diagonal) line between A and B where all nodes are occupied by the other
-	 * player. Else return false
+	 * Returns true iff any node (A) is not occupied and there exist a node(B)
+	 * on the board such that B is occupied with the given playerID and there exist
+	 * at least one straight (horizontal, vertical, or diagonal) line between A
+	 * and B where all nodes are occupied by the other Player.
 	 * 
 	 * @param PlayerID
-	 *            the id of the player making the move
+	 *            the id of the player making the move.
 	 * @param board
+	 *            the board in which to look for a valid move.
+	 * @return true iff a valid move exists for the given player.
 	 */
 	protected boolean hasValidMove(SimpleBoard board, String playerId) {
 		for (Node node : board.getNodes()) {
@@ -69,12 +70,10 @@ public class SimpleRules {
 	}
 
 	/**
-	 * Returns false if any of the two players can make a valid move. else
-	 * return true
+	 * Returns false iff any of the two players can make a valid move.
 	 * 
-	 * @board the board where the game is played
-	 * @return Returns false if any of the two players can make a valid move.
-	 *         else return true
+	 * @board the board to be checked for game over.
+	 * @return Returns false iff any of the two players can make a valid move.
 	 */
 	protected boolean isGameOver(SimpleBoard board, String player1Id, String player2Id) {
 		if (hasValidMove(board, player1Id) || hasValidMove(board, player2Id)) {
@@ -84,20 +83,18 @@ public class SimpleRules {
 	}
 
 	/**
-	 * 
 	 * Returns a list with the nodes that will be swapped for the given move,
-	 * excluding the node that is placed by the player
+	 * excluding the node that is placed by the player.
 	 * 
 	 * @param board
-	 *            the board where the game is played
+	 *            the board where the move would be made.
 	 * @param playerId
-	 *            the id of the player making the move
+	 *            the id of the player making the move.
 	 * @param node
-	 *            a node on the board that the player want to play
+	 *            a node on the board where the player wants to play.
 	 * @return the list of nodes that will be swapped for the given move,
-	 *         excluding the node that is placed by the player
+	 *         excluding the node that is placed by the player.
 	 */
-
 	protected List<Node> getNodesToSwap(SimpleBoard board, Node node, String playerId) {
 		ArrayList<Node> result = new ArrayList<Node>();
 		// check if node is occupied
@@ -119,18 +116,16 @@ public class SimpleRules {
 	}
 
 	/*
-	 * Return the nodes in the given direction (in relation to the given node)
-	 * that are swapped if the player with the given playerId play on the given
-	 * node.
+	 * Returns the nodes in the given direction (in relation to the given node)
+	 * that would be swapped if the player with the given playerId would play at 
+	 * the given node.
 	 */
-
 	private ArrayList<Node> getSwappableNodesInDirection(SimpleBoard board, String playerId, Node originNode,
 			Direction direction) {
 
 		ArrayList<Node> result = new ArrayList<>();
-		// Check that the direct neighbor in the given direction belong to other
-		// player
-		// otherwise returns an empty list
+		// Check that the direct neighbor in the given direction belongs to other
+		// player. Otherwise return an empty list.
 		Node nextNodeInDirection = board.getNextNodeInDirection(originNode, direction);
 		if (nextNodeInDirection == null) {
 			return result;
