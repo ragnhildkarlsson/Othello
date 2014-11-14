@@ -6,6 +6,12 @@ import java.util.List;
 import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
 
+/**
+ * A BoardFactory generates new {@link SimpleBoard}.
+ * 
+ * @author Mikael Eriksson
+ * 
+ */
 public class BoardFactory {
 
 	private static final int BOARD_SIZE = 8;

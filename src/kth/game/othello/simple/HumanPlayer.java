@@ -2,6 +2,14 @@ package kth.game.othello.simple;
 
 import kth.game.othello.player.Player;
 
+/**
+ * A simple implementation of the Player interface, which always is the Type
+ * HUMAN.
+ * 
+ * @author Mikael Eriksson
+ * @author Ragnhild Karlsson
+ * 
+ */
 public class HumanPlayer implements Player {
 
 	private final String playerId;
