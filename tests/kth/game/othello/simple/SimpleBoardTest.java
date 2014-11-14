@@ -136,12 +136,12 @@ public class SimpleBoardTest {
 		 */
 		List<Node> nodes = new ArrayList<>();
 		String middleID = "middle";
-		String[] directions = new String[] { SimpleBoard.Direction.NORTHWEST.name(),
+		String[] nodeIDs = new String[] { SimpleBoard.Direction.NORTHWEST.name(),
 				SimpleBoard.Direction.NORTH.name(), SimpleBoard.Direction.NORTHEAST.name(),
 				SimpleBoard.Direction.WEST.name(), middleID, SimpleBoard.Direction.EAST.name(),
 				SimpleBoard.Direction.SOUTHWEST.name(), SimpleBoard.Direction.SOUTH.name(),
 				SimpleBoard.Direction.SOUTHEAST.name() };
-		for (String nodeID : directions) {
+		for (String nodeID : nodeIDs) {
 			Node node = Mockito.mock(Node.class);
 			Mockito.when(node.getId()).thenReturn(nodeID);
 			Mockito.when(node.getXCoordinate()).thenReturn(1);
