@@ -185,7 +185,8 @@ public class SimpleBoard implements Board {
         for (String player : getPlayerIDs()) {
             stringBuilder.append(player + ", ");
         }
-        stringBuilder.delete(stringBuilder.length()-3, stringBuilder.length());
+        stringBuilder.delete(stringBuilder.length()-2, stringBuilder.length());
+        stringBuilder.append('\n');
         for (int x = 0; x < boardSide; x++) {
             for (int y = 0; y < boardSide; y++) {
                 Node node = getNodeAtCoordinates(x,y);
@@ -195,6 +196,7 @@ public class SimpleBoard implements Board {
                 } else {
                     stringBuilder.append('•');
                 }
+                stringBuilder.append(' ');
             }
             stringBuilder.append('\n');
         }
@@ -204,7 +206,10 @@ public class SimpleBoard implements Board {
     private List<String> getPlayerIDs() {
         HashSet<String> playerIDs = new HashSet<>();
         for (Node node : nodes) {
-            playerIDs.add(node.getOccupantPlayerId());
+            String playerID = node.getOccupantPlayerId();
+            if (playerID != null) {
+                playerIDs.add(playerID);
+            }
         }
         ArrayList<String> playerIDList = new ArrayList<>();
         playerIDList.addAll(playerIDs);
