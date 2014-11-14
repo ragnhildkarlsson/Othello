@@ -154,7 +154,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean isActive() {
-		return !rules.isGameOver();
+		return !rules.isGameOver(board, players.get(0).getId(), players.get(1).getId());
 	}
 
 	/**
@@ -241,15 +241,15 @@ public class SimpleOthello implements Othello {
 	public void start(String playerId) {
 		this.board = boardFactory.newStartingBoard();
 		for (int i = 0; i < nPlayers; i++) {
-            String existingPlayerID = players.get(i).getId();
+			String existingPlayerID = players.get(i).getId();
 			if (existingPlayerID.equals(playerId)) {
 				playerInTurn = i;
-                return;
+				return;
 			}
 		}
 
-        // Could not find player with playerId
-        throw new IllegalArgumentException("Tried to start with non-existing playerId: " + playerId);
+		// Could not find player with playerId
+		throw new IllegalArgumentException("Tried to start with non-existing playerId: " + playerId);
 	}
 
 	private void switchPlayer() {
