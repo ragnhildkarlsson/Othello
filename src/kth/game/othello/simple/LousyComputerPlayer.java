@@ -70,4 +70,12 @@ public class LousyComputerPlayer implements ComputerPlayer {
 		}
 		return result;
 	}
+
+    @Override
+    public String toString() {
+        return "LousyComputerPlayer{" +
+            "ID='" + id + '\'' +
+            ", Name='" + name + '\'' +
+            '}';
+    }
 }

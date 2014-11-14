@@ -86,4 +86,14 @@ public final class SimpleNode implements Node {
 		}
 		return false;
 	}
+
+    @Override
+    public String toString() {
+        return "SimpleNode{" +
+            "ID='" + nodeId + '\'' +
+            ", occupantPlayerId='" + occupantPlayerId + '\'' +
+            ", x=" + xCoordinate +
+            ", y=" + yCoordinate +
+            '}';
+    }
 }

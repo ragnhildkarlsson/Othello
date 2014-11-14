@@ -1,10 +1,13 @@
 package kth.game.othello.simple;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
+import kth.game.othello.player.Player;
 
 /**
  * A simple implementation of the {@link kth.game.othello.board.Board}
@@ -173,4 +176,43 @@ public class SimpleBoard implements Board {
 		final int boardSide = (int) Math.sqrt(nodes.size());
 		return 0 <= x && x < boardSide && 0 <= y && y < boardSide;
 	}
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append('\n');
+        stringBuilder.append("Board with players: ");
+        for (String player : getPlayerIDs()) {
+            stringBuilder.append(player + ", ");
+        }
+        stringBuilder.delete(stringBuilder.length()-2, stringBuilder.length());
+        stringBuilder.append('\n');
+        for (int x = 0; x < boardSide; x++) {
+            for (int y = 0; y < boardSide; y++) {
+                Node node = getNodeAtCoordinates(x,y);
+                if (node.isMarked()) {
+                    String playerInitial = node.getOccupantPlayerId().substring(0,1);
+                    stringBuilder.append(playerInitial);
+                } else {
+                    stringBuilder.append('•');
+                }
+                stringBuilder.append(' ');
+            }
+            stringBuilder.append('\n');
+        }
+        return stringBuilder.toString();
+    }
+
+    private List<String> getPlayerIDs() {
+        HashSet<String> playerIDs = new HashSet<>();
+        for (Node node : nodes) {
+            String playerID = node.getOccupantPlayerId();
+            if (playerID != null) {
+                playerIDs.add(playerID);
+            }
+        }
+        ArrayList<String> playerIDList = new ArrayList<>();
+        playerIDList.addAll(playerIDs);
+        return playerIDList;
+    }
 }
