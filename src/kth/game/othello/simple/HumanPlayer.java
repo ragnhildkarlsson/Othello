@@ -14,7 +14,6 @@ public class HumanPlayer implements Player {
 
 	private final String playerId;
 	private final String name;
-	private final Type type;
 
 	/**
 	 * A player has a unique id, a name and a type.
@@ -27,8 +26,6 @@ public class HumanPlayer implements Player {
 	protected HumanPlayer(String playerId, String name) {
 		this.playerId = playerId;
 		this.name = name;
-		this.type = Player.Type.HUMAN;
-
 	}
 
 	/**
@@ -59,6 +56,14 @@ public class HumanPlayer implements Player {
 	 */
 	@Override
 	public Type getType() {
-		return this.type;
+		return Player.Type.HUMAN;
 	}
+
+    @Override
+    public String toString() {
+        return "HumanPlayer{" +
+            "ID='" + playerId + '\'' +
+            ", Name='" + name + '\'' +
+            '}';
+    }
 }
