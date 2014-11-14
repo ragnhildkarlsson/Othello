@@ -147,6 +147,12 @@ public class SimpleRules {
 				result.clear();
 				return result;
 			}
+			if(nextNodeInDirection.getOccupantPlayerId() == null){
+				// reached unmarked node, return empty list
+				result.clear();
+				return result;
+			}
+			
 			if (nextNodeInDirection.getOccupantPlayerId().equals(playerId)) {
 				return result;
 			}
