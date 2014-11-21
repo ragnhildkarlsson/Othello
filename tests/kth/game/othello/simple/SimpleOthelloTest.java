@@ -12,6 +12,7 @@ import kth.game.othello.player.Player;
 
 import kth.game.othello.simple.board.BoardFactory;
 import kth.game.othello.simple.board.ImmutableBoard;
+import kth.game.othello.simple.player.ComputerPlayer;
 import org.junit.Test;
 import org.mockito.AdditionalMatchers;
 import org.mockito.Mockito;

@@ -10,6 +10,8 @@ import kth.game.othello.board.Node;
 import kth.game.othello.player.Player;
 import kth.game.othello.simple.board.BoardFactory;
 import kth.game.othello.simple.board.ImmutableBoard;
+import kth.game.othello.simple.player.ComputerPlayer;
+import kth.game.othello.simple.player.HumanPlayer;
 
 /**
  * This class represents a simple Othello game.

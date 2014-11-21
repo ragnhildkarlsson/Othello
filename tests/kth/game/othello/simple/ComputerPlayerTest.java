@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import kth.game.othello.board.Node;
 
 import kth.game.othello.simple.board.ImmutableBoard;
+import kth.game.othello.simple.player.LousyComputerPlayer;
 import org.junit.Test;
 import org.mockito.Mockito;
 
