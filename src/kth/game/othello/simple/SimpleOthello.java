@@ -8,6 +8,8 @@ import kth.game.othello.Othello;
 import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
 import kth.game.othello.player.Player;
+import kth.game.othello.simple.board.BoardFactory;
+import kth.game.othello.simple.board.ImmutableBoard;
 
 /**
  * This class represents a simple Othello game.
@@ -20,7 +22,7 @@ public class SimpleOthello implements Othello {
 	private final BoardFactory boardFactory;
 	private final List<Player> players = new ArrayList<>();
 
-	private SimpleBoard board;
+	private ImmutableBoard board;
 	private SimpleRules rules;
 
 	private int playerInTurn = 0;
@@ -239,7 +241,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start(String playerId) {
-		this.board = boardFactory.newStartingBoard();
+		this.board = boardFactory.newDefaultStartingBoard();
 		for (int i = 0; i < nPlayers; i++) {
 			String existingPlayerID = players.get(i).getId();
 			if (existingPlayerID.equals(playerId)) {

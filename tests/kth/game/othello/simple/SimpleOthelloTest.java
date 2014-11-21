@@ -10,6 +10,8 @@ import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
 import kth.game.othello.player.Player;
 
+import kth.game.othello.simple.board.BoardFactory;
+import kth.game.othello.simple.board.ImmutableBoard;
 import org.junit.Test;
 import org.mockito.AdditionalMatchers;
 import org.mockito.Mockito;
@@ -35,7 +37,7 @@ public class SimpleOthelloTest {
 		when(player.getType()).thenReturn(Player.Type.COMPUTER);
 		when(player.getId()).thenReturn(playerID);
 		Node nodeToPlatAt = mockNodeWithId(nodeToPlayAtID);
-		when(player.getMove(any(SimpleRules.class), any(SimpleBoard.class))).thenReturn(nodeToPlatAt);
+		when(player.getMove(any(SimpleRules.class), any(ImmutableBoard.class))).thenReturn(nodeToPlatAt);
 		return player;
 	};
 
@@ -46,22 +48,22 @@ public class SimpleOthelloTest {
 		Node nodeToPlayAt = mockNodeWithId(nodeToPlayAtID);
 		Node otherNode = mockNodeWithId(otherNodeID);
 
-		SimpleBoard mockBoard = Mockito.mock(SimpleBoard.class);
+		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
 		when(mockBoard.getNodeById(nodeToPlayAtID)).thenReturn(nodeToPlayAt);
 		when(mockBoard.getNodeById(otherNodeID)).thenReturn(otherNode);
 
 		BoardFactory mockFactory = Mockito.mock(BoardFactory.class);
-		when(mockFactory.newStartingBoard()).thenReturn(mockBoard);
+		when(mockFactory.newDefaultStartingBoard()).thenReturn(mockBoard);
 		when(mockFactory.newBoardReplacingNodesInBoard(any(Board.class), anyList(), anyString())).thenReturn(mockBoard);
 
 		SimpleRules mockRules = Mockito.mock(SimpleRules.class);
-		when(mockRules.validMove(any(SimpleBoard.class), any(Node.class), eq(invalidMovePlayerID))).thenReturn(false);
+		when(mockRules.validMove(any(ImmutableBoard.class), any(Node.class), eq(invalidMovePlayerID))).thenReturn(false);
 		when(
-				mockRules.validMove(any(SimpleBoard.class), any(Node.class),
+				mockRules.validMove(any(ImmutableBoard.class), any(Node.class),
 						AdditionalMatchers.not(eq(invalidMovePlayerID)))).thenReturn(true);
 		List<Node> mockNodesToSwap = new ArrayList<>();
 		mockNodesToSwap.add(mockNodeWithId(otherNodeID));
-		when(mockRules.getNodesToSwap(any(SimpleBoard.class), any(Node.class), anyString()))
+		when(mockRules.getNodesToSwap(any(ImmutableBoard.class), any(Node.class), anyString()))
 				.thenReturn(mockNodesToSwap);
 
 		return new SimpleOthello(mockFactory, mockRules, player1, player2);

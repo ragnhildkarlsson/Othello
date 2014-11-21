@@ -1,4 +1,4 @@
-package kth.game.othello.simple;
+package kth.game.othello.simple.board;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ import kth.game.othello.board.Node;
  * 
  * @author Daniel Schlaug
  */
-public class SimpleBoard implements Board {
+public class ImmutableBoard {
 	private final List<Node> nodes;
 	private final int boardSide;
 
@@ -53,7 +53,7 @@ public class SimpleBoard implements Board {
 	 *            with its nodes in rising order of x- and then y-coordinates of
 	 *            the nodes.
 	 */
-	protected SimpleBoard(List<Node> nodes) {
+	protected ImmutableBoard(List<Node> nodes) {
 		this.nodes = new ArrayList<>();
 		this.nodes.addAll(nodes);
 		this.boardSide = (int) Math.sqrt(nodes.size());

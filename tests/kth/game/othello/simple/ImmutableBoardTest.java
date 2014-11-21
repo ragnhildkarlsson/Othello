@@ -7,13 +7,14 @@ import java.util.List;
 
 import kth.game.othello.board.Node;
 
+import kth.game.othello.simple.board.ImmutableBoard;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class SimpleBoardTest {
+public class ImmutableBoardTest {
 
 	private final String dummyID = "dummyID";
-	private final SimpleBoard dummy8x8Board = generateBoardWithSide(8);
+	private final ImmutableBoard dummy8x8Board = generateBoardWithSide(8);
 
 	private List<Node> generateNDummyNodes(int numberOfNodes) {
 
@@ -30,7 +31,7 @@ public class SimpleBoardTest {
 		return dummyNodes;
 	}
 
-	private SimpleBoard generateBoardWithSide(int boardSide) {
+	private ImmutableBoard generateBoardWithSide(int boardSide) {
 
 		final int boardSize = boardSide * boardSide;
 
@@ -39,14 +40,14 @@ public class SimpleBoardTest {
 
 		// Create board and retrieve its nodes
 
-		return new SimpleBoard(dummyNodes);
+		return new ImmutableBoard(dummyNodes);
 
 	}
 
 	@Test
 	public void testGetNodesShouldReturnCopy() throws Exception {
 
-		SimpleBoard board = generateBoardWithSide(2);
+		ImmutableBoard board = generateBoardWithSide(2);
 		List<Node> retrievedNodes = board.getNodes();
 
 		// Mock one node to try and insert
@@ -106,7 +107,7 @@ public class SimpleBoardTest {
 		dummyNodes.set(lastIndex, upperRightNode);
 
 		// Create board
-		SimpleBoard board = new SimpleBoard(dummyNodes);
+		ImmutableBoard board = new ImmutableBoard(dummyNodes);
 
 		// Test board
 		assertEquals(board.getNodeAtCoordinates(0, 0).getId(), lowerLeftNode.getId());
@@ -117,7 +118,7 @@ public class SimpleBoardTest {
 	@Test
 	public void testGetNodeByID() throws Exception {
 
-		SimpleBoard board = generateBoardWithSide(1);
+		ImmutableBoard board = generateBoardWithSide(1);
 
 		assertNotNull(board.getNodeById(dummyID));
 
@@ -136,11 +137,11 @@ public class SimpleBoardTest {
 		 */
 		List<Node> nodes = new ArrayList<>();
 		String middleID = "middle";
-		String[] nodeIDs = new String[] { SimpleBoard.Direction.NORTHWEST.name(),
-				SimpleBoard.Direction.NORTH.name(), SimpleBoard.Direction.NORTHEAST.name(),
-				SimpleBoard.Direction.WEST.name(), middleID, SimpleBoard.Direction.EAST.name(),
-				SimpleBoard.Direction.SOUTHWEST.name(), SimpleBoard.Direction.SOUTH.name(),
-				SimpleBoard.Direction.SOUTHEAST.name() };
+		String[] nodeIDs = new String[] { ImmutableBoard.Direction.NORTHWEST.name(),
+				ImmutableBoard.Direction.NORTH.name(), ImmutableBoard.Direction.NORTHEAST.name(),
+				ImmutableBoard.Direction.WEST.name(), middleID, ImmutableBoard.Direction.EAST.name(),
+				ImmutableBoard.Direction.SOUTHWEST.name(), ImmutableBoard.Direction.SOUTH.name(),
+				ImmutableBoard.Direction.SOUTHEAST.name() };
 		for (String nodeID : nodeIDs) {
 			Node node = Mockito.mock(Node.class);
 			Mockito.when(node.getId()).thenReturn(nodeID);
@@ -150,12 +151,12 @@ public class SimpleBoardTest {
 		}
 
 		// Create board
-		SimpleBoard board = new SimpleBoard(nodes);
+		ImmutableBoard board = new ImmutableBoard(nodes);
 
 		Node middleNode = board.getNodeAtCoordinates(1, 1);
 		assertEquals(middleID, middleNode.getId());
 
-		for (SimpleBoard.Direction direction : SimpleBoard.Direction.values()) {
+		for (ImmutableBoard.Direction direction : ImmutableBoard.Direction.values()) {
 			Node nodeInDirection = board.getNextNodeInDirection(middleNode, direction);
 			assertEquals(direction.name(), nodeInDirection.getId());
 		}

@@ -8,6 +8,9 @@ import java.util.List;
 import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
 
+import kth.game.othello.simple.board.BoardFactory;
+import kth.game.othello.simple.board.ImmutableBoard;
+import kth.game.othello.simple.board.ImmutableNode;
 import org.junit.Test;
 
 /**
@@ -25,7 +28,7 @@ public class BoardFactoryITest {
 
 		// Check the size of the board
 		BoardFactory bf = new BoardFactory("white", "black");
-		SimpleBoard board = bf.newStartingBoard();
+		ImmutableBoard board = bf.newDefaultStartingBoard();
 		List<Node> nodes = board.getNodes();
 		int expectedNumberOfNodes = BOARD_SIZE * BOARD_SIZE;
 		assertEquals("The size of the new board should be equal to BOARD_SIZE*BOARD_SIZE", expectedNumberOfNodes,
@@ -81,15 +84,15 @@ public class BoardFactoryITest {
 		List<Node> nodes = new ArrayList<Node>();
 		for (int x = maxIndex; x >= 0; x--) {
 			for (int y = 0; y < BOARD_SIZE; y++) {
-				Node node = new SimpleNode(x, y, null);
+				Node node = new ImmutableNode(x, y, null);
 				nodes.add(node);
 			}
 		}
-		board = new SimpleBoard(nodes);
+		board = new ImmutableBoard(nodes);
 		// Generate a list with nodes to swap
 		List<Node> nodesToSwap = new ArrayList<Node>();
-		Node firstNode = new SimpleNode(0, 0, null);
-		Node lastNode = new SimpleNode(maxIndex, maxIndex, null);
+		Node firstNode = new ImmutableNode(0, 0, null);
+		Node lastNode = new ImmutableNode(maxIndex, maxIndex, null);
 		nodesToSwap.add(firstNode);
 		nodesToSwap.add(lastNode);
 

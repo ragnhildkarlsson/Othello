@@ -5,7 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 
 import kth.game.othello.board.Node;
-import kth.game.othello.simple.SimpleBoard.Direction;
+import kth.game.othello.simple.board.ImmutableBoard;
+import kth.game.othello.simple.board.ImmutableBoard.Direction;
 
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -27,7 +28,7 @@ public class SimpleRulesTest {
 	public void testValidMoveOnBoardEdgeShouldBeValid() {
 		String player1Id = "1";
 		String player2Id = "2";
-		SimpleBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
+		ImmutableBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
 		Node playAtNode = mockBoard.getNodes().get(2);
 		SimpleRules rules = new SimpleRules();
 		boolean res = rules.validMove(mockBoard, playAtNode, player1Id);
@@ -61,7 +62,7 @@ public class SimpleRulesTest {
 	public void testValidMoveShouldGiveCorrectNumberOfSwapedNodes() {
 		String oPlayerID = "o";
 		String xPlayerID = "x";
-		SimpleBoard mockBoard = Mockito.mock(SimpleBoard.class);
+		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
 
 		// mock nodes
 		Node boardNode20 = getMockedNode(null);
@@ -196,7 +197,7 @@ public class SimpleRulesTest {
 	public void testHasValidMoveShouldBeTrueIfPlayerHaveValidMove() {
 		String player1Id = "1";
 		String player2Id = "2";
-		SimpleBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
+		ImmutableBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
 		SimpleRules rules = new SimpleRules();
 		boolean res = rules.hasValidMove(mockBoard, player1Id);
 		assertEquals(true, res);
@@ -218,7 +219,7 @@ public class SimpleRulesTest {
 	public void testHasValidMoveShouldBeFalseIfPlayerHaveNoValidMove() {
 		String player1Id = "1";
 		String player2Id = "2";
-		SimpleBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
+		ImmutableBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
 		SimpleRules rules = new SimpleRules();
 		boolean res = rules.hasValidMove(mockBoard, player2Id);
 		assertEquals(false, res);
@@ -232,7 +233,7 @@ public class SimpleRulesTest {
 	public void testIsGameOverShouldReturnFalseIfAPlayerHasAValidMove() {
 		String player1Id = "1";
 		String player2Id = "2";
-		SimpleBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
+		ImmutableBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
 		SimpleRules rules = new SimpleRules();
 		boolean res = rules.isGameOver(mockBoard, player1Id, player2Id);
 		assertEquals(false, res);
@@ -247,7 +248,7 @@ public class SimpleRulesTest {
 	public void testIsGameOverShouldReturnTrueIfNoPlayerHasAValidMove() {
 		String player1Id = "1";
 		String player2Id = "2";
-		SimpleBoard mockBoard = Mockito.mock(SimpleBoard.class);
+		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
 		ArrayList<Node> nodesOnBoard = new ArrayList<Node>();
 		Node boardNode0 = getMockedNode(player1Id);
 		nodesOnBoard.add(boardNode0);
@@ -300,9 +301,9 @@ public class SimpleRulesTest {
 	 * 
 	 * <pre>
 	 */
-	private SimpleBoard getMinimalMockedBoard(String player1Id, String player2Id) {
+	private ImmutableBoard getMinimalMockedBoard(String player1Id, String player2Id) {
 
-		SimpleBoard mockBoard = Mockito.mock(SimpleBoard.class);
+		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
 		ArrayList<Node> nodesOnBoard = new ArrayList<Node>();
 		Node boardNode0 = getMockedNode(player1Id);
 		nodesOnBoard.add(boardNode0);

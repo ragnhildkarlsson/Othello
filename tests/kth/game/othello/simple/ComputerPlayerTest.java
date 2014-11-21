@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import kth.game.othello.board.Node;
 
+import kth.game.othello.simple.board.ImmutableBoard;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -26,7 +27,7 @@ public class ComputerPlayerTest {
 		Node validMove = Mockito.mock(Node.class);
 		nodesOnBoard.add(validMove);
 
-		SimpleBoard mockBoard = Mockito.mock(SimpleBoard.class);
+		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
 		Mockito.when(mockBoard.getNodes()).thenReturn(nodesOnBoard);
 		SimpleRules mockRules = Mockito.mock(SimpleRules.class);
 
@@ -52,7 +53,7 @@ public class ComputerPlayerTest {
 		Node unvalidMove = Mockito.mock(Node.class);
 		nodesOnBoard.add(unvalidMove);
 
-		SimpleBoard mockBoard = Mockito.mock(SimpleBoard.class);
+		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
 		Mockito.when(mockBoard.getNodes()).thenReturn(nodesOnBoard);
 		SimpleRules mockRules = Mockito.mock(SimpleRules.class);
 		Mockito.when(mockRules.validMove(mockBoard, unvalidMove, null)).thenReturn(false);

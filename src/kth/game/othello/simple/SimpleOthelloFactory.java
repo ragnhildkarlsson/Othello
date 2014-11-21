@@ -2,6 +2,7 @@ package kth.game.othello.simple;
 
 import kth.game.othello.Othello;
 import kth.game.othello.OthelloFactory;
+import kth.game.othello.simple.board.BoardFactory;
 
 /**
  * A factory for producing simple Othello games.

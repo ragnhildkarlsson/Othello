@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kth.game.othello.board.Node;
-import kth.game.othello.simple.SimpleBoard.Direction;
+import kth.game.othello.simple.board.ImmutableBoard;
+import kth.game.othello.simple.board.ImmutableBoard.Direction;
 
 /**
  * Represents the rules of simple Othello.
@@ -37,7 +38,7 @@ public class SimpleRules {
 	 *            the board where the move would be made.
 	 * @return true iff move is valid.
 	 */
-	protected boolean validMove(SimpleBoard board, Node node, String playerId) {
+	protected boolean validMove(ImmutableBoard board, Node node, String playerId) {
 
 		// check if any nodes are swapped by move
 		List<Node> swappedNodes = getNodesToSwap(board, node, playerId);
@@ -60,7 +61,7 @@ public class SimpleRules {
 	 *            the board in which to look for a valid move.
 	 * @return true iff a valid move exists for the given player.
 	 */
-	protected boolean hasValidMove(SimpleBoard board, String playerId) {
+	protected boolean hasValidMove(ImmutableBoard board, String playerId) {
 		for (Node node : board.getNodes()) {
 			if (validMove(board, node, playerId)) {
 				return true;
@@ -75,7 +76,7 @@ public class SimpleRules {
 	 * @board the board to be checked for game over.
 	 * @return Returns false iff any of the two players can make a valid move.
 	 */
-	protected boolean isGameOver(SimpleBoard board, String player1Id, String player2Id) {
+	protected boolean isGameOver(ImmutableBoard board, String player1Id, String player2Id) {
 		if (hasValidMove(board, player1Id) || hasValidMove(board, player2Id)) {
 			return false;
 		}
@@ -95,7 +96,7 @@ public class SimpleRules {
 	 * @return the list of nodes that will be swapped for the given move,
 	 *         excluding the node that is placed by the player.
 	 */
-	protected List<Node> getNodesToSwap(SimpleBoard board, Node node, String playerId) {
+	protected List<Node> getNodesToSwap(ImmutableBoard board, Node node, String playerId) {
 		ArrayList<Node> result = new ArrayList<Node>();
 		// check if node is occupied
 		if (node.isMarked()) {
@@ -120,7 +121,7 @@ public class SimpleRules {
 	 * that would be swapped if the player with the given playerId would play at
 	 * the given node.
 	 */
-	private ArrayList<Node> getSwappableNodesInDirection(SimpleBoard board, String playerId, Node originNode,
+	private ArrayList<Node> getSwappableNodesInDirection(ImmutableBoard board, String playerId, Node originNode,
 			Direction direction) {
 
         // check that the following nodes in the given direction belongs to the

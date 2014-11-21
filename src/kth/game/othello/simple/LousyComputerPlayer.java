@@ -1,6 +1,7 @@
 package kth.game.othello.simple;
 
 import kth.game.othello.board.Node;
+import kth.game.othello.simple.board.ImmutableBoard;
 
 /**
  * A lousy computer player implementing the {@link ComputerPlayer} interface.
@@ -59,7 +60,7 @@ public class LousyComputerPlayer implements ComputerPlayer {
 	 * @return A node representing a valid move on the board for the player. If
 	 *         no valid move exists returns null;
 	 */
-	public Node getMove(SimpleRules rules, SimpleBoard board) {
+	public Node getMove(SimpleRules rules, ImmutableBoard board) {
 		Node result = null;
 		// Check if player have any valid move;
 		for (Node move : board.getNodes()) {

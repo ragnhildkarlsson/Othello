@@ -2,6 +2,7 @@ package kth.game.othello.simple;
 
 import kth.game.othello.board.Node;
 import kth.game.othello.player.Player;
+import kth.game.othello.simple.board.ImmutableBoard;
 
 /**
  * A representation of a computer player, i.e. a player that can generate moves
@@ -23,5 +24,5 @@ public interface ComputerPlayer extends Player {
 	 * @return A node representing a valid move on the board for the player. If
 	 *         no valid move exists returns null;
 	 */
-	public Node getMove(SimpleRules rules, SimpleBoard board);
+	public Node getMove(SimpleRules rules, ImmutableBoard board);
 }

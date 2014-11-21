@@ -1,4 +1,4 @@
-package kth.game.othello.simple;
+package kth.game.othello.simple.board;
 
 import kth.game.othello.board.Node;
 
@@ -8,7 +8,7 @@ import kth.game.othello.board.Node;
  * 
  * @author Mikael Eriksson
  */
-public final class SimpleNode implements Node {
+public final class ImmutableNode {
 
 	private final String nodeId;
 	private final String occupantPlayerId;
@@ -24,7 +24,7 @@ public final class SimpleNode implements Node {
 	 * @param playerId
 	 *            optional, set to null if the node is unmarked.
 	 */
-	protected SimpleNode(int xCoordinate, int yCoordinate, String playerId) {
+	protected ImmutableNode(int xCoordinate, int yCoordinate, String playerId) {
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
 		this.occupantPlayerId = playerId;
