@@ -1,47 +1,24 @@
 package kth.game.othello.simple.board;
 
-import kth.game.othello.board.Node;
-
 /**
- * A simple implementation of the {@link kth.game.othello.board.Node} interface,
- * SimpleNode is an immutable class.
+ * TODO write class doc here
  * 
- * @author Mikael Eriksson
  */
 public final class ImmutableNode {
 
-	private final String nodeId;
 	private final String occupantPlayerId;
-	private final int xCoordinate;
-	private final int yCoordinate;
+	private final ImmutableXYCoordinates coordinates;
 
 	/**
 	 * Construct an immutable node given its coordinates and an optional player
-	 * ID.
+	 * ID. TODO correct
 	 * 
-	 * @param xCoordinate
-	 * @param yCoordinate
 	 * @param playerId
 	 *            optional, set to null if the node is unmarked.
 	 */
-	protected ImmutableNode(int xCoordinate, int yCoordinate, String playerId) {
-		this.xCoordinate = xCoordinate;
-		this.yCoordinate = yCoordinate;
+	protected ImmutableNode(ImmutableXYCoordinates coordinates, String playerId) {
+		this.coordinates = coordinates;
 		this.occupantPlayerId = playerId;
-		int idCode = xCoordinate << 16;
-		idCode = idCode | yCoordinate;
-		this.nodeId = Integer.toString(idCode);
-	}
-
-	/**
-	 * The unique identifier of a node. A node should be identified uniquely
-	 * given the x- and y-coordinate
-	 * 
-	 * @return the id
-	 */
-	@Override
-	public String getId() {
-		return this.nodeId;
 	}
 
 	/**
@@ -49,29 +26,17 @@ public final class ImmutableNode {
 	 * 
 	 * @return the id of the occupant player or null if the node is not marked
 	 */
-	@Override
 	public String getOccupantPlayerId() {
 		return this.occupantPlayerId;
 	}
 
 	/**
-	 * The x-coordinate of this node
+	 * Returns the coordinates of the node
 	 * 
-	 * @return the x-coordinate
+	 * @return Returns the coordinates of the node
 	 */
-	@Override
-	public int getXCoordinate() {
-		return this.xCoordinate;
-	}
-
-	/**
-	 * The y-coordinate of this node
-	 * 
-	 * @return the y-coordinate
-	 */
-	@Override
-	public int getYCoordinate() {
-		return this.yCoordinate;
+	public ImmutableXYCoordinates getCoordinates() {
+		return coordinates;
 	}
 
 	/**
@@ -79,7 +44,6 @@ public final class ImmutableNode {
 	 * 
 	 * @return true if the node is occupied by any player
 	 */
-	@Override
 	public boolean isMarked() {
 		if (occupantPlayerId != null) {
 			return true;
@@ -87,13 +51,9 @@ public final class ImmutableNode {
 		return false;
 	}
 
-    @Override
-    public String toString() {
-        return "SimpleNode{" +
-            "ID='" + nodeId + '\'' +
-            ", occupantPlayerId='" + occupantPlayerId + '\'' +
-            ", x=" + xCoordinate +
-            ", y=" + yCoordinate +
-            '}';
-    }
+	@Override
+	public String toString() {
+		return "ImmutableNode{" + ", occupantPlayerId='" + occupantPlayerId + '\'' + ", x="
+				+ coordinates.getXCoordinate() + ", y=" + coordinates.getYCoordinate() + '}';
+	}
 }

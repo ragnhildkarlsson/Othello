@@ -1,11 +1,14 @@
 package kth.game.othello.simple;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import kth.game.othello.board.Node;
 import kth.game.othello.simple.board.ImmutableBoard;
 import kth.game.othello.simple.board.ImmutableBoard.Direction;
+import kth.game.othello.simple.board.ImmutableNode;
+//import kth.game.othello.board.Node;
 
 /**
  * Represents the rules of simple Othello.
@@ -25,6 +28,7 @@ public class SimpleRules {
 	}
 
 	/**
+	 * TODO add to match multiplayerCase also Or should this be speparate?
 	 * Returns true iff the given node (A) is not occupied and there exist a
 	 * node(B) on the board such that B is occupied with the given playerID and
 	 * there exist at least one straight (horizontal, vertical, or diagonal)
@@ -38,7 +42,7 @@ public class SimpleRules {
 	 *            the board where the move would be made.
 	 * @return true iff move is valid.
 	 */
-	protected boolean validMove(ImmutableBoard board, Node node, String playerId) {
+	protected boolean validMove(ImmutableBoard board, ImmutableNode node, String playerId) {
 
 		// check if any nodes are swapped by move
 		List<Node> swappedNodes = getNodesToSwap(board, node, playerId);
@@ -121,15 +125,15 @@ public class SimpleRules {
 	 * that would be swapped if the player with the given playerId would play at
 	 * the given node.
 	 */
-	private ArrayList<Node> getSwappableNodesInDirection(ImmutableBoard board, String playerId, Node originNode,
-			Direction direction) {
+	private Set<ImmutableNode> getSwappableNodesInDirection(ImmutableBoard board, String playerId,
+			ImmutableNode originNode, Direction direction) {
 
-        // check that the following nodes in the given direction belongs to the
-        // opponent until we reach a node marked by the given player. If this
-        // never happens, return an empty list.
-        ArrayList<Node> result = new ArrayList<>();
-        while (true) {
-			Node nextNodeInDirection = board.getNextNodeInDirection(originNode, direction);
+		// check that the following nodes in the given direction belongs to the
+		// opponent until we reach a node marked by the given player. If this
+		// never happens, return an empty list.
+		Set<ImmutableNode> result = new HashSet<ImmutableNode>();
+		while (true) {
+			ImmutableNode nextNodeInDirection = board.getNextNodeInDirection(originNode, direction);
 			if (nextNodeInDirection == null || nextNodeInDirection.getOccupantPlayerId() == null) {
 				// Reached edge or unmarked node - return empty list.
 				result.clear();
@@ -137,7 +141,7 @@ public class SimpleRules {
 			}
 
 			if (nextNodeInDirection.getOccupantPlayerId().equals(playerId)) {
-                // Found own node. Return nodes in between.
+				// Found own node. Return nodes in between.
 				return result;
 			}
 

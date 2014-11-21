@@ -1,7 +1,6 @@
 package kth.game.othello.simple;
 
 import kth.game.othello.board.Node;
-import kth.game.othello.player.Player;
 import kth.game.othello.simple.board.ImmutableBoard;
 
 /**
@@ -11,7 +10,7 @@ import kth.game.othello.simple.board.ImmutableBoard;
  * @author Mikael Eriksson
  * 
  */
-public interface ComputerPlayer extends Player {
+public interface ComputerPlayer {
 
 	/**
 	 * Returns a node representing a valid move on the board for the player. If
