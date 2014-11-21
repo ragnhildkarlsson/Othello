@@ -9,7 +9,7 @@ import java.util.Set;
  * 
  */
 public class ImmutableBoard {
-	private final HashMap<ImmutableXYCoordinates, ImmutableNode> nodes;
+	private final HashMap<Coordinates, ImmutableNode> nodes;
 
 	/**
 	 * The different type of directions on the board
@@ -35,7 +35,7 @@ public class ImmutableBoard {
 	 * TODO
 	 */
 	public ImmutableBoard(Set<ImmutableNode> nodes) {
-		this.nodes = new HashMap<ImmutableXYCoordinates, ImmutableNode>();
+		this.nodes = new HashMap<Coordinates, ImmutableNode>();
 		for (ImmutableNode immutableNode : nodes) {
 			this.nodes.put(immutableNode.getCoordinates(), immutableNode);
 		}
@@ -46,7 +46,7 @@ public class ImmutableBoard {
 	 * 
 	 * @return
 	 */
-	public Map<ImmutableXYCoordinates, ImmutableNode> getNodes() {
+	public Map<Coordinates, ImmutableNode> getNodes() {
 		// TODO implement return copy
 		return null;
 	}
@@ -58,7 +58,7 @@ public class ImmutableBoard {
 	 * 
 	 * @return The node at the given coordinates.
 	 */
-	public ImmutableNode getNodeAtCoordinates(ImmutableXYCoordinates coordinates) {
+	public ImmutableNode getNodeAtCoordinates(Coordinates coordinates) {
 		// TODO Implement
 		return null;
 	}
@@ -126,7 +126,7 @@ public class ImmutableBoard {
 
 	}
 
-	private boolean coordinatesAreOnBoard(ImmutableXYCoordinates coordinates) {
+	private boolean coordinatesAreOnBoard(Coordinates coordinates) {
 		// TODO reimplement;
 		return false;
 	}

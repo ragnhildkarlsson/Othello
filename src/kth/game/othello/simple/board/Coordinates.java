@@ -1,10 +1,12 @@
 package kth.game.othello.simple.board;
 
-public class ImmutableXYCoordinates {
+
+//TODO Doc
+public class Coordinates {
 	private final int xCoordinate;
 	private final int yCoordinate;
 
-	public ImmutableXYCoordinates(int xCoordinate, int yCoordinate) {
+	public Coordinates(int xCoordinate, int yCoordinate) {
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
 	}

@@ -7,7 +7,7 @@ package kth.game.othello.simple.board;
 public final class ImmutableNode {
 
 	private final String occupantPlayerId;
-	private final ImmutableXYCoordinates coordinates;
+	private final Coordinates coordinates;
 
 	/**
 	 * Construct an immutable node given its coordinates and an optional player
@@ -16,7 +16,7 @@ public final class ImmutableNode {
 	 * @param playerId
 	 *            optional, set to null if the node is unmarked.
 	 */
-	protected ImmutableNode(ImmutableXYCoordinates coordinates, String playerId) {
+	protected ImmutableNode(Coordinates coordinates, String playerId) {
 		this.coordinates = coordinates;
 		this.occupantPlayerId = playerId;
 	}
@@ -35,7 +35,7 @@ public final class ImmutableNode {
 	 * 
 	 * @return Returns the coordinates of the node
 	 */
-	public ImmutableXYCoordinates getCoordinates() {
+	public Coordinates getCoordinates() {
 		return coordinates;
 	}
 
