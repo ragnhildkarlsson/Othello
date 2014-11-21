@@ -1,47 +1,56 @@
 package kth.game.othello.board;
 
+import java.util.Observer;
+
 /**
- * The responsibility of a node is to keep information of which player is
- * occupying it.
- * 
+ * The responsibility of a node is to keep information of which player is occupying it. It must inform all observers
+ * when it is occupied by another player. In this case the update method will be called with this node and the previous
+ * occupying player id or null if the node did not have any previous occupying player.
+ *
  * @author Tomas Ekholm
  */
 public interface Node {
 
-	/**
-	 * The unique identifier of a node. A node should be identified uniquely
-	 * given the x- and y-coordinate
-	 * 
-	 * @return the id
-	 */
-	public String getId();
+    /**
+     * Adds an observer to this node.
+     *
+     * @param observer an observer of this node
+     */
+    public void addObserver(Observer observer);
 
-	/**
-	 * To get the player id of the occupant player
-	 * 
-	 * @return the id of the occupant player or null if the node is not marked
-	 */
-	public String getOccupantPlayerId();
+    /**
+     * The unique identifier of a node
+     *
+     * @return the id
+     */
+    public String getId();
 
-	/**
-	 * The x-coordinate of this node
-	 * 
-	 * @return the x-coordinate
-	 */
-	public int getXCoordinate();
+    /**
+     * To get the player id of the occupant player
+     *
+     * @return the id of the occupant player or null if the node is not marked
+     */
+    public String getOccupantPlayerId();
 
-	/**
-	 * The y-coordinate of this node
-	 * 
-	 * @return the y-coordinate
-	 */
-	public int getYCoordinate();
+    /**
+     * The x-coordinate of this node
+     *
+     * @return the x-coordinate
+     */
+    public int getXCoordinate();
 
-	/**
-	 * Determines of the node is occupied by any player
-	 * 
-	 * @return true if the node is occupied by any player
-	 */
-	public boolean isMarked();
+    /**
+     * The y-coordinate of this node
+     *
+     * @return the y-coordinate
+     */
+    public int getYCoordinate();
+
+    /**
+     * Determines of the node is occupied by any player
+     *
+     * @return true if the node is occupied by any player
+     */
+    public boolean isMarked();
 
 }
