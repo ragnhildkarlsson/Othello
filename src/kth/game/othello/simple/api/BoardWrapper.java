@@ -5,13 +5,18 @@ import kth.game.othello.board.Node;
 import kth.game.othello.simple.board.ImmutableBoard;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * //TODO
  */
 public class BoardWrapper implements Board {
 
-    private ImmutableBoard immutableBoard;
+    private List<NodeWrapper> nodeWrappers;
+
+    public BoardWrapper(List<NodeWrapper> nodeWrappers) {
+        // TODO Order list
+    }
 
     /**
      * Returns the node with the given x- and y-coordinate

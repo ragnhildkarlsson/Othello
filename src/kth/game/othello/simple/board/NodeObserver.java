@@ -5,4 +5,6 @@ package kth.game.othello.simple.board;
  */
 public interface NodeObserver {
 
+    public void nodeUpdated(ImmutableNode lastValue, ImmutableNode newValue);
+
 }

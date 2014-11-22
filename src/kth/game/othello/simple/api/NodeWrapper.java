@@ -11,10 +11,21 @@ import java.util.Observer;
  */
 public class NodeWrapper extends Observable implements Node {
 
-    private ImmutableNode immutableNode;
+    private String occupantPlayerId;
+    private int x;
+    private int y;
 
-    public NodeWrapper(ImmutableNode node) {
-        immutableNode = node;
+    public NodeWrapper(int x, int y, String occupantPlayerId) {
+
+        //TODO
+    }
+
+    /**
+     *
+     * @param id
+     */
+    protected void setOccupantPlayerId(String id) {
+        occupantPlayerId = id;
     }
 
     /**

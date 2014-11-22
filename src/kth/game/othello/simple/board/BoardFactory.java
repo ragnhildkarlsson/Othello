@@ -13,11 +13,14 @@ public class BoardFactory {
 	private static final int DEFAULT_BOARD_SIZE = 8;
 	private static final String DEFAULT_WHITE_PLAYER_ID = "white";
 	private static final String DEFAULT_BLACK_PLAYER_ID = "black";
+    private NodeObserver observer;
 
 	/**
 	 * Create a BoardFactory.
+     * TODO describe observer
 	 */
-	public BoardFactory() {
+	public BoardFactory(NodeObserver observer) {
+        this.observer = observer;
 	}
 
 	/**
@@ -101,6 +104,11 @@ public class BoardFactory {
 
 		return null;
 	}
+
+    public ImmutableBoard boardFromNodes(Set<ImmutableNode> nodes) {
+        // TODO
+    }
+
 	//
 	// private Node findNodeByCoordinates(List<Node> nodesToSearch, int
 	// xCoordinate, int yCoordinate) {

@@ -176,28 +176,7 @@ public class SimpleOthello implements Othello {
 		return rules.validMove(board, node, playerId);
 	}
 
-	/**
-	 * If the player in turn is a computer then this computer makes a move and
-	 * updates the player in turn.
-	 * 
-	 * @return the nodes that where swapped for this move, including the node
-	 *         where the player made the move
-	 * @throws IllegalStateException
-	 *             if there is not a computer in turn
-	 */
-	@Override
-	public List<Node> move() {
-		Player currentPlayer = players.get(playerInTurn);
-		switch (currentPlayer.getType()) {
-		case HUMAN:
-			throw new IllegalArgumentException("Tried to do an AI move using a human player.");
-		case COMPUTER:
-			ComputerPlayer computerPlayer = (ComputerPlayer) currentPlayer;
-			Node nodeToPlayAt = computerPlayer.getMove(rules, board);
-			return this.move(currentPlayer.getId(), nodeToPlayAt.getId());
-		}
-		throw new IllegalStateException("This should never be reached.");
-	}
+
 
 	/**
 	 * Validates if the move is correct and if the player is in turn. If so,
