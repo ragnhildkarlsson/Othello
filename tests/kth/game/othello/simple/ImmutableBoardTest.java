@@ -181,6 +181,7 @@ public class ImmutableBoardTest {
 
 		for (ImmutableBoard.Direction direction : ImmutableBoard.Direction.values()) {
 			ImmutableNode nodeInDirection = board.getNextNodeInDirection(middleNode, direction);
+			//TODO should assert on coordinates instead of using occupying player?
 			assertEquals(direction.name(), nodeInDirection.getOccupantPlayerId());
 		}
 
