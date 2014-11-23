@@ -38,7 +38,7 @@ public class SimpleRules {
 	 *            the board where the move would be made.
 	 * @return true iff move is valid.
 	 */
-	protected boolean validMove(ImmutableBoard board, ImmutableNode node, String playerId) {
+	public boolean validMove(ImmutableBoard board, ImmutableNode node, String playerId) {
 
 		// check if any nodes are swapped by move
 		Set<ImmutableNode> swappedNodes = getNodesToSwap(board, node, playerId);
@@ -61,7 +61,7 @@ public class SimpleRules {
 	 *            the board in which to look for a valid move.
 	 * @return true iff a valid move exists for the given player.
 	 */
-	protected boolean hasValidMove(ImmutableBoard board, String playerId) {
+	public boolean hasValidMove(ImmutableBoard board, String playerId) {
 		Set<ImmutableNode> nodesOnBoard = board.getNodes();
 		for (ImmutableNode node : nodesOnBoard) {
 			if (validMove(board, node, playerId)) {
@@ -78,7 +78,7 @@ public class SimpleRules {
 	 * @board the board to be checked for game over.
 	 * @return Returns false iff any of the two players can make a valid move.
 	 */
-	protected boolean isGameOver(ImmutableBoard board, String player1Id, String player2Id) {
+	public boolean isGameOver(ImmutableBoard board, String player1Id, String player2Id) {
 		if (hasValidMove(board, player1Id) || hasValidMove(board, player2Id)) {
 			return false;
 		}
@@ -98,7 +98,7 @@ public class SimpleRules {
 	 * @return the list of nodes that will be swapped for the given move,
 	 *         excluding the node that is placed by the player.
 	 */
-	protected Set<ImmutableNode> getNodesToSwap(ImmutableBoard board, ImmutableNode node, String playerId) {
+	public Set<ImmutableNode> getNodesToSwap(ImmutableBoard board, ImmutableNode node, String playerId) {
 		Set<ImmutableNode> result = new HashSet<ImmutableNode>();
 		// check if node is occupied
 		if (node.isMarked()) {
