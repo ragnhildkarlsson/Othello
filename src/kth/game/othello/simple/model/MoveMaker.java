@@ -9,19 +9,18 @@ import java.util.Set;
  */
 public class MoveMaker {
 
-	private final ImmutableBoardFactory boardFactory;
-	private final List<String> playersId;
+	private final List<String> playerIds;
 	private SimpleRules rules;
-	private String playerInTurn;
+	private int playerInTurn;
 	private ImmutableBoard board;
 
-	public MoveMaker(ImmutableBoardFactory boardFactory, ImmutableBoard startBoard, String startPlayerId,
-			List<String> playersId, SimpleRules rules) {
-		this.boardFactory = boardFactory;
-		this.playersId = playersId;
+	public MoveMaker(ImmutableBoard startBoard, String startPlayerId,
+			List<String> playerIds, SimpleRules rules) {
+		this.playerIds = playerIds;
 		this.rules = rules;
 		this.board = startBoard;
-		this.playerInTurn = startPlayerId;
+        // TODO set start player index
+//		this.playerInTurn = startPlayerId;
 	}
 
 	/**

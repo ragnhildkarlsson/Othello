@@ -168,6 +168,7 @@ public class SimpleOthello implements Othello, BoardObserver {
 	 */
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
+
 		return null;
 	}
 
@@ -187,6 +188,7 @@ public class SimpleOthello implements Othello, BoardObserver {
 	 */
 	@Override
 	public void start(String playerId) {
+        // TODO Throw exception if playerId is not among players
 
 	}
 }
