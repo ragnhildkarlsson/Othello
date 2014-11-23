@@ -16,7 +16,6 @@ public class SimpleScore implements Score, Observer {
 	@Override
 	public void addObserver(Observer observer) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -34,6 +33,5 @@ public class SimpleScore implements Score, Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
-
 	}
 }

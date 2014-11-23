@@ -1,5 +1,6 @@
 package kth.game.othello.simple.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -28,8 +29,8 @@ public class GameModel {
 	 * @return Returns a set with nodes that will be swapped if the player with
 	 *         the given id play at a node with the given coordinates.
 	 */
-	public Set<ImmutableNode> getNodesToSwap(String playerId, Coordinates nodeCoordinates) {
-		return moveMaker.getNodesToSwap(nodeCoordinates, playerId);
+	public Set<Coordinates> getNodesToSwap(String playerId, Coordinates nodeCoordinates) {
+		return getSetOfCoordinatesFromNodes(moveMaker.getNodesToSwap(nodeCoordinates, playerId));
 	}
 
 	/**
@@ -80,14 +81,22 @@ public class GameModel {
 	 * 
 	 * @param playerId
 	 *            the id of the player that makes the move
-	 * @param nodeId
-	 *            the id of the node where the player wants to move
-	 * @return the nodes that where swapped for this move, including the node
-	 *         where the player made the move
+	 * @param nodeCoordinates
+	 *            the coordinates of the node where the player wants to move
+	 * @return the coordinates of the nodes that where swapped, including the
+	 *         coordinates of the node where the player made the move;
 	 * @throws IllegalArgumentException
 	 *             if the move is not valid, or if the player is not in turn
 	 */
-	public Set<ImmutableNode> move(String playerId, Coordinates nodeCoordinates) throws IllegalArgumentException {
-		return moveMaker.makeMove(playerId, nodeCoordinates);
+	public Set<Coordinates> move(String playerId, Coordinates nodeCoordinates) throws IllegalArgumentException {
+		return getSetOfCoordinatesFromNodes(moveMaker.makeMove(playerId, nodeCoordinates));
+	}
+
+	private Set<Coordinates> getSetOfCoordinatesFromNodes(Set<ImmutableNode> nodes) {
+		Set<Coordinates> coordinates = new HashSet<Coordinates>();
+		for (ImmutableNode immutableNode : nodes) {
+			coordinates.add(immutableNode.getCoordinates());
+		}
+		return coordinates;
 	}
 }

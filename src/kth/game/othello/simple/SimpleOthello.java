@@ -1,6 +1,8 @@
 package kth.game.othello.simple;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import kth.game.othello.Othello;
 import kth.game.othello.board.Board;
@@ -22,13 +24,15 @@ public class SimpleOthello implements Othello {
 	private PlayerHandler playerHandler;
 	private GameModelFactory gameModelFactory;
 	private GameModel gameModel;
+	private Score score;
 
 	public SimpleOthello(ImmutableBoard startingBoard, BoardWrapper board, PlayerHandler playerHandler,
-			GameModelFactory gameModelFactory) {
+			GameModelFactory gameModelFactory, Score score) {
 		this.startingBoard = startingBoard;
 		this.playerHandler = playerHandler;
 		this.boardWrapper = board;
 		this.gameModelFactory = gameModelFactory;
+
 	}
 
 	/**
@@ -52,7 +56,14 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> getNodesToSwap(String playerId, String nodeId) {
-		return null;
+		Node node = boardWrapper.getNodeById(nodeId);
+		Coordinates nodeCoordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
+		Set<Coordinates> coordinatesOfSwappedNodes = gameModel.getNodesToSwap(playerId, nodeCoordinates);
+		ArrayList<Node> result = new ArrayList<Node>();
+		for (Coordinates cord : coordinatesOfSwappedNodes) {
+			result.add(boardWrapper.getNode(cord.getXCoordinate(), cord.getYCoordinate()));
+		}
+		return result;
 	}
 
 	/**
@@ -82,7 +93,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public Score getScore() {
-		return null;
+		return score;
 	}
 
 	/**
@@ -138,6 +149,7 @@ public class SimpleOthello implements Othello {
 		// TODO Fix
 		// update boardwrapper with the changes from the model
 		return null;
+
 		// Player currentPlayer = players.get(playerInTurn);
 		// switch (currentPlayer.getType()) {
 		// case HUMAN:
@@ -166,6 +178,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
+		// TODO
 		// Update boardwrapper with the changes from the nodes
 		return null;
 	}

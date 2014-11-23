@@ -26,6 +26,7 @@ public class NodeWrapper extends Observable implements Node {
 	 */
 	protected void setOccupantPlayerId(String id) {
 		occupantPlayerId = id;
+		// TODO notify
 	}
 
 	/**
@@ -88,4 +89,5 @@ public class NodeWrapper extends Observable implements Node {
 	public boolean isMarked() {
 		return false;
 	}
+
 }

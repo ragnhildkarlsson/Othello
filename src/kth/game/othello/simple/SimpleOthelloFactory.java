@@ -39,6 +39,8 @@ public class SimpleOthelloFactory implements OthelloFactory {
 	public Othello createComputerGame() {
 
 		// TODO implement
+		// See if it is possible to extract general tasks done in createGame
+		// method below to private methods and reuse code
 
 		// BoardFactory boardFactory = new BoardFactory(player1Id, player2Id);
 		// SimpleRules rules = new SimpleRules();
@@ -60,6 +62,8 @@ public class SimpleOthelloFactory implements OthelloFactory {
 	@Override
 	public Othello createHumanGame() {
 		// TODO implement
+
+		// Old Implementation
 		// BoardFactory boardFactory = new BoardFactory(player1Id, player2Id);
 		// SimpleRules rules = new SimpleRules();
 		// HumanPlayer human = new HumanPlayer(player1Id, nameOfPlayer1);
@@ -78,6 +82,10 @@ public class SimpleOthelloFactory implements OthelloFactory {
 	 */
 	@Override
 	public Othello createHumanVersusComputerGame() {
+
+		// See if it is possible to extract general tasks done in createGame
+		// method below to private methods and reuse code
+
 		// TODO implement
 		// BoardFactory boardFactory = new BoardFactory(player1Id, player2Id);
 		// SimpleRules rules = new SimpleRules();
@@ -126,11 +134,15 @@ public class SimpleOthelloFactory implements OthelloFactory {
 		for (ImmutableNode immutableNode : immutableNodes) {
 			nodeWrappers.add(getNodeWrapperFromImmuatableNode(immutableNode));
 		}
+		SimpleScore score = new SimpleScore();
+		// Add score as observer for all nodes;
+		for (NodeWrapper nodeWrapper : nodeWrappers) {
+			nodeWrapper.addObserver(score);
+		}
 
 		BoardWrapper boardWrapper = new BoardWrapper(nodeWrappers);
 		PlayerHandler playerHandler = new PlayerHandler(players);
-		SimpleOthello othello = new SimpleOthello(immutableBoard, boardWrapper, playerHandler, gameModelFactory);
-
+		SimpleOthello othello = new SimpleOthello(immutableBoard, boardWrapper, playerHandler, gameModelFactory, score);
 		return othello;
 	}
 

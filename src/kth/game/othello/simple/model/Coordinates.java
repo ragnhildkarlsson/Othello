@@ -1,8 +1,7 @@
 package kth.game.othello.simple.model;
 
-
 //TODO Doc
-public class Coordinates {
+public final class Coordinates {
 	private final int xCoordinate;
 	private final int yCoordinate;
 
