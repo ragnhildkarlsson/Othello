@@ -8,9 +8,10 @@ import java.util.List;
 import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
 
-import kth.game.othello.simple.board.BoardFactory;
-import kth.game.othello.simple.board.ImmutableBoard;
-import kth.game.othello.simple.board.ImmutableNode;
+import kth.game.othello.simple.model.ImmutableBoard;
+import kth.game.othello.simple.model.ImmutableBoardFactory;
+import kth.game.othello.simple.model.ImmutableNode;
+
 import org.junit.Test;
 
 /**
@@ -27,7 +28,7 @@ public class BoardFactoryITest {
 	public void testStartingBoardGeneration() {
 
 		// Check the size of the board
-		BoardFactory bf = new BoardFactory("white", "black");
+		ImmutableBoardFactory bf = new ImmutableBoardFactory("white", "black");
 		ImmutableBoard board = bf.newDefaultStartingBoard();
 		List<Node> nodes = board.getNodes();
 		int expectedNumberOfNodes = BOARD_SIZE * BOARD_SIZE;
@@ -97,7 +98,7 @@ public class BoardFactoryITest {
 		nodesToSwap.add(lastNode);
 
 		String playerId = "swapped";
-		BoardFactory boardFactory = new BoardFactory("white", "black");
+		ImmutableBoardFactory boardFactory = new ImmutableBoardFactory("white", "black");
 		Board newBoard = boardFactory.newBoardReplacingNodesInBoard(board, nodesToSwap, playerId);
 		nodes = newBoard.getNodes();
 		assertSame("First node should be swapped", playerId, nodes.get(0).getOccupantPlayerId());

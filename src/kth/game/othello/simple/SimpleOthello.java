@@ -1,92 +1,37 @@
 package kth.game.othello.simple;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import kth.game.othello.Othello;
 import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
 import kth.game.othello.player.Player;
-import kth.game.othello.simple.board.BoardFactory;
-import kth.game.othello.simple.board.ImmutableBoard;
-import kth.game.othello.simple.player.ComputerPlayer;
-import kth.game.othello.simple.player.HumanPlayer;
+import kth.game.othello.score.Score;
+import kth.game.othello.simple.model.Coordinates;
+import kth.game.othello.simple.model.GameModel;
+import kth.game.othello.simple.model.ImmutableNode;
 
 /**
- * This class represents a simple Othello game.
- * 
- * @author Daniel Schlaug
+ * Created by spike on 11/22/14.
  */
-public class SimpleOthello implements Othello {
+public class SimpleOthello implements Othello, BoardObserver {
 
-	private final int nPlayers = 2;
-	private final BoardFactory boardFactory;
-	private final List<Player> players = new ArrayList<>();
+	private BoardWrapper boardWrapper;
+	private BoardWrapper startingBoard;
+	private PlayerHandler playerHandler;
+	private GameModelFactory gameModelFactory;
+	private GameModel gameModel;
 
-	private ImmutableBoard board;
-	private SimpleRules rules;
-
-	private int playerInTurn = 0;
-
-	/**
-	 * Creates an Othello game between two computers.
-	 * 
-	 * @param boardFactory
-	 *            the factory that will be used to create the boards in the
-	 *            game.
-	 * @param rules
-	 *            the rules for the game.
-	 * @param computer
-	 *            the first computer player.
-	 * @param computer2
-	 *            the second computer player.
-	 */
-	protected SimpleOthello(BoardFactory boardFactory, SimpleRules rules, ComputerPlayer computer,
-			ComputerPlayer computer2) {
-		this(boardFactory, rules, (Player) computer, (Player) computer2);
+	public SimpleOthello(BoardWrapper startingBoard, PlayerHandler playerHandler, GameModelFactory gameModelFactory) {
+		this.startingBoard = startingBoard;
+		this.playerHandler = playerHandler;
+		this.gameModelFactory = gameModelFactory;
 	}
 
-	/**
-	 * Creates an Othello game between a human and computer player.
-	 * 
-	 * @param boardFactory
-	 *            the factory that will be used to create the boards in the
-	 *            game.
-	 * @param rules
-	 *            the rules for the game.
-	 * @param computer
-	 *            the computer player.
-	 * @param human
-	 *            the human player.
-	 */
-	protected SimpleOthello(BoardFactory boardFactory, SimpleRules rules, HumanPlayer human, ComputerPlayer computer) {
-		this(boardFactory, rules, (Player) computer, (Player) human);
-	}
-
-	/**
-	 * Creates an Othello game between two human players.
-	 * 
-	 * @param boardFactory
-	 *            the factory that will be used to create the boards in the
-	 *            game.
-	 * @param rules
-	 *            the rules for the game.
-	 * @param human
-	 *            the first human player.
-	 * @param human2
-	 *            the second human player.
-	 */
-	protected SimpleOthello(BoardFactory boardFactory, SimpleRules rules, HumanPlayer human, HumanPlayer human2) {
-		this(boardFactory, rules, (Player) human, (Player) human2);
-	}
-
-	// This constructor should be called by all the above.
-	private SimpleOthello(BoardFactory boardFactory, SimpleRules rules, Player startingPlayer, Player secondPlayer) {
-		players.add(startingPlayer);
-		players.add(secondPlayer);
-		this.rules = rules;
-		this.boardFactory = boardFactory;
+	@Override
+	public void nodeUpdated(ImmutableNode lastValue, ImmutableNode newValue) {
+		// TODO Notify relevant NodeWrapper
+		// boardWrapper.getNode();
 	}
 
 	/**
@@ -96,7 +41,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public Board getBoard() {
-		return this.board;
+		return boardWrapper;
 	}
 
 	/**
@@ -110,10 +55,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> getNodesToSwap(String playerId, String nodeId) {
-		List<Node> nodesToSwap;
-		Node node = board.getNodeById(nodeId);
-		nodesToSwap = rules.getNodesToSwap(board, node, playerId);
-		return nodesToSwap;
+		return null;
 	}
 
 	/**
@@ -123,7 +65,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public Player getPlayerInTurn() {
-		return players.get(playerInTurn);
+		return playerHandler.getPlayerById(gameModel.getPlayerInTurn());
 	}
 
 	/**
@@ -133,10 +75,17 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Player> getPlayers() {
-		// Return a copy of our internal players to enforce immutability.
-		List<Player> cloneOfPlayers = new ArrayList<>();
-		cloneOfPlayers.addAll(players);
-		return cloneOfPlayers;
+		return playerHandler.getPlayers();
+	}
+
+	/**
+	 * The score of the game
+	 * 
+	 * @return the score
+	 */
+	@Override
+	public Score getScore() {
+		return null;
 	}
 
 	/**
@@ -148,7 +97,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean hasValidMove(String playerId) {
-		return rules.hasValidMove(board, playerId);
+		return gameModel.hasValidMove(playerId);
 	}
 
 	/**
@@ -158,7 +107,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean isActive() {
-		return !rules.isGameOver(board, players.get(0).getId(), players.get(1).getId());
+		return gameModel.isActive();
 	}
 
 	/**
@@ -172,11 +121,37 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean isMoveValid(String playerId, String nodeId) {
-		Node node = board.getNodeById(nodeId);
-		return rules.validMove(board, node, playerId);
+		Node node = boardWrapper.getNodeById(nodeId);
+		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
+		return gameModel.isMoveValid(playerId, coordinates);
 	}
 
+	/**
+	 * If the player in turn is a computer then this computer makes a move and
+	 * updates the player in turn.
+	 * 
+	 * @return the nodes that where swapped for this move, including the node
+	 *         where the player made the move
+	 * @throws IllegalStateException
+	 *             if there is not a computer in turn
+	 */
+	@Override
+	public List<Node> move() {
 
+		// TODO Fix
+		return null;
+		// Player currentPlayer = players.get(playerInTurn);
+		// switch (currentPlayer.getType()) {
+		// case HUMAN:
+		// throw new
+		// IllegalStateException("Tried to do an AI move using a human player.");
+		// case COMPUTER:
+		// ComputerPlayer computerPlayer = (ComputerPlayer) currentPlayer;
+		// Node nodeToPlayAt = computerPlayer.getMove(rules, board);
+		// return this.move(currentPlayer.getId(), nodeToPlayAt.getId());
+		// }
+		// throw new IllegalStateException("This should never be reached.");
+	}
 
 	/**
 	 * Validates if the move is correct and if the player is in turn. If so,
@@ -193,15 +168,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
-		if (!isMoveValid(playerId, nodeId)) {
-			throw new IllegalArgumentException("Tried to make an invalid move.");
-		}
-		Node nodePlayedAt = board.getNodeById(nodeId);
-		List<Node> nodesToSwap = rules.getNodesToSwap(board, nodePlayedAt, playerId);
-		nodesToSwap.add(nodePlayedAt);
-		this.board = boardFactory.newBoardReplacingNodesInBoard(board, nodesToSwap, playerId);
-		this.switchPlayer();
-		return nodesToSwap;
+		return null;
 	}
 
 	/**
@@ -209,9 +176,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start() {
-		int randomPlayerIndex = new Random().nextInt(nPlayers);
-		Player randomPlayer = players.get(randomPlayerIndex);
-		start(randomPlayer.getId());
+
 	}
 
 	/**
@@ -222,21 +187,6 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start(String playerId) {
-		this.board = boardFactory.newDefaultStartingBoard();
-		for (int i = 0; i < nPlayers; i++) {
-			String existingPlayerID = players.get(i).getId();
-			if (existingPlayerID.equals(playerId)) {
-				playerInTurn = i;
-				return;
-			}
-		}
 
-		// Could not find player with playerId
-		throw new IllegalArgumentException("Tried to start with non-existing playerId: " + playerId);
-	}
-
-	private void switchPlayer() {
-		// Alternates between player 0 and player 1
-		playerInTurn = (playerInTurn + 1) % nPlayers;
 	}
 }

@@ -1,13 +1,10 @@
-package kth.game.othello.simple;
+package kth.game.othello.simple.model;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import kth.game.othello.simple.board.ImmutableBoard;
-import kth.game.othello.simple.board.ImmutableBoard.Direction;
-import kth.game.othello.simple.board.ImmutableNode;
+import kth.game.othello.simple.model.ImmutableBoard.Direction;
+
 //import kth.game.othello.board.Node;
 
 /**
@@ -28,11 +25,10 @@ public class SimpleRules {
 	}
 
 	/**
-	 * TODO add to match multiplayerCase also Or should this be speparate?
 	 * Returns true iff the given node (A) is not occupied and there exist a
 	 * node(B) on the board such that B is occupied with the given playerID and
 	 * there exist at least one straight (horizontal, vertical, or diagonal)
-	 * line between A and B where all nodes are occupied by the other Player.
+	 * line between A and B where all nodes are occupied by other players.
 	 * 
 	 * @param Node
 	 *            the node on the board where the player wants to play.
@@ -45,7 +41,7 @@ public class SimpleRules {
 	protected boolean validMove(ImmutableBoard board, ImmutableNode node, String playerId) {
 
 		// check if any nodes are swapped by move
-		List<Node> swappedNodes = getNodesToSwap(board, node, playerId);
+		Set<ImmutableNode> swappedNodes = getNodesToSwap(board, node, playerId);
 		if (swappedNodes.size() > 0) {
 			return true;
 		}
@@ -57,7 +53,7 @@ public class SimpleRules {
 	 * Returns true iff any node (A) is not occupied and there exist a node(B)
 	 * on the board such that B is occupied with the given playerID and there
 	 * exist at least one straight (horizontal, vertical, or diagonal) line
-	 * between A and B where all nodes are occupied by the other Player.
+	 * between A and B where all nodes are occupied by the other players.
 	 * 
 	 * @param PlayerID
 	 *            the id of the player making the move.
@@ -66,11 +62,13 @@ public class SimpleRules {
 	 * @return true iff a valid move exists for the given player.
 	 */
 	protected boolean hasValidMove(ImmutableBoard board, String playerId) {
-		for (Node node : board.getNodes()) {
+		Set<ImmutableNode> nodesOnBoard = board.getNodes();
+		for (ImmutableNode node : nodesOnBoard) {
 			if (validMove(board, node, playerId)) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -100,20 +98,18 @@ public class SimpleRules {
 	 * @return the list of nodes that will be swapped for the given move,
 	 *         excluding the node that is placed by the player.
 	 */
-	protected List<Node> getNodesToSwap(ImmutableBoard board, Node node, String playerId) {
-		ArrayList<Node> result = new ArrayList<Node>();
+	protected Set<ImmutableNode> getNodesToSwap(ImmutableBoard board, ImmutableNode node, String playerId) {
+		Set<ImmutableNode> result = new HashSet<ImmutableNode>();
 		// check if node is occupied
 		if (node.isMarked()) {
 			result.clear();
 			return result;
 		}
 		// Add the nodes swapped in each direction
-		ArrayList<Node> nodesInDirection;
+		Set<ImmutableNode> nodesInDirection;
 		for (Direction dir : Direction.values()) {
 			nodesInDirection = getSwappableNodesInDirection(board, playerId, node, dir);
-			for (Node swappedNode : nodesInDirection) {
-				result.add(swappedNode);
-			}
+			result.addAll(nodesInDirection);
 		}
 
 		return result;

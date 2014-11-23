@@ -1,8 +1,8 @@
 package kth.game.othello.simple.player;
 
 import kth.game.othello.board.Node;
-import kth.game.othello.simple.SimpleRules;
-import kth.game.othello.simple.board.ImmutableBoard;
+import kth.game.othello.simple.model.ImmutableBoard;
+import kth.game.othello.simple.model.SimpleRules;
 
 /**
  * A representation of a computer player, i.e. a player that can generate moves

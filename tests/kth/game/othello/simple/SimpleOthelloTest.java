@@ -10,8 +10,10 @@ import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
 import kth.game.othello.player.Player;
 
-import kth.game.othello.simple.board.BoardFactory;
-import kth.game.othello.simple.board.ImmutableBoard;
+import kth.game.othello.simple.model.GameModel;
+import kth.game.othello.simple.model.ImmutableBoard;
+import kth.game.othello.simple.model.ImmutableBoardFactory;
+import kth.game.othello.simple.model.SimpleRules;
 import kth.game.othello.simple.player.ComputerPlayer;
 import org.junit.Test;
 import org.mockito.AdditionalMatchers;
@@ -42,7 +44,7 @@ public class SimpleOthelloTest {
 		return player;
 	};
 
-	private SimpleOthello othelloWithMockedDependencies() {
+	private GameModel othelloWithMockedDependencies() {
 		ComputerPlayer player1 = mockComputerPlayerWithID(player1ID);
 		ComputerPlayer player2 = mockComputerPlayerWithID(player2ID);
 
@@ -53,7 +55,7 @@ public class SimpleOthelloTest {
 		when(mockBoard.getNodeById(nodeToPlayAtID)).thenReturn(nodeToPlayAt);
 		when(mockBoard.getNodeById(otherNodeID)).thenReturn(otherNode);
 
-		BoardFactory mockFactory = Mockito.mock(BoardFactory.class);
+		ImmutableBoardFactory mockFactory = Mockito.mock(ImmutableBoardFactory.class);
 		when(mockFactory.newDefaultStartingBoard()).thenReturn(mockBoard);
 		when(mockFactory.newBoardReplacingNodesInBoard(any(Board.class), anyList(), anyString())).thenReturn(mockBoard);
 
@@ -67,12 +69,12 @@ public class SimpleOthelloTest {
 		when(mockRules.getNodesToSwap(any(ImmutableBoard.class), any(Node.class), anyString()))
 				.thenReturn(mockNodesToSwap);
 
-		return new SimpleOthello(mockFactory, mockRules, player1, player2);
+		return new GameModel(mockFactory, mockRules, player1, player2);
 	}
 
 	@Test
 	public void testGetPlayerInTurnShouldReturnStartingPlayer() throws Exception {
-		SimpleOthello othello = othelloWithMockedDependencies();
+		GameModel othello = othelloWithMockedDependencies();
 
 		othello.start(player2ID);
 
@@ -81,7 +83,7 @@ public class SimpleOthelloTest {
 
 	@Test
 	public void testGetPlayerInTurnShouldUpdateOnMove() throws Exception {
-		SimpleOthello othello = othelloWithMockedDependencies();
+		GameModel othello = othelloWithMockedDependencies();
 
 		othello.start(player2ID);
 		othello.move();
@@ -95,7 +97,7 @@ public class SimpleOthelloTest {
 	public void testGetPlayersShouldReturnCopy() throws Exception {
 		ComputerPlayer player = mockComputerPlayerWithID(null);
 
-		SimpleOthello othello = new SimpleOthello(null, null, player, player);
+		GameModel othello = new GameModel(null, null, player, player);
 
 		List<Player> players = othello.getPlayers();
 
@@ -107,7 +109,7 @@ public class SimpleOthelloTest {
 
 	@Test
 	public void testMoveShouldReturnSwappedNodesIfValid() throws Exception {
-		SimpleOthello othello = othelloWithMockedDependencies();
+		GameModel othello = othelloWithMockedDependencies();
 
 		// Test valid move without arguments
 		othello.start();
@@ -149,7 +151,7 @@ public class SimpleOthelloTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testMoveShouldTriggerExceptionIfInvalid() throws Exception {
-		SimpleOthello othello = othelloWithMockedDependencies();
+		GameModel othello = othelloWithMockedDependencies();
 
 		// Test invalid move with arguments
 		othello.start();
@@ -158,7 +160,7 @@ public class SimpleOthelloTest {
 
 	@Test
 	public void testStartShouldRandomizePlayer() throws Exception {
-		SimpleOthello othello = othelloWithMockedDependencies();
+		GameModel othello = othelloWithMockedDependencies();
 
 		boolean player1HasStarted = false;
 		boolean player2HasStarted = false;
@@ -186,7 +188,7 @@ public class SimpleOthelloTest {
 
 	@Test
 	public void testStartWithArgumentShouldSetGivenPlayer() throws Exception {
-		SimpleOthello othello = othelloWithMockedDependencies();
+		GameModel othello = othelloWithMockedDependencies();
 
 		othello.start(player1ID);
 		assertEquals(othello.getPlayerInTurn().getId(), player1ID);

@@ -1,4 +1,4 @@
-package kth.game.othello.simple.board;
+package kth.game.othello.simple.model;
 
 
 //TODO Doc

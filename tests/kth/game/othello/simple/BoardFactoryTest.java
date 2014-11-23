@@ -7,8 +7,8 @@ import java.util.List;
 
 import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
+import kth.game.othello.simple.model.ImmutableBoardFactory;
 
-import kth.game.othello.simple.board.BoardFactory;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -16,7 +16,7 @@ public class BoardFactoryTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGeneratingNewBoardFromOldIllegalArgument() {
-		BoardFactory bf = new BoardFactory("white", "black");
+		ImmutableBoardFactory bf = new ImmutableBoardFactory("white", "black");
 
 		// Check that wrongly sized old boards get rejected
 		List<Node> oneNode = new ArrayList<Node>();

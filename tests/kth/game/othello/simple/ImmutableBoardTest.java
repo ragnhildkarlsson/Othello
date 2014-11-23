@@ -7,7 +7,8 @@ import java.util.List;
 
 import kth.game.othello.board.Node;
 
-import kth.game.othello.simple.board.ImmutableBoard;
+import kth.game.othello.simple.model.ImmutableBoard;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 

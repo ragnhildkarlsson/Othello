@@ -5,8 +5,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 
 import kth.game.othello.board.Node;
-import kth.game.othello.simple.board.ImmutableBoard;
-import kth.game.othello.simple.board.ImmutableBoard.Direction;
+import kth.game.othello.simple.model.ImmutableBoard;
+import kth.game.othello.simple.model.SimpleRules;
+import kth.game.othello.simple.model.ImmutableBoard.Direction;
 
 import org.junit.Test;
 import org.mockito.Mockito;
