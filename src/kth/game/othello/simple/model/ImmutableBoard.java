@@ -1,6 +1,7 @@
 package kth.game.othello.simple.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import kth.game.othello.simple.BoardObserver;
@@ -161,6 +162,11 @@ public class ImmutableBoard {
 		// stringBuilder.append('\n');
 		// }
 		// return stringBuilder.toString();
+	}
+
+	public ImmutableNode getNodeById(String dummyID) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	// private List<String> getPlayerIDs() {

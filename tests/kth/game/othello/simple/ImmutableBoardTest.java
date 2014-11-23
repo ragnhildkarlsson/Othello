@@ -2,12 +2,12 @@ package kth.game.othello.simple;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import kth.game.othello.board.Node;
-
+import kth.game.othello.simple.model.Coordinates;
 import kth.game.othello.simple.model.ImmutableBoard;
+import kth.game.othello.simple.model.ImmutableNode;
 
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -17,14 +17,23 @@ public class ImmutableBoardTest {
 	private final String dummyID = "dummyID";
 	private final ImmutableBoard dummy8x8Board = generateBoardWithSide(8);
 
-	private List<Node> generateNDummyNodes(int numberOfNodes) {
+	private Coordinates createMockCoordinates(int x, int y) {
+		Coordinates cord = Mockito.mock(Coordinates.class);
+		Mockito.when(cord.getXCoordinate()).thenReturn(x);
+		Mockito.when(cord.getYCoordinate()).thenReturn(y);
+		return cord;
+	}
+
+	private Set<ImmutableNode> generateNDummyNodes(int numberOfNodes) {
 
 		// Mock dummy node
-		Node dummyNode = Mockito.mock(Node.class);
+		ImmutableNode dummyNode = Mockito.mock(ImmutableNode.class);
 		Mockito.when(dummyNode.getId()).thenReturn(dummyID);
 
 		// Construct a list of dummy nodes
-		List<Node> dummyNodes = new ArrayList<>();
+
+		Set<ImmutableNode> dummyNodes = new HashSet<ImmutableNode>();
+		// Set<ImmutableNode> dummyNodes = new Set<>();
 		for (int i = 0; i < numberOfNodes; i++) {
 			dummyNodes.add(dummyNode);
 		}
@@ -37,7 +46,7 @@ public class ImmutableBoardTest {
 		final int boardSize = boardSide * boardSide;
 
 		// Mock dummy nodes
-		List<Node> dummyNodes = generateNDummyNodes(boardSize);
+		Set<ImmutableNode> dummyNodes = generateNDummyNodes(boardSize);
 
 		// Create board and retrieve its nodes
 
@@ -49,15 +58,15 @@ public class ImmutableBoardTest {
 	public void testGetNodesShouldReturnCopy() throws Exception {
 
 		ImmutableBoard board = generateBoardWithSide(2);
-		List<Node> retrievedNodes = board.getNodes();
+		Set<ImmutableNode> retrievedNodes = board.getNodes();
 
 		// Mock one node to try and insert
-		Node specificNode = Mockito.mock(Node.class);
+		ImmutableNode specificNode = Mockito.mock(ImmutableNode.class);
 		Mockito.when(specificNode.getId()).thenReturn("specificNode");
 
-		retrievedNodes.set(0, specificNode);
+		retrievedNodes.add(specificNode);
 
-		for (Node node : board.getNodes()) {
+		for (ImmutableNode node : board.getNodes()) {
 			if (node.getId().equals(specificNode.getId())) {
 				fail("SimpleBoard should be immutable but could be mutated through its returned list of nodes.");
 			}
@@ -67,22 +76,32 @@ public class ImmutableBoardTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetNodeOutOfRightBoundsShouldReturnNull() throws Exception {
-		assertNull(dummy8x8Board.getNodeAtCoordinates(8, 0));
+		// Mock a coordinate object
+		Coordinates cord = Mockito.mock(Coordinates.class);
+		Mockito.when(cord.getXCoordinate()).thenReturn(8);
+		Mockito.when(cord.getYCoordinate()).thenReturn(0);
+		assertNull(dummy8x8Board.getNodeAtCoordinates(cord));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetNodeOutOfBottomBoundsShouldReturnNull() throws Exception {
-		assertNull(dummy8x8Board.getNodeAtCoordinates(0, -1));
+		// Mock a coordinate object
+		Coordinates cord = createMockCoordinates(0, -1);
+		assertNull(dummy8x8Board.getNodeAtCoordinates(cord));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetNodeOutOfTopBoundsShouldReturnNull() throws Exception {
-		assertNull(dummy8x8Board.getNodeAtCoordinates(0, 8));
+		// Mock a coordinate object
+		Coordinates cord = createMockCoordinates(0, 8);
+		assertNull(dummy8x8Board.getNodeAtCoordinates(cord));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetNodeOutOfLeftBoundsShouldReturnNull() throws Exception {
-		assertNull(dummy8x8Board.getNodeAtCoordinates(-1, 0));
+		// Mock a coordinate object
+		Coordinates cord = createMockCoordinates(-1, 1);
+		assertNull(dummy8x8Board.getNodeAtCoordinates(cord));
 	}
 
 	@Test
@@ -91,28 +110,35 @@ public class ImmutableBoardTest {
 		final int boardSide = 8;
 		final int boardSize = boardSide * boardSide;
 
-		// First node to look for
-		Node lowerLeftNode = Mockito.mock(Node.class);
-		Mockito.when(lowerLeftNode.getId()).thenReturn("dskjjhd687");
+		// First node to look for at position (0,0)
+		ImmutableNode zeroZeroNode = Mockito.mock(ImmutableNode.class);
+		Mockito.when(zeroZeroNode.getId()).thenReturn("dskjjhd687");
+		Coordinates zeroZeroCord = createMockCoordinates(0, 0);
+		Mockito.when(zeroZeroNode.getCoordinates()).thenReturn(zeroZeroCord);
 
 		// Second node to look for
-		Node upperRightNode = Mockito.mock(Node.class);
-		Mockito.when(upperRightNode.getId()).thenReturn("dsjkhds728563");
+		ImmutableNode sevenSevenNode = Mockito.mock(ImmutableNode.class);
+		Mockito.when(sevenSevenNode.getId()).thenReturn("dsjkhds728563");
+		Coordinates sevenSevenCord = createMockCoordinates(7, 7);
+		Mockito.when(sevenSevenNode.getCoordinates()).thenReturn(sevenSevenCord);
 
 		// Get dummy nodes
-		List<Node> dummyNodes = generateNDummyNodes(boardSize);
+		Set<ImmutableNode> dummyNodes = generateNDummyNodes(boardSize);
 
 		// Carefully insert specific nodes at expected positions
-		int lastIndex = boardSize - 1;
-		dummyNodes.set(0, lowerLeftNode);
-		dummyNodes.set(lastIndex, upperRightNode);
+		// remove the current (0,0) and (7,7) nodes in the set
+		dummyNodes.remove(zeroZeroNode);
+		dummyNodes.remove(sevenSevenNode);
+		// Add our new version of nodes with the correct id
+		dummyNodes.add(zeroZeroNode);
+		dummyNodes.add(sevenSevenNode);
 
 		// Create board
 		ImmutableBoard board = new ImmutableBoard(dummyNodes);
 
 		// Test board
-		assertEquals(board.getNodeAtCoordinates(0, 0).getId(), lowerLeftNode.getId());
-		assertEquals(board.getNodeAtCoordinates(7, 7).getId(), upperRightNode.getId());
+		assertEquals(board.getNodeAtCoordinates(zeroZeroCord).getId(), zeroZeroNode.getId());
+		assertEquals(board.getNodeAtCoordinates(sevenSevenCord).getId(), sevenSevenNode.getId());
 
 	}
 
@@ -136,7 +162,7 @@ public class ImmutableBoardTest {
 		 *  W D E Where NW, N, SE etc. are the 8 directions
 		 * SW S SE
 		 */
-		List<Node> nodes = new ArrayList<>();
+		Set<ImmutableNode> nodes = new HashSet<>();
 		String middleID = "middle";
 		String[] nodeIDs = new String[] { ImmutableBoard.Direction.NORTHWEST.name(),
 				ImmutableBoard.Direction.NORTH.name(), ImmutableBoard.Direction.NORTHEAST.name(),
@@ -144,21 +170,21 @@ public class ImmutableBoardTest {
 				ImmutableBoard.Direction.SOUTHWEST.name(), ImmutableBoard.Direction.SOUTH.name(),
 				ImmutableBoard.Direction.SOUTHEAST.name() };
 		for (String nodeID : nodeIDs) {
-			Node node = Mockito.mock(Node.class);
+			ImmutableNode node = Mockito.mock(ImmutableNode.class);
 			Mockito.when(node.getId()).thenReturn(nodeID);
-			Mockito.when(node.getXCoordinate()).thenReturn(1);
-			Mockito.when(node.getYCoordinate()).thenReturn(1);
+			Coordinates cord = createMockCoordinates(1, 1);
+			Mockito.when(node.getCoordinates()).thenReturn(cord);
 			nodes.add(node);
 		}
 
 		// Create board
 		ImmutableBoard board = new ImmutableBoard(nodes);
 
-		Node middleNode = board.getNodeAtCoordinates(1, 1);
+		ImmutableNode middleNode = board.getNodeById(middleID);
 		assertEquals(middleID, middleNode.getId());
 
 		for (ImmutableBoard.Direction direction : ImmutableBoard.Direction.values()) {
-			Node nodeInDirection = board.getNextNodeInDirection(middleNode, direction);
+			ImmutableNode nodeInDirection = board.getNextNodeInDirection(middleNode, direction);
 			assertEquals(direction.name(), nodeInDirection.getId());
 		}
 

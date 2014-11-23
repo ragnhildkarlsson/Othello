@@ -17,7 +17,7 @@ public final class ImmutableNode {
 	 * @param playerId
 	 *            optional, set to null if the node is unmarked.
 	 */
-	protected ImmutableNode(Coordinates coordinates, String playerId) {
+	public ImmutableNode(Coordinates coordinates, String playerId) {
 		this.coordinates = coordinates;
 		this.occupantPlayerId = playerId;
 	}
@@ -56,5 +56,10 @@ public final class ImmutableNode {
 	public String toString() {
 		return "ImmutableNode{" + ", occupantPlayerId='" + occupantPlayerId + '\'' + ", x="
 				+ coordinates.getXCoordinate() + ", y=" + coordinates.getYCoordinate() + '}';
+	}
+
+	public Object getId() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
