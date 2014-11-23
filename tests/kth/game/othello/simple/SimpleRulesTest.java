@@ -2,10 +2,11 @@ package kth.game.othello.simple;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-import kth.game.othello.board.Node;
 import kth.game.othello.simple.model.ImmutableBoard;
+import kth.game.othello.simple.model.ImmutableNode;
 import kth.game.othello.simple.model.SimpleRules;
 import kth.game.othello.simple.model.ImmutableBoard.Direction;
 
@@ -30,7 +31,7 @@ public class SimpleRulesTest {
 		String player1Id = "1";
 		String player2Id = "2";
 		ImmutableBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
-		Node playAtNode = mockBoard.getNodes().get(2);
+		ImmutableNode playAtNode = mockBoard.getNodeById(null);
 		SimpleRules rules = new SimpleRules();
 		boolean res = rules.validMove(mockBoard, playAtNode, player1Id);
 		for (Direction dir : Direction.values()) {
@@ -66,21 +67,21 @@ public class SimpleRulesTest {
 		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
 
 		// mock nodes
-		Node boardNode20 = getMockedNode(null);
-		Node boardNode40 = getMockedNode(oPlayerID);
-		Node boardNode01 = getMockedNode(xPlayerID);
-		Node boardNode11 = getMockedNode(oPlayerID);
-		Node boardNode21 = getMockedNode(oPlayerID);
-		Node playAtNode = getMockedNode(null);
-		Node boardNode41 = getMockedNode(oPlayerID);
-		Node boardNode51 = getMockedNode(xPlayerID);
-		Node boardNode22 = getMockedNode(oPlayerID);
-		Node boardNode32 = getMockedNode(null);
-		Node boardNode42 = getMockedNode(oPlayerID);
-		Node boardNode13 = getMockedNode(oPlayerID);
-		Node boardNode33 = getMockedNode(xPlayerID);
-		Node boardNode53 = getMockedNode(null);
-		Node boardNode64 = getMockedNode(xPlayerID);
+		ImmutableNode boardNode20 = getMockedNode(null);
+		ImmutableNode boardNode40 = getMockedNode(oPlayerID);
+		ImmutableNode boardNode01 = getMockedNode(xPlayerID);
+		ImmutableNode boardNode11 = getMockedNode(oPlayerID);
+		ImmutableNode boardNode21 = getMockedNode(oPlayerID);
+		ImmutableNode playAtNode = getMockedNode(null);
+		ImmutableNode boardNode41 = getMockedNode(oPlayerID);
+		ImmutableNode boardNode51 = getMockedNode(xPlayerID);
+		ImmutableNode boardNode22 = getMockedNode(oPlayerID);
+		ImmutableNode boardNode32 = getMockedNode(null);
+		ImmutableNode boardNode42 = getMockedNode(oPlayerID);
+		ImmutableNode boardNode13 = getMockedNode(oPlayerID);
+		ImmutableNode boardNode33 = getMockedNode(xPlayerID);
+		ImmutableNode boardNode53 = getMockedNode(null);
+		ImmutableNode boardNode64 = getMockedNode(xPlayerID);
 
 		// set up behavior for getNextNodeInDirection;
 
@@ -159,7 +160,7 @@ public class SimpleRulesTest {
 	public void testMoveOnOccupiedNodeShouldBeInvalid() {
 		String player1Id = "1";
 		String player2Id = "2";
-		Node boardNode = getMockedNode(player1Id);
+		ImmutableNode boardNode = getMockedNode(player1Id);
 		SimpleRules rules = new SimpleRules();
 		// By giving null as the argument board, this test will fail if the
 		// method validMove() tries to calculate if this move is valid
@@ -174,7 +175,7 @@ public class SimpleRulesTest {
 	@Test
 	public void testMoveOnOccupiedNodeShouldSwapNoNodes() {
 		String player1Id = "1";
-		Node boardNode = getMockedNode(player1Id);
+		ImmutableNode boardNode = getMockedNode(player1Id);
 		SimpleRules rules = new SimpleRules();
 		// By giving null as the argument board, this test will fail if the
 		// method getNodesToSwap() tries to calculate the nodes to swap
@@ -250,12 +251,12 @@ public class SimpleRulesTest {
 		String player1Id = "1";
 		String player2Id = "2";
 		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
-		ArrayList<Node> nodesOnBoard = new ArrayList<Node>();
-		Node boardNode0 = getMockedNode(player1Id);
+		Set<ImmutableNode> nodesOnBoard = new HashSet<>();
+		ImmutableNode boardNode0 = getMockedNode(player1Id);
 		nodesOnBoard.add(boardNode0);
-		Node boardNode1 = getMockedNode(player1Id);
+		ImmutableNode boardNode1 = getMockedNode(player1Id);
 		nodesOnBoard.add(boardNode1);
-		Node boardNode2 = getMockedNode(null);
+		ImmutableNode boardNode2 = getMockedNode(null);
 		nodesOnBoard.add(boardNode2);
 
 		for (Direction dir : Direction.values()) {
@@ -305,12 +306,12 @@ public class SimpleRulesTest {
 	private ImmutableBoard getMinimalMockedBoard(String player1Id, String player2Id) {
 
 		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
-		ArrayList<Node> nodesOnBoard = new ArrayList<Node>();
-		Node boardNode0 = getMockedNode(player1Id);
+		Set<ImmutableNode> nodesOnBoard = new HashSet<>();
+		ImmutableNode boardNode0 = getMockedNode(player1Id);
 		nodesOnBoard.add(boardNode0);
-		Node boardNode1 = getMockedNode(player2Id);
+		ImmutableNode boardNode1 = getMockedNode(player2Id);
 		nodesOnBoard.add(boardNode1);
-		Node boardNode2 = getMockedNode(null);
+		ImmutableNode boardNode2 = getMockedNode(null);
 		nodesOnBoard.add(boardNode2);
 
 		for (Direction dir : Direction.values()) {
@@ -341,8 +342,8 @@ public class SimpleRulesTest {
 	 * and getOccupantPlayerId() return the given playerId. Otherwise false and
 	 * null, respectively, will be returned for these method calls.
 	 */
-	private Node getMockedNode(String playerId) {
-		Node mockNode = Mockito.mock(Node.class);
+	private ImmutableNode getMockedNode(String playerId) {
+		ImmutableNode mockNode = Mockito.mock(ImmutableNode.class);
 
 		boolean isOccupied = true;
 		if (playerId == null) {
