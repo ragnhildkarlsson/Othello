@@ -20,7 +20,7 @@ public class SimpleRules {
 	 * Creates an object with the responsibility of telling the rules of
 	 * Othello.
 	 */
-	protected SimpleRules() {
+	public SimpleRules() {
 
 	}
 

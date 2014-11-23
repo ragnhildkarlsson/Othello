@@ -9,29 +9,26 @@ import kth.game.othello.player.Player;
 import kth.game.othello.score.Score;
 import kth.game.othello.simple.model.Coordinates;
 import kth.game.othello.simple.model.GameModel;
-import kth.game.othello.simple.model.ImmutableNode;
+import kth.game.othello.simple.model.GameModelFactory;
+import kth.game.othello.simple.model.ImmutableBoard;
 
 /**
  * Created by spike on 11/22/14.
  */
-public class SimpleOthello implements Othello, BoardObserver {
+public class SimpleOthello implements Othello {
 
 	private BoardWrapper boardWrapper;
-	private BoardWrapper startingBoard;
+	private ImmutableBoard startingBoard;
 	private PlayerHandler playerHandler;
 	private GameModelFactory gameModelFactory;
 	private GameModel gameModel;
 
-	public SimpleOthello(BoardWrapper startingBoard, PlayerHandler playerHandler, GameModelFactory gameModelFactory) {
+	public SimpleOthello(ImmutableBoard startingBoard, BoardWrapper board, PlayerHandler playerHandler,
+			GameModelFactory gameModelFactory) {
 		this.startingBoard = startingBoard;
 		this.playerHandler = playerHandler;
+		this.boardWrapper = board;
 		this.gameModelFactory = gameModelFactory;
-	}
-
-	@Override
-	public void nodeUpdated(ImmutableNode lastValue, ImmutableNode newValue) {
-		// TODO Notify relevant NodeWrapper
-		// boardWrapper.getNode();
 	}
 
 	/**
@@ -139,6 +136,7 @@ public class SimpleOthello implements Othello, BoardObserver {
 	public List<Node> move() {
 
 		// TODO Fix
+		// update boardwrapper with the changes from the model
 		return null;
 		// Player currentPlayer = players.get(playerInTurn);
 		// switch (currentPlayer.getType()) {
@@ -168,7 +166,7 @@ public class SimpleOthello implements Othello, BoardObserver {
 	 */
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
-
+		// Update boardwrapper with the changes from the nodes
 		return null;
 	}
 
@@ -177,7 +175,8 @@ public class SimpleOthello implements Othello, BoardObserver {
 	 */
 	@Override
 	public void start() {
-
+		// Create a new game model
+		// change the nodes on board wrapper according to startBoard
 	}
 
 	/**
@@ -188,7 +187,8 @@ public class SimpleOthello implements Othello, BoardObserver {
 	 */
 	@Override
 	public void start(String playerId) {
-        // TODO Throw exception if playerId is not among players
-
+		// TODO Throw exception if playerId is not among players
+		// Create a new game model
+		// change the nodes on board wrapper according to startBoard
 	}
 }

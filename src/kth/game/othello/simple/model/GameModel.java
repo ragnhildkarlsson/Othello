@@ -90,5 +90,4 @@ public class GameModel {
 	public Set<ImmutableNode> move(String playerId, Coordinates nodeCoordinates) throws IllegalArgumentException {
 		return moveMaker.makeMove(playerId, nodeCoordinates);
 	}
-
 }

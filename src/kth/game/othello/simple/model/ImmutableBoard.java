@@ -3,15 +3,12 @@ package kth.game.othello.simple.model;
 import java.util.HashMap;
 import java.util.Set;
 
-import kth.game.othello.simple.BoardObserver;
-
 /**
  * TODO add more doc here ImmutabelBoard is an immutable class.
  * 
  */
 public class ImmutableBoard {
 	private final HashMap<Coordinates, ImmutableNode> nodes;
-	private List<BoardObserver> boardObservers;
 
 	/**
 	 * The different type of directions on the board
@@ -175,4 +172,10 @@ public class ImmutableBoard {
 	// playerIDList.addAll(playerIDs);
 	// return playerIDList;
 	// }
+
+	public ImmutableBoard getCopyWithNodeSwapped(Set<ImmutableNode> nodesToSwap, String playerId) {
+		// TODO implement
+		return null;
+
+	}
 }

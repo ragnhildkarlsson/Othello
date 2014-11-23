@@ -3,9 +3,8 @@ package kth.game.othello.simple.model;
 import java.util.List;
 import java.util.Set;
 
-
 /**
- * Created by spike on 11/21/14.
+ * TODO
  */
 public class MoveMaker {
 
@@ -14,13 +13,12 @@ public class MoveMaker {
 	private int playerInTurn;
 	private ImmutableBoard board;
 
-	public MoveMaker(ImmutableBoard startBoard, String startPlayerId,
-			List<String> playerIds, SimpleRules rules) {
+	public MoveMaker(ImmutableBoard startBoard, String startPlayerId, List<String> playerIds, SimpleRules rules) {
 		this.playerIds = playerIds;
 		this.rules = rules;
 		this.board = startBoard;
-        // TODO set start player index
-//		this.playerInTurn = startPlayerId;
+		// TODO set start player index
+		// this.playerInTurn = startPlayerId;
 	}
 
 	/**
@@ -30,7 +28,7 @@ public class MoveMaker {
 	 */
 	public String getPlayerInTurn() {
 		// TODO implement or move this functionality to a turnhandler;
-		return playerInTurn;
+		return null;
 	}
 
 	/**
