@@ -57,9 +57,4 @@ public final class ImmutableNode {
 		return "ImmutableNode{" + ", occupantPlayerId='" + occupantPlayerId + '\'' + ", x="
 				+ coordinates.getXCoordinate() + ", y=" + coordinates.getYCoordinate() + '}';
 	}
-
-	public Object getId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

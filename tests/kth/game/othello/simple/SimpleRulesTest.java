@@ -30,8 +30,15 @@ public class SimpleRulesTest {
 	public void testValidMoveOnBoardEdgeShouldBeValid() {
 		String player1Id = "1";
 		String player2Id = "2";
+		ImmutableNode playAtNode = null;
 		ImmutableBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
-		ImmutableNode playAtNode = mockBoard.getNodeById(null);
+		Set<ImmutableNode> nodes = mockBoard.getNodes();
+		for(ImmutableNode node : nodes){
+			if(!node.isMarked()){
+				playAtNode = node; // get the node which is unmarked
+			}
+		}
+		
 		SimpleRules rules = new SimpleRules();
 		boolean res = rules.validMove(mockBoard, playAtNode, player1Id);
 		for (Direction dir : Direction.values()) {

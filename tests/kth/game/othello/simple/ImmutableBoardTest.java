@@ -28,7 +28,7 @@ public class ImmutableBoardTest {
 
 		// Mock dummy node
 		ImmutableNode dummyNode = Mockito.mock(ImmutableNode.class);
-		Mockito.when(dummyNode.getId()).thenReturn(dummyID);
+		Mockito.when(dummyNode.getOccupantPlayerId()).thenReturn(dummyID);
 
 		// Construct a list of dummy nodes
 
@@ -62,12 +62,12 @@ public class ImmutableBoardTest {
 
 		// Mock one node to try and insert
 		ImmutableNode specificNode = Mockito.mock(ImmutableNode.class);
-		Mockito.when(specificNode.getId()).thenReturn("specificNode");
+		Mockito.when(specificNode.getOccupantPlayerId()).thenReturn("specificNode");
 
 		retrievedNodes.add(specificNode);
 
 		for (ImmutableNode node : board.getNodes()) {
-			if (node.getId().equals(specificNode.getId())) {
+			if (node.getOccupantPlayerId().equals(specificNode.getOccupantPlayerId())) {
 				fail("SimpleBoard should be immutable but could be mutated through its returned list of nodes.");
 			}
 		}
@@ -112,13 +112,13 @@ public class ImmutableBoardTest {
 
 		// First node to look for at position (0,0)
 		ImmutableNode zeroZeroNode = Mockito.mock(ImmutableNode.class);
-		Mockito.when(zeroZeroNode.getId()).thenReturn("dskjjhd687");
+		Mockito.when(zeroZeroNode.getOccupantPlayerId()).thenReturn("dskjjhd687");
 		Coordinates zeroZeroCord = createMockCoordinates(0, 0);
 		Mockito.when(zeroZeroNode.getCoordinates()).thenReturn(zeroZeroCord);
 
 		// Second node to look for
 		ImmutableNode sevenSevenNode = Mockito.mock(ImmutableNode.class);
-		Mockito.when(sevenSevenNode.getId()).thenReturn("dsjkhds728563");
+		Mockito.when(sevenSevenNode.getOccupantPlayerId()).thenReturn("dsjkhds728563");
 		Coordinates sevenSevenCord = createMockCoordinates(7, 7);
 		Mockito.when(sevenSevenNode.getCoordinates()).thenReturn(sevenSevenCord);
 
@@ -137,19 +137,8 @@ public class ImmutableBoardTest {
 		ImmutableBoard board = new ImmutableBoard(dummyNodes);
 
 		// Test board
-		assertEquals(board.getNodeAtCoordinates(zeroZeroCord).getId(), zeroZeroNode.getId());
-		assertEquals(board.getNodeAtCoordinates(sevenSevenCord).getId(), sevenSevenNode.getId());
-
-	}
-
-	@Test
-	public void testGetNodeByID() throws Exception {
-
-		ImmutableBoard board = generateBoardWithSide(1);
-
-		assertNotNull(board.getNodeById(dummyID));
-
-		assertNull(board.getNodeById("some random ID that shouldn't exist in board 37892783"));
+		assertEquals(board.getNodeAtCoordinates(zeroZeroCord).getOccupantPlayerId(), zeroZeroNode.getOccupantPlayerId());
+		assertEquals(board.getNodeAtCoordinates(sevenSevenCord).getOccupantPlayerId(), sevenSevenNode.getOccupantPlayerId());
 
 	}
 
@@ -163,16 +152,23 @@ public class ImmutableBoardTest {
 		 * SW S SE
 		 */
 		Set<ImmutableNode> nodes = new HashSet<>();
-		String middleID = "middle";
-		String[] nodeIDs = new String[] { ImmutableBoard.Direction.NORTHWEST.name(),
+		String middle = "middle";
+		Coordinates[] nodeCoordinates = new Coordinates[] {
+				new Coordinates(0,0), new Coordinates(1,0), new Coordinates(2,0),
+				new Coordinates(0,1), new Coordinates(1,1), new Coordinates(2,1),
+				new Coordinates(0,2), new Coordinates(1,2), new Coordinates(2,2)
+		};
+		
+		String[] directions = new String[] { ImmutableBoard.Direction.NORTHWEST.name(),
 				ImmutableBoard.Direction.NORTH.name(), ImmutableBoard.Direction.NORTHEAST.name(),
-				ImmutableBoard.Direction.WEST.name(), middleID, ImmutableBoard.Direction.EAST.name(),
+				ImmutableBoard.Direction.WEST.name(), middle, ImmutableBoard.Direction.EAST.name(),
 				ImmutableBoard.Direction.SOUTHWEST.name(), ImmutableBoard.Direction.SOUTH.name(),
 				ImmutableBoard.Direction.SOUTHEAST.name() };
-		for (String nodeID : nodeIDs) {
+		for (int i = 0; i < directions.length; i++) {
+			String direction = directions[i];
+			Coordinates cord = nodeCoordinates[i];
 			ImmutableNode node = Mockito.mock(ImmutableNode.class);
-			Mockito.when(node.getId()).thenReturn(nodeID);
-			Coordinates cord = createMockCoordinates(1, 1);
+			Mockito.when(node.getOccupantPlayerId()).thenReturn(direction);
 			Mockito.when(node.getCoordinates()).thenReturn(cord);
 			nodes.add(node);
 		}
@@ -180,12 +176,12 @@ public class ImmutableBoardTest {
 		// Create board
 		ImmutableBoard board = new ImmutableBoard(nodes);
 
-		ImmutableNode middleNode = board.getNodeById(middleID);
-		assertEquals(middleID, middleNode.getId());
+		ImmutableNode middleNode = board.getNodeAtCoordinates(new Coordinates(1,1));
+		assertEquals(middle, middleNode.getOccupantPlayerId());
 
 		for (ImmutableBoard.Direction direction : ImmutableBoard.Direction.values()) {
 			ImmutableNode nodeInDirection = board.getNextNodeInDirection(middleNode, direction);
-			assertEquals(direction.name(), nodeInDirection.getId());
+			assertEquals(direction.name(), nodeInDirection.getOccupantPlayerId());
 		}
 
 	}
