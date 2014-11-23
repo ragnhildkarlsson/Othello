@@ -12,7 +12,7 @@ import kth.game.othello.simple.player.LousyComputerPlayer;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class ComputerPlayerTest {
+public class SimplePlayerTest {
 
 	/**
 	 * Tests that given a board with a valid move for the player, then getMove
