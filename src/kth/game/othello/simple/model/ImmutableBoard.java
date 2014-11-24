@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * ImmutableBoard is responsible for keeping track of the nodes in the game state, it is an
- * immutable class.
+ * ImmutableBoard is responsible for keeping track of the nodes in the game
+ * state, it is an immutable class.
  * 
  */
 public class ImmutableBoard {
@@ -144,6 +144,17 @@ public class ImmutableBoard {
 		return false;
 	}
 
+	public Set<String> getPlayerIDs() {
+		HashSet<String> playerIDs = new HashSet<>();
+		for (ImmutableNode node : this.nodes.values()) {
+			String playerID = node.getOccupantPlayerId();
+			if (playerID != null) {
+				playerIDs.add(playerID);
+			}
+		}
+		return playerIDs;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -155,8 +166,8 @@ public class ImmutableBoard {
 
 	/**
 	 * Create a new board from this board, with a given subset of the old nodes
-	 * to be occupied by a given playerID in the new board. All other nodes remain in the
-	 * same state.
+	 * to be occupied by a given playerID in the new board. All other nodes
+	 * remain in the same state.
 	 * 
 	 * @param nodesToSwap
 	 *            nodes to get occupied by the given playerID.
