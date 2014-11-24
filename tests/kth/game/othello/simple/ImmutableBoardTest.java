@@ -17,13 +17,6 @@ public class ImmutableBoardTest {
 	private final String dummyID = "dummyID";
 	private final ImmutableBoard dummy8x8Board = generateBoardWithSide(8);
 
-	private Coordinates createMockCoordinates(int x, int y) {
-		Coordinates cord = Mockito.mock(Coordinates.class);
-		Mockito.when(cord.getXCoordinate()).thenReturn(x);
-		Mockito.when(cord.getYCoordinate()).thenReturn(y);
-		return cord;
-	}
-
 	private Set<ImmutableNode> generateNDummyNodes(int numberOfNodes) {
 
 		// Mock dummy node
@@ -77,30 +70,27 @@ public class ImmutableBoardTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetNodeOutOfRightBoundsShouldReturnNull() throws Exception {
 		// Mock a coordinate object
-		Coordinates cord = Mockito.mock(Coordinates.class);
-		Mockito.when(cord.getXCoordinate()).thenReturn(8);
-		Mockito.when(cord.getYCoordinate()).thenReturn(0);
+		Coordinates cord = new Coordinates(8, 0);
 		assertNull(dummy8x8Board.getNodeAtCoordinates(cord));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetNodeOutOfBottomBoundsShouldReturnNull() throws Exception {
 		// Mock a coordinate object
-		Coordinates cord = createMockCoordinates(0, -1);
+		Coordinates cord = new Coordinates(0, -1);
 		assertNull(dummy8x8Board.getNodeAtCoordinates(cord));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetNodeOutOfTopBoundsShouldReturnNull() throws Exception {
 		// Mock a coordinate object
-		Coordinates cord = createMockCoordinates(0, 8);
+		Coordinates cord = new Coordinates(0, 8);
 		assertNull(dummy8x8Board.getNodeAtCoordinates(cord));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetNodeOutOfLeftBoundsShouldReturnNull() throws Exception {
-		// Mock a coordinate object
-		Coordinates cord = createMockCoordinates(-1, 1);
+		Coordinates cord = new Coordinates(-1, 1);
 		assertNull(dummy8x8Board.getNodeAtCoordinates(cord));
 	}
 
@@ -113,13 +103,13 @@ public class ImmutableBoardTest {
 		// First node to look for at position (0,0)
 		ImmutableNode zeroZeroNode = Mockito.mock(ImmutableNode.class);
 		Mockito.when(zeroZeroNode.getOccupantPlayerId()).thenReturn("dskjjhd687");
-		Coordinates zeroZeroCord = createMockCoordinates(0, 0);
+		Coordinates zeroZeroCord = new Coordinates(0, 0);
 		Mockito.when(zeroZeroNode.getCoordinates()).thenReturn(zeroZeroCord);
 
 		// Second node to look for
 		ImmutableNode sevenSevenNode = Mockito.mock(ImmutableNode.class);
 		Mockito.when(sevenSevenNode.getOccupantPlayerId()).thenReturn("dsjkhds728563");
-		Coordinates sevenSevenCord = createMockCoordinates(7, 7);
+		Coordinates sevenSevenCord = new Coordinates(7, 7);
 		Mockito.when(sevenSevenNode.getCoordinates()).thenReturn(sevenSevenCord);
 
 		// Get dummy nodes
@@ -138,7 +128,8 @@ public class ImmutableBoardTest {
 
 		// Test board
 		assertEquals(board.getNodeAtCoordinates(zeroZeroCord).getOccupantPlayerId(), zeroZeroNode.getOccupantPlayerId());
-		assertEquals(board.getNodeAtCoordinates(sevenSevenCord).getOccupantPlayerId(), sevenSevenNode.getOccupantPlayerId());
+		assertEquals(board.getNodeAtCoordinates(sevenSevenCord).getOccupantPlayerId(),
+				sevenSevenNode.getOccupantPlayerId());
 
 	}
 
@@ -153,12 +144,10 @@ public class ImmutableBoardTest {
 		 */
 		Set<ImmutableNode> nodes = new HashSet<>();
 		String middle = "middle";
-		Coordinates[] nodeCoordinates = new Coordinates[] {
-				new Coordinates(0,0), new Coordinates(1,0), new Coordinates(2,0),
-				new Coordinates(0,1), new Coordinates(1,1), new Coordinates(2,1),
-				new Coordinates(0,2), new Coordinates(1,2), new Coordinates(2,2)
-		};
-		
+		Coordinates[] nodeCoordinates = new Coordinates[] { new Coordinates(0, 0), new Coordinates(1, 0),
+				new Coordinates(2, 0), new Coordinates(0, 1), new Coordinates(1, 1), new Coordinates(2, 1),
+				new Coordinates(0, 2), new Coordinates(1, 2), new Coordinates(2, 2) };
+
 		String[] directions = new String[] { ImmutableBoard.Direction.NORTHWEST.name(),
 				ImmutableBoard.Direction.NORTH.name(), ImmutableBoard.Direction.NORTHEAST.name(),
 				ImmutableBoard.Direction.WEST.name(), middle, ImmutableBoard.Direction.EAST.name(),
@@ -174,14 +163,15 @@ public class ImmutableBoardTest {
 		}
 
 		// Create board
+		System.out.println("Size of nodes is " + nodes.size());
 		ImmutableBoard board = new ImmutableBoard(nodes);
-
-		ImmutableNode middleNode = board.getNodeAtCoordinates(new Coordinates(1,1));
+		ImmutableNode middleNode = board.getNodeAtCoordinates(new Coordinates(1, 1));
 		assertEquals(middle, middleNode.getOccupantPlayerId());
 
 		for (ImmutableBoard.Direction direction : ImmutableBoard.Direction.values()) {
 			ImmutableNode nodeInDirection = board.getNextNodeInDirection(middleNode, direction);
-			//TODO should assert on coordinates instead of using occupying player?
+			// TODO should assert on coordinates instead of using occupying
+			// player?
 			assertEquals(direction.name(), nodeInDirection.getOccupantPlayerId());
 		}
 
