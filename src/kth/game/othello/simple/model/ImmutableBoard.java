@@ -68,7 +68,7 @@ public class ImmutableBoard {
 	 * @throws IllegalArgumentException if the coordinates does not exist on the board. 
 	 */
 	public ImmutableNode getNodeAtCoordinates(Coordinates coordinates) throws IllegalArgumentException {
-		if (!nodes.containsKey(coordinates)) {
+		if (!this.coordinatesAreOnBoard(coordinates)) {
 			throw new IllegalArgumentException("Coordinates does not exist on board");
 		}
 		return nodes.get(coordinates);

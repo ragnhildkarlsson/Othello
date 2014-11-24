@@ -10,39 +10,30 @@ import kth.game.othello.simple.model.ImmutableBoard;
 import kth.game.othello.simple.model.ImmutableNode;
 
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class ImmutableBoardTest {
 
 	private final String dummyID = "dummyID";
 	private final ImmutableBoard dummy8x8Board = generateBoardWithSide(8);
 
-	private Set<ImmutableNode> generateNDummyNodes(int numberOfNodes) {
-
-		// Mock dummy node
-		ImmutableNode dummyNode = Mockito.mock(ImmutableNode.class);
-		Mockito.when(dummyNode.getOccupantPlayerId()).thenReturn(dummyID);
-
-		// Construct a list of dummy nodes
-
+	private Set<ImmutableNode> generateDummyNodes(int numberOfNodesOnSide) {
+		// Construct a set of dummy nodes with real coordinates
 		Set<ImmutableNode> dummyNodes = new HashSet<ImmutableNode>();
-		// Set<ImmutableNode> dummyNodes = new Set<>();
-		for (int i = 0; i < numberOfNodes; i++) {
-			dummyNodes.add(dummyNode);
+		for (int y = 0; y < numberOfNodesOnSide; y++) {
+			for(int x = 0; x < numberOfNodesOnSide; x++){
+				// Mock dummy node
+				ImmutableNode dummyNode = new ImmutableNode(new Coordinates(x, y), dummyID);
+				dummyNodes.add(dummyNode);	
+			}
 		}
 
 		return dummyNodes;
 	}
 
 	private ImmutableBoard generateBoardWithSide(int boardSide) {
-
-		final int boardSize = boardSide * boardSide;
-
 		// Mock dummy nodes
-		Set<ImmutableNode> dummyNodes = generateNDummyNodes(boardSize);
-
+		Set<ImmutableNode> dummyNodes = generateDummyNodes(boardSide);
 		// Create board and retrieve its nodes
-
 		return new ImmutableBoard(dummyNodes);
 
 	}
@@ -54,8 +45,7 @@ public class ImmutableBoardTest {
 		Set<ImmutableNode> retrievedNodes = board.getNodes();
 
 		// Mock one node to try and insert
-		ImmutableNode specificNode = Mockito.mock(ImmutableNode.class);
-		Mockito.when(specificNode.getOccupantPlayerId()).thenReturn("specificNode");
+		ImmutableNode specificNode = new ImmutableNode(new Coordinates(3, 3), "SpecificNode");
 
 		retrievedNodes.add(specificNode);
 
@@ -90,46 +80,32 @@ public class ImmutableBoardTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetNodeOutOfLeftBoundsShouldReturnNull() throws Exception {
-		Coordinates cord = new Coordinates(-1, 1);
+		Coordinates cord = new Coordinates(-1, 0);
 		assertNull(dummy8x8Board.getNodeAtCoordinates(cord));
 	}
 
 	@Test
 	public void testGetNodeAtCoordinatesShouldReturnCorrectNode() throws Exception {
 
-		final int boardSide = 8;
-		final int boardSize = boardSide * boardSide;
-
 		// First node to look for at position (0,0)
-		ImmutableNode zeroZeroNode = Mockito.mock(ImmutableNode.class);
-		Mockito.when(zeroZeroNode.getOccupantPlayerId()).thenReturn("dskjjhd687");
 		Coordinates zeroZeroCord = new Coordinates(0, 0);
-		Mockito.when(zeroZeroNode.getCoordinates()).thenReturn(zeroZeroCord);
+		ImmutableNode zeroZeroNode = new ImmutableNode(zeroZeroCord, "dskjjhd687" );
 
-		// Second node to look for
-		ImmutableNode sevenSevenNode = Mockito.mock(ImmutableNode.class);
-		Mockito.when(sevenSevenNode.getOccupantPlayerId()).thenReturn("dsjkhds728563");
+		// Second node to look for at position (7,7)
 		Coordinates sevenSevenCord = new Coordinates(7, 7);
-		Mockito.when(sevenSevenNode.getCoordinates()).thenReturn(sevenSevenCord);
+		ImmutableNode sevenSevenNode = new ImmutableNode(sevenSevenCord, "dsjkhds728563");
 
-		// Get dummy nodes
-		Set<ImmutableNode> dummyNodes = generateNDummyNodes(boardSize);
-
-		// Carefully insert specific nodes at expected positions
-		// remove the current (0,0) and (7,7) nodes in the set
-		dummyNodes.remove(zeroZeroNode);
-		dummyNodes.remove(sevenSevenNode);
+		Set<ImmutableNode> dummyNodes = new HashSet<>();
 		// Add our new version of nodes with the correct id
 		dummyNodes.add(zeroZeroNode);
-		dummyNodes.add(sevenSevenNode);
+		dummyNodes.add(sevenSevenNode); 
 
 		// Create board
 		ImmutableBoard board = new ImmutableBoard(dummyNodes);
 
 		// Test board
-		assertEquals(board.getNodeAtCoordinates(zeroZeroCord).getOccupantPlayerId(), zeroZeroNode.getOccupantPlayerId());
-		assertEquals(board.getNodeAtCoordinates(sevenSevenCord).getOccupantPlayerId(),
-				sevenSevenNode.getOccupantPlayerId());
+		assertEquals(zeroZeroNode.getOccupantPlayerId(), board.getNodeAtCoordinates(zeroZeroCord).getOccupantPlayerId());
+		assertEquals(sevenSevenNode.getOccupantPlayerId(), board.getNodeAtCoordinates(sevenSevenCord).getOccupantPlayerId());
 
 	}
 
@@ -156,24 +132,39 @@ public class ImmutableBoardTest {
 		for (int i = 0; i < directions.length; i++) {
 			String direction = directions[i];
 			Coordinates cord = nodeCoordinates[i];
-			ImmutableNode node = Mockito.mock(ImmutableNode.class);
-			Mockito.when(node.getOccupantPlayerId()).thenReturn(direction);
-			Mockito.when(node.getCoordinates()).thenReturn(cord);
+			ImmutableNode node = new ImmutableNode(cord, direction);
 			nodes.add(node);
 		}
 
 		// Create board
-		System.out.println("Size of nodes is " + nodes.size());
 		ImmutableBoard board = new ImmutableBoard(nodes);
 		ImmutableNode middleNode = board.getNodeAtCoordinates(new Coordinates(1, 1));
 		assertEquals(middle, middleNode.getOccupantPlayerId());
 
 		for (ImmutableBoard.Direction direction : ImmutableBoard.Direction.values()) {
 			ImmutableNode nodeInDirection = board.getNextNodeInDirection(middleNode, direction);
-			// TODO should assert on coordinates instead of using occupying
-			// player?
 			assertEquals(direction.name(), nodeInDirection.getOccupantPlayerId());
 		}
-
+	}
+	
+	@Test
+	public void testGetCopyWithNodeSwapped(){
+		// Create a simple board
+		ImmutableNode node1 = new ImmutableNode(new Coordinates(0,0), dummyID);
+		ImmutableNode node2 = new ImmutableNode(new Coordinates(1,0), dummyID);
+		Set<ImmutableNode> nodes = new HashSet<>();
+		nodes.add(node1); 
+		nodes.add(node2);
+		
+		ImmutableBoard oldBoard = new ImmutableBoard(nodes);
+		
+		Set<ImmutableNode> nodeToSwap = new HashSet<>();
+		nodeToSwap.add(node2);
+		String swapID = "swapped";
+		ImmutableBoard newBoard = oldBoard.getCopyWithNodeSwapped(nodeToSwap, swapID);
+		//Check that the new board node 1 is unchanged and node 2 is changed
+		assertEquals(node1, newBoard.getNodeAtCoordinates(new Coordinates(0,0)));
+		assertEquals(swapID, newBoard.getNodeAtCoordinates(new Coordinates(1, 0)).getOccupantPlayerId());
+		
 	}
 }
