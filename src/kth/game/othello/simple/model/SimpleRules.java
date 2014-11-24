@@ -73,14 +73,16 @@ public class SimpleRules {
 	}
 
 	/**
-	 * Returns false iff any of the two players can make a valid move.
+	 * Returns false iff any of the players on the board can make a valid move.
 	 * 
 	 * @board the board to be checked for game over.
-	 * @return Returns false iff any of the two players can make a valid move.
+	 * @return Returns false iff any of the players on the board can make a valid move.
 	 */
-	public boolean isGameOver(ImmutableBoard board, String player1Id, String player2Id) {
-		if (hasValidMove(board, player1Id) || hasValidMove(board, player2Id)) {
-			return false;
+	public boolean isGameOver(ImmutableBoard board) {
+		Set<String> playerIDs = board.getPlayerIDs();
+		for(String playerID: playerIDs){
+			if(hasValidMove(board, playerID))
+				return false;
 		}
 		return true;
 	}

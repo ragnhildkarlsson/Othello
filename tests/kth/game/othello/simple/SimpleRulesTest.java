@@ -243,8 +243,12 @@ public class SimpleRulesTest {
 		String player1Id = "1";
 		String player2Id = "2";
 		ImmutableBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
+		Set<String> playerIDs = new HashSet<>();
+		playerIDs.add(player1Id);
+		playerIDs.add(player2Id);
+		Mockito.when(mockBoard.getPlayerIDs()).thenReturn(playerIDs);
 		SimpleRules rules = new SimpleRules();
-		boolean res = rules.isGameOver(mockBoard, player1Id, player2Id);
+		boolean res = rules.isGameOver(mockBoard);
 		assertEquals(false, res);
 
 	}
@@ -286,8 +290,12 @@ public class SimpleRulesTest {
 			}
 		}
 		Mockito.when(mockBoard.getNodes()).thenReturn(nodesOnBoard);
+		Set<String> playerIDs = new HashSet<>();
+		playerIDs.add(player1Id);
+		playerIDs.add(player2Id);
+		Mockito.when(mockBoard.getPlayerIDs()).thenReturn(playerIDs);
 		SimpleRules rules = new SimpleRules();
-		boolean res = rules.isGameOver(mockBoard, player1Id, player2Id);
+		boolean res = rules.isGameOver(mockBoard);
 		assertEquals(true, res);
 	}
 
