@@ -10,9 +10,9 @@ import java.util.List;
 public class GameModelFactory {
 	private ImmutableBoard startBoard;
 	private List<String> playerIds;
-	private SimpleRules rules;
+	private Rules rules;
 
-	public GameModelFactory(ImmutableBoard startBoard, List<String> playerIds, SimpleRules rules) {
+	public GameModelFactory(ImmutableBoard startBoard, List<String> playerIds, Rules rules) {
 		this.startBoard = startBoard;
 		this.playerIds = playerIds;
 		this.rules = rules;
