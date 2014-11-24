@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * ImmutableBoard is responsible for keeping track of game state, it is an
+ * ImmutableBoard is responsible for keeping track of the nodes in the game state, it is an
  * immutable class.
  * 
  */
@@ -65,7 +65,8 @@ public class ImmutableBoard {
 	 * 
 	 * @return The node at the given coordinates.
 	 * 
-	 * @throws IllegalArgumentException if the coordinates does not exist on the board. 
+	 * @throws IllegalArgumentException
+	 *             if the coordinates does not exist on the board.
 	 */
 	public ImmutableNode getNodeAtCoordinates(Coordinates coordinates) throws IllegalArgumentException {
 		if (!this.coordinatesAreOnBoard(coordinates)) {
@@ -84,9 +85,11 @@ public class ImmutableBoard {
 	 *            the direction in which the next node is to be fetched.
 	 * @return the next node in the given direction or null if no such node
 	 *         exists.
-	 * @throws IllegalArgumentException if the origin node is outside the board.
+	 * @throws IllegalArgumentException
+	 *             if the origin node is outside the board.
 	 */
-	public ImmutableNode getNextNodeInDirection(ImmutableNode originNode, Direction direction) throws IllegalArgumentException {
+	public ImmutableNode getNextNodeInDirection(ImmutableNode originNode, Direction direction)
+			throws IllegalArgumentException {
 
 		Coordinates originCoord = originNode.getCoordinates();
 		int x = originCoord.getXCoordinate();
@@ -94,7 +97,7 @@ public class ImmutableBoard {
 		if (!this.coordinatesAreOnBoard(originCoord)) {
 			throw new IllegalArgumentException("Used a starting point that was outside of the board: " + x + ", " + y);
 		}
-		
+
 		switch (direction) {
 		case NORTH:
 			y--;
@@ -125,8 +128,8 @@ public class ImmutableBoard {
 			x--;
 			break;
 		}
-		Coordinates newCoordinates = new Coordinates(x,y);
-		
+		Coordinates newCoordinates = new Coordinates(x, y);
+
 		if (!coordinatesAreOnBoard(newCoordinates)) {
 			return null;
 		} else {
@@ -144,53 +147,27 @@ public class ImmutableBoard {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for(ImmutableNode node : this.nodes.values()){
+		for (ImmutableNode node : this.nodes.values()) {
 			sb.append(node.toString());
 		}
 		return sb.toString();
-		// OLD IMPLEMTATITION
-		// StringBuilder stringBuilder = new StringBuilder();
-		// stringBuilder.append('\n');
-		// stringBuilder.append("Board with players: ");
-		// for (String player : getPlayerIDs()) {
-		// stringBuilder.append(player + ", ");
-		// }
-		// stringBuilder.delete(stringBuilder.length() - 2,
-		// stringBuilder.length());
-		// stringBuilder.append('\n');
-		// for (int x = 0; x < boardSide; x++) {
-		// for (int y = 0; y < boardSide; y++) {
-		// Node node = getNodeAtCoordinates(x, y);
-		// if (node.isMarked()) {
-		// String playerInitial = node.getOccupantPlayerId().substring(0, 1);
-		// stringBuilder.append(playerInitial);
-		// } else {
-		// stringBuilder.append('•');
-		// }
-		// stringBuilder.append(' ');
-		// }
-		// stringBuilder.append('\n');
-		// }
-		// return stringBuilder.toString();
 	}
 
-	// private List<String> getPlayerIDs() {
-	// HashSet<String> playerIDs = new HashSet<>();
-	// for (Node node : nodes) {
-	// String playerID = node.getOccupantPlayerId();
-	// if (playerID != null) {
-	// playerIDs.add(playerID);
-	// }
-	// }
-	// ArrayList<String> playerIDList = new ArrayList<>();
-	// playerIDList.addAll(playerIDs);
-	// return playerIDList;
-	// }
-
-	
+	/**
+	 * Create a new board from this board, with a given subset of the old nodes
+	 * to be occupied by a given playerID in the new board. All other nodes remain in the
+	 * same state.
+	 * 
+	 * @param nodesToSwap
+	 *            nodes to get occupied by the given playerID.
+	 * @param playerId
+	 *            the playerID of the player to occupy the swapped nodes.
+	 * @return a new board with the given set of nodes now occupied by the
+	 *         chosen playerID.
+	 */
 	public ImmutableBoard getCopyWithNodeSwapped(Set<ImmutableNode> nodesToSwap, String playerId) {
 		Set<ImmutableNode> newNodes = new HashSet<>();
-		for(ImmutableNode node: nodesToSwap){
+		for (ImmutableNode node : nodesToSwap) {
 			ImmutableNode newNode = new ImmutableNode(node.getCoordinates(), playerId);
 			newNodes.add(newNode);
 		}
