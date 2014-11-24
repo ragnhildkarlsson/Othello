@@ -1,11 +1,10 @@
 package kth.game.othello.simple.model;
 
-
 /**
  * TODO write class doc here
  * 
  */
-public final class ImmutableNode {
+public class ImmutableNode {
 
 	private final String occupantPlayerId;
 	private final Coordinates coordinates;
@@ -57,4 +56,30 @@ public final class ImmutableNode {
 		return "ImmutableNode{" + ", occupantPlayerId='" + occupantPlayerId + '\'' + ", x="
 				+ coordinates.getXCoordinate() + ", y=" + coordinates.getYCoordinate() + '}';
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((coordinates == null) ? 0 : coordinates.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ImmutableNode other = (ImmutableNode) obj;
+		if (coordinates == null) {
+			if (other.coordinates != null)
+				return false;
+		} else if (!coordinates.equals(other.coordinates))
+			return false;
+		return true;
+	}
+
 }
