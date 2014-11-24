@@ -1,4 +1,4 @@
-package kth.game.othello.simple;
+package kth.game.othello.simple.model;
 
 import static org.junit.Assert.*;
 
