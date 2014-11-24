@@ -171,7 +171,7 @@ public class ImmutableBoardTest {
 		Set<ImmutableNode> nodeToSwap = new HashSet<>();
 		nodeToSwap.add(node2);
 		String swapID = "swapped";
-		ImmutableBoard newBoard = oldBoard.getCopyWithNodeSwapped(nodeToSwap, swapID);
+		ImmutableBoard newBoard = oldBoard.swapNodes(nodeToSwap, swapID);
 		// Check that the new board node 1 is unchanged and node 2 is changed
 		assertEquals(node1, newBoard.getNodeAtCoordinates(new Coordinates(0, 0)));
 		assertEquals(swapID, newBoard.getNodeAtCoordinates(new Coordinates(1, 0)).getOccupantPlayerId());

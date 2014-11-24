@@ -33,7 +33,8 @@ public class ImmutableBoard {
 	}
 
 	/**
-	 * Construct a new ImmutableBoard given a set of ImmutableNodes.
+	 * Construct a new ImmutableBoard given all the ImmutableNodes that can ever
+	 * be played at on the board.
 	 * 
 	 * @param nodes
 	 *            the nodes which the board should consist of.
@@ -139,9 +140,7 @@ public class ImmutableBoard {
 	}
 
 	private boolean coordinatesAreOnBoard(Coordinates coordinates) {
-		if (nodes.containsKey(coordinates))
-			return true;
-		return false;
+		return nodes.containsKey(coordinates);
 	}
 
 	public Set<String> getPlayerIDs() {
@@ -176,13 +175,14 @@ public class ImmutableBoard {
 	 * @return a new board with the given set of nodes now occupied by the
 	 *         chosen playerID.
 	 */
-	public ImmutableBoard getCopyWithNodeSwapped(Set<ImmutableNode> nodesToSwap, String playerId) {
+	public ImmutableBoard swapNodes(Set<ImmutableNode> nodesToSwap, String playerId) {
 		Set<ImmutableNode> newNodes = new HashSet<>();
 		for (ImmutableNode node : nodesToSwap) {
 			ImmutableNode newNode = new ImmutableNode(node.getCoordinates(), playerId);
 			newNodes.add(newNode);
 		}
-		// Add all the old nodes
+		// Add all the old nodes (old nodes with the same coordinates as the new
+		// will be ignored by the Set logic)
 		newNodes.addAll(this.getNodes());
 		return new ImmutableBoard(newNodes);
 	}
