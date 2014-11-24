@@ -12,7 +12,7 @@ import java.util.List;
 public class TurnKeeper {
 
 	private List<String> players;
-	private int playerInTurn;
+	private int playerInTurnIndex;
 
 	/**
 	 * Create a new turnKeeper.
@@ -22,7 +22,7 @@ public class TurnKeeper {
 	 */
 	public TurnKeeper(List<String> playerIds, String startingPlayerId) {
 		this.players = playerIds;
-		this.playerInTurn = players.indexOf(startingPlayerId);
+		this.playerInTurnIndex = players.indexOf(startingPlayerId);
 
 	}
 
@@ -33,10 +33,11 @@ public class TurnKeeper {
 	 */
 	public String getPlayerInTurn(Rules rules, ImmutableBoard board) {
 		for (int i = 0; i < players.size(); i++) {
-			String possiblePlayerInTurn = players.get(i);
+			String possiblePlayerInTurn = players.get(playerInTurnIndex);
 			if (rules.hasValidMove(board, possiblePlayerInTurn)) {
 				return possiblePlayerInTurn;
 			}
+			this.nextTurn();
 		}
 		return null;
 	}
@@ -45,7 +46,7 @@ public class TurnKeeper {
 	 * Change the current player in turn to the next player.
 	 */
 	public void nextTurn() {
-		playerInTurn = playerInTurn + 1 % players.size();
+		playerInTurnIndex = (playerInTurnIndex + 1) % players.size();
 	}
 
 	/**
