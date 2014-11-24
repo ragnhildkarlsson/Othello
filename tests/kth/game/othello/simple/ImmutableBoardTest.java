@@ -11,6 +11,15 @@ import kth.game.othello.simple.model.ImmutableNode;
 
 import org.junit.Test;
 
+/**
+ * Tests the ImmutableBoard class with the two friendlies Coordinates and
+ * ImmutableNode. These two classes are considered friendlies since they are
+ * made up of data and thereby does not need to be mocked.
+ * 
+ * @author mikael
+ * @author Daniel
+ * 
+ */
 public class ImmutableBoardTest {
 
 	private final String dummyID = "dummyID";
