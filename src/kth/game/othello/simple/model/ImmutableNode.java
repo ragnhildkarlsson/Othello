@@ -4,7 +4,7 @@ package kth.game.othello.simple.model;
  * TODO write class doc here
  * 
  */
-public class ImmutableNode {
+public final class ImmutableNode {
 
 	private final String occupantPlayerId;
 	private final Coordinates coordinates;
