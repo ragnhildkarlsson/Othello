@@ -1,11 +1,12 @@
 package kth.game.othello.simple.model;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
- * TODO add more doc here ImmutabelBoard is an immutable class.
+ * ImmutableBoard is responsible for keeping track of the nodes in the game state, it is an
+ * immutable class.
  * 
  */
 public class ImmutableBoard {
@@ -32,7 +33,10 @@ public class ImmutableBoard {
 	}
 
 	/**
-	 * TODO
+	 * Construct a new ImmutableBoard given a set of ImmutableNodes.
+	 * 
+	 * @param nodes
+	 *            the nodes which the board should consist of.
 	 */
 	public ImmutableBoard(Set<ImmutableNode> nodes) {
 		this.nodes = new HashMap<Coordinates, ImmutableNode>();
@@ -42,13 +46,13 @@ public class ImmutableBoard {
 	}
 
 	/**
-	 * TODO
+	 * Returns the nodes of this board.
 	 * 
-	 * @return
+	 * @return the nodes of this board.
 	 */
 	public Set<ImmutableNode> getNodes() {
-		// TODO implement return copy
-		return null;
+		HashSet<ImmutableNode> nodesCopy = new HashSet<>(this.nodes.values());
+		return nodesCopy;
 	}
 
 	/**
@@ -56,11 +60,19 @@ public class ImmutableBoard {
 	 * IllegalArgumentException if the given coordinates are not within the
 	 * board.
 	 * 
+	 * @param coordinates
+	 *            the coordinates of the node that is to be returned.
+	 * 
 	 * @return The node at the given coordinates.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             if the coordinates does not exist on the board.
 	 */
-	public ImmutableNode getNodeAtCoordinates(Coordinates coordinates) {
-		// TODO Implement
-		return null;
+	public ImmutableNode getNodeAtCoordinates(Coordinates coordinates) throws IllegalArgumentException {
+		if (!this.coordinatesAreOnBoard(coordinates)) {
+			throw new IllegalArgumentException("Coordinates does not exist on board");
+		}
+		return nodes.get(coordinates);
 	}
 
 	/**
@@ -73,110 +85,94 @@ public class ImmutableBoard {
 	 *            the direction in which the next node is to be fetched.
 	 * @return the next node in the given direction or null if no such node
 	 *         exists.
+	 * @throws IllegalArgumentException
+	 *             if the origin node is outside the board.
 	 */
-	public ImmutableNode getNextNodeInDirection(ImmutableNode originNode, Direction direction) {
-		// TODO implement;
-		return null;
-		// OLD IMPLEMENTATION
-		// int x = startPointNode.getXCoordinate();
-		// int y = startPointNode.getYCoordinate();
-		//
-		// if (!coordinatesAreWithinTheBoard(x, y)) {
-		// throw new
-		// IllegalArgumentException("Used a starting point that was outside of the board: "
-		// + x + ", " + y);
-		// }
-		//
-		// switch (direction) {
-		// case NORTH:
-		// y--;
-		// break;
-		// case EAST:
-		// x++;
-		// break;
-		// case SOUTH:
-		// y++;
-		// break;
-		// case WEST:
-		// x--;
-		// break;
-		// case NORTHEAST:
-		// y--;
-		// x++;
-		// break;
-		// case SOUTHEAST:
-		// y++;
-		// x++;
-		// break;
-		// case SOUTHWEST:
-		// y++;
-		// x--;
-		// break;
-		// case NORTHWEST:
-		// y--;
-		// x--;
-		// break;
-		// }
-		//
-		// if (!coordinatesAreWithinTheBoard(x, y)) {
-		// return null;
-		// } else {
-		// return getNodeAtCoordinates(x, y);
-		// }
+	public ImmutableNode getNextNodeInDirection(ImmutableNode originNode, Direction direction)
+			throws IllegalArgumentException {
+
+		Coordinates originCoord = originNode.getCoordinates();
+		int x = originCoord.getXCoordinate();
+		int y = originCoord.getYCoordinate();
+		if (!this.coordinatesAreOnBoard(originCoord)) {
+			throw new IllegalArgumentException("Used a starting point that was outside of the board: " + x + ", " + y);
+		}
+
+		switch (direction) {
+		case NORTH:
+			y--;
+			break;
+		case EAST:
+			x++;
+			break;
+		case SOUTH:
+			y++;
+			break;
+		case WEST:
+			x--;
+			break;
+		case NORTHEAST:
+			y--;
+			x++;
+			break;
+		case SOUTHEAST:
+			y++;
+			x++;
+			break;
+		case SOUTHWEST:
+			y++;
+			x--;
+			break;
+		case NORTHWEST:
+			y--;
+			x--;
+			break;
+		}
+		Coordinates newCoordinates = new Coordinates(x, y);
+
+		if (!coordinatesAreOnBoard(newCoordinates)) {
+			return null;
+		} else {
+			return getNodeAtCoordinates(newCoordinates);
+		}
 
 	}
 
 	private boolean coordinatesAreOnBoard(Coordinates coordinates) {
-		// TODO reimplement;
+		if (nodes.containsKey(coordinates))
+			return true;
 		return false;
 	}
 
 	@Override
 	public String toString() {
-		// TODO Implement;
-		return null;
-		// OLD IMPLEMTATITION
-		// StringBuilder stringBuilder = new StringBuilder();
-		// stringBuilder.append('\n');
-		// stringBuilder.append("Board with players: ");
-		// for (String player : getPlayerIDs()) {
-		// stringBuilder.append(player + ", ");
-		// }
-		// stringBuilder.delete(stringBuilder.length() - 2,
-		// stringBuilder.length());
-		// stringBuilder.append('\n');
-		// for (int x = 0; x < boardSide; x++) {
-		// for (int y = 0; y < boardSide; y++) {
-		// Node node = getNodeAtCoordinates(x, y);
-		// if (node.isMarked()) {
-		// String playerInitial = node.getOccupantPlayerId().substring(0, 1);
-		// stringBuilder.append(playerInitial);
-		// } else {
-		// stringBuilder.append('•');
-		// }
-		// stringBuilder.append(' ');
-		// }
-		// stringBuilder.append('\n');
-		// }
-		// return stringBuilder.toString();
+		StringBuilder sb = new StringBuilder();
+		for (ImmutableNode node : this.nodes.values()) {
+			sb.append(node.toString());
+		}
+		return sb.toString();
 	}
 
-	// private List<String> getPlayerIDs() {
-	// HashSet<String> playerIDs = new HashSet<>();
-	// for (Node node : nodes) {
-	// String playerID = node.getOccupantPlayerId();
-	// if (playerID != null) {
-	// playerIDs.add(playerID);
-	// }
-	// }
-	// ArrayList<String> playerIDList = new ArrayList<>();
-	// playerIDList.addAll(playerIDs);
-	// return playerIDList;
-	// }
-
+	/**
+	 * Create a new board from this board, with a given subset of the old nodes
+	 * to be occupied by a given playerID in the new board. All other nodes remain in the
+	 * same state.
+	 * 
+	 * @param nodesToSwap
+	 *            nodes to get occupied by the given playerID.
+	 * @param playerId
+	 *            the playerID of the player to occupy the swapped nodes.
+	 * @return a new board with the given set of nodes now occupied by the
+	 *         chosen playerID.
+	 */
 	public ImmutableBoard getCopyWithNodeSwapped(Set<ImmutableNode> nodesToSwap, String playerId) {
-		// TODO implement
-		return null;
-
+		Set<ImmutableNode> newNodes = new HashSet<>();
+		for (ImmutableNode node : nodesToSwap) {
+			ImmutableNode newNode = new ImmutableNode(node.getCoordinates(), playerId);
+			newNodes.add(newNode);
+		}
+		// Add all the old nodes
+		newNodes.addAll(this.getNodes());
+		return new ImmutableBoard(newNodes);
 	}
 }
