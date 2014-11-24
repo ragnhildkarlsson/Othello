@@ -13,7 +13,7 @@ import kth.game.othello.simple.model.GameModelFactory;
 import kth.game.othello.simple.model.ImmutableBoard;
 import kth.game.othello.simple.model.ImmutableBoardFactory;
 import kth.game.othello.simple.model.ImmutableNode;
-import kth.game.othello.simple.model.SimpleRules;
+import kth.game.othello.simple.model.Rules;
 
 /**
  * A factory for producing simple Othello games.
@@ -124,7 +124,7 @@ public class SimpleOthelloFactory implements OthelloFactory {
 		for (Player player : players) {
 			playerIds.add(player.getId());
 		}
-		SimpleRules rules = new SimpleRules();
+		Rules rules = new Rules();
 
 		GameModelFactory gameModelFactory = new GameModelFactory(immutableBoard, playerIds, rules);
 

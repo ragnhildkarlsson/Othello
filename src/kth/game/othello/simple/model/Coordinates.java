@@ -19,20 +19,28 @@ public final class Coordinates {
 	}
 
 	@Override
-	public boolean equals(Object otherXYCoord) {
-		// TODO Implement
-		return false;
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + xCoordinate;
+		result = prime * result + yCoordinate;
+		return result;
 	}
 
 	@Override
-	public int hashCode() {
-		// TODO implement
-		// Maybe helpful old implementation of id
-		int idCode = xCoordinate << 16;
-		idCode = idCode | yCoordinate;
-		// this.nodeId = Integer.toString(idCode);
-
-		return 0;
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Coordinates other = (Coordinates) obj;
+		if (xCoordinate != other.xCoordinate)
+			return false;
+		if (yCoordinate != other.yCoordinate)
+			return false;
+		return true;
 	}
 
 	@Override

@@ -9,11 +9,11 @@ import java.util.Set;
 public class MoveMaker {
 
 	private final List<String> playerIds;
-	private SimpleRules rules;
+	private Rules rules;
 	private int playerInTurn;
 	private ImmutableBoard board;
 
-	public MoveMaker(ImmutableBoard startBoard, String startPlayerId, List<String> playerIds, SimpleRules rules) {
+	public MoveMaker(ImmutableBoard startBoard, String startPlayerId, List<String> playerIds, Rules rules) {
 		this.playerIds = playerIds;
 		this.rules = rules;
 		this.board = startBoard;
