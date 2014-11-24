@@ -8,13 +8,13 @@ import java.util.Set;
 import kth.game.othello.simple.model.Coordinates;
 import kth.game.othello.simple.model.ImmutableBoard;
 import kth.game.othello.simple.model.ImmutableNode;
-import kth.game.othello.simple.model.SimpleRules;
+import kth.game.othello.simple.model.Rules;
 import kth.game.othello.simple.model.ImmutableBoard.Direction;
 
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class SimpleRulesTest {
+public class RulesTest {
 
 	/**
 	 * <pre>
@@ -40,7 +40,7 @@ public class SimpleRulesTest {
 			}
 		}
 		
-		SimpleRules rules = new SimpleRules();
+		Rules rules = new Rules();
 		boolean res = rules.validMove(mockBoard, playAtNode, player1Id);
 		for (Direction dir : Direction.values()) {
 			Mockito.verify(mockBoard).getNextNodeInDirection(playAtNode, dir);
@@ -134,7 +134,7 @@ public class SimpleRulesTest {
 
 		// Check that the right nodes (and no other nodes) where listed as nodes
 		// to swap
-		SimpleRules rules = new SimpleRules();
+		Rules rules = new Rules();
 		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode, xPlayerID).contains(boardNode41));
 		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode, xPlayerID).contains(boardNode21));
 		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode, xPlayerID).contains(boardNode11));
@@ -168,7 +168,7 @@ public class SimpleRulesTest {
 		String player1Id = "1";
 		String player2Id = "2";
 		ImmutableNode boardNode = new ImmutableNode(new Coordinates(0, 0), player1Id);
-		SimpleRules rules = new SimpleRules();
+		Rules rules = new Rules();
 		// By giving null as the argument board, this test will fail if the
 		// method validMove() tries to calculate if this move is valid
 		assertEquals(false, rules.validMove(null, boardNode, player1Id));
@@ -183,7 +183,7 @@ public class SimpleRulesTest {
 	public void testMoveOnOccupiedNodeShouldSwapNoNodes() {
 		String player1Id = "1";
 		ImmutableNode boardNode = new ImmutableNode(new Coordinates(0, 0), player1Id);
-		SimpleRules rules = new SimpleRules();
+		Rules rules = new Rules();
 		// By giving null as the argument board, this test will fail if the
 		// method getNodesToSwap() tries to calculate the nodes to swap
 		assertEquals(true, rules.getNodesToSwap(null, boardNode, null).isEmpty());
@@ -207,7 +207,7 @@ public class SimpleRulesTest {
 		String player1Id = "1";
 		String player2Id = "2";
 		ImmutableBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
-		SimpleRules rules = new SimpleRules();
+		Rules rules = new Rules();
 		boolean res = rules.hasValidMove(mockBoard, player1Id);
 		assertEquals(true, res);
 	}
@@ -229,7 +229,7 @@ public class SimpleRulesTest {
 		String player1Id = "1";
 		String player2Id = "2";
 		ImmutableBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
-		SimpleRules rules = new SimpleRules();
+		Rules rules = new Rules();
 		boolean res = rules.hasValidMove(mockBoard, player2Id);
 		assertEquals(false, res);
 	}
@@ -247,7 +247,7 @@ public class SimpleRulesTest {
 		playerIDs.add(player1Id);
 		playerIDs.add(player2Id);
 		Mockito.when(mockBoard.getPlayerIDs()).thenReturn(playerIDs);
-		SimpleRules rules = new SimpleRules();
+		Rules rules = new Rules();
 		boolean res = rules.isGameOver(mockBoard);
 		assertEquals(false, res);
 
@@ -294,7 +294,7 @@ public class SimpleRulesTest {
 		playerIDs.add(player1Id);
 		playerIDs.add(player2Id);
 		Mockito.when(mockBoard.getPlayerIDs()).thenReturn(playerIDs);
-		SimpleRules rules = new SimpleRules();
+		Rules rules = new Rules();
 		boolean res = rules.isGameOver(mockBoard);
 		assertEquals(true, res);
 	}
