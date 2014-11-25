@@ -6,38 +6,29 @@ import java.util.Observer;
 import kth.game.othello.board.Node;
 
 /**
- * // TODO
+ * This class implements an outer, mutable view of the current state of a node on an Othello board.
  */
-public class NodeWrapper extends Observable implements Node {
+public class NodeAPIView extends Observable implements Node {
 
 	private String occupantPlayerId;
 	private int x;
 	private int y;
-	private final String id;
 
-	public NodeWrapper(int x, int y, String occupantPlayerId) {
-		// TODO Implement
-		id = null;
+	public NodeAPIView(int x, int y, String occupantPlayerId) {
+		this.x = x;
+        this.y = y;
+		this.occupantPlayerId = occupantPlayerId;
 	}
 
 	/**
-	 * 
+	 * TODO
+     *
 	 * @param id
 	 */
 	protected void setOccupantPlayerId(String id) {
 		occupantPlayerId = id;
-		// TODO notify
-	}
-
-	/**
-	 * Adds an observer to this node.
-	 * 
-	 * @param observer
-	 *            an observer of this node
-	 */
-	@Override
-	public void addObserver(Observer observer) {
-
+        this.setChanged();
+        this.notifyObservers();
 	}
 
 	/**
@@ -47,7 +38,18 @@ public class NodeWrapper extends Observable implements Node {
 	 */
 	@Override
 	public String getId() {
-		return null;
+        int idInt = getXCoordinate();
+
+        // 32-bit idInt:
+        // 0000 0000 0000 0000 0000 0000 0000 0000
+        // | Y goes here      | X goes here      |
+        // Together they become some cryptic integer that does not tempt ppl to use the id to infer coordinates.
+        idInt = idInt | (getYCoordinate() << 16);
+
+        String id = Integer.toString(idInt);
+
+		return id;
+
 	}
 
 	/**
@@ -57,7 +59,7 @@ public class NodeWrapper extends Observable implements Node {
 	 */
 	@Override
 	public String getOccupantPlayerId() {
-		return null;
+		return occupantPlayerId;
 	}
 
 	/**
@@ -67,7 +69,7 @@ public class NodeWrapper extends Observable implements Node {
 	 */
 	@Override
 	public int getXCoordinate() {
-		return 0;
+		return x;
 	}
 
 	/**
@@ -77,7 +79,7 @@ public class NodeWrapper extends Observable implements Node {
 	 */
 	@Override
 	public int getYCoordinate() {
-		return 0;
+		return y;
 	}
 
 	/**
@@ -87,7 +89,7 @@ public class NodeWrapper extends Observable implements Node {
 	 */
 	@Override
 	public boolean isMarked() {
-		return false;
+		return occupantPlayerId != null;
 	}
 
 }

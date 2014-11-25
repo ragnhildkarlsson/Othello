@@ -1,8 +1,7 @@
 package kth.game.othello.simple;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import kth.game.othello.Othello;
 import kth.game.othello.board.Board;
@@ -12,27 +11,22 @@ import kth.game.othello.score.Score;
 import kth.game.othello.simple.model.Coordinates;
 import kth.game.othello.simple.model.GameModel;
 import kth.game.othello.simple.model.GameModelFactory;
-import kth.game.othello.simple.model.ImmutableBoard;
 
 /**
- * Created by spike on 11/22/14.
+ * TODO
  */
 public class SimpleOthello implements Othello {
 
-	private BoardWrapper boardWrapper;
-	private ImmutableBoard startingBoard;
-	private PlayerHandler playerHandler;
-	private GameModelFactory gameModelFactory;
+	private final BoardAPIView boardAPIView;
+	private final Map<String, Player> players = new HashMap<>();
+	private final GameModelFactory gameModelFactory;
 	private GameModel gameModel;
-	private Score score;
+	private final Score score;
 
-	public SimpleOthello(ImmutableBoard startingBoard, BoardWrapper board, PlayerHandler playerHandler,
-			GameModelFactory gameModelFactory, Score score) {
-		this.startingBoard = startingBoard;
-		this.playerHandler = playerHandler;
-		this.boardWrapper = board;
+	public SimpleOthello(BoardAPIView board, PlayerHandler playerHandler, GameModelFactory gameModelFactory, Score score) {
+		this.boardAPIView = board;
 		this.gameModelFactory = gameModelFactory;
-
+		this.score = score;
 	}
 
 	/**
@@ -42,7 +36,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public Board getBoard() {
-		return boardWrapper;
+		return boardAPIView;
 	}
 
 	/**
@@ -56,13 +50,14 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> getNodesToSwap(String playerId, String nodeId) {
-		Node node = boardWrapper.getNodeById(nodeId);
+		Node node = boardAPIView.getNodeById(nodeId);
 		Coordinates nodeCoordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
-		Set<Coordinates> coordinatesOfSwappedNodes = gameModel.getNodesToSwap(playerId, nodeCoordinates);
-		ArrayList<Node> result = new ArrayList<Node>();
-		for (Coordinates cord : coordinatesOfSwappedNodes) {
-			result.add(boardWrapper.getNode(cord.getXCoordinate(), cord.getYCoordinate()));
-		}
+
+		Set<Coordinates> swappedCoordinates = gameModel.getNodesToSwap(playerId, nodeCoordinates);
+		List<Node> result = swappedCoordinates.stream()
+				.map(coordinates -> boardAPIView.getNode(coordinates.getXCoordinate(), coordinates.getYCoordinate()))
+				.collect(Collectors.toList());
+
 		return result;
 	}
 
@@ -73,7 +68,8 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public Player getPlayerInTurn() {
-		return playerHandler.getPlayerById(gameModel.getPlayerInTurn());
+		String playerIdInTurn = gameModel.getPlayerInTurn();
+		return players.get(playerIdInTurn);
 	}
 
 	/**
@@ -83,7 +79,9 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Player> getPlayers() {
-		return playerHandler.getPlayers();
+		List<Player> playerList = new ArrayList<>();
+		playerList.addAll(players.values());
+		return playerList;
 	}
 
 	/**
@@ -129,8 +127,9 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean isMoveValid(String playerId, String nodeId) {
-		Node node = boardWrapper.getNodeById(nodeId);
+		Node node = boardAPIView.getNodeById(nodeId);
 		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
+
 		return gameModel.isMoveValid(playerId, coordinates);
 	}
 
@@ -146,21 +145,18 @@ public class SimpleOthello implements Othello {
 	@Override
 	public List<Node> move() {
 
-		// TODO Fix
-		// update boardwrapper with the changes from the model
-		return null;
+		String playerIdInTurn = gameModel.getPlayerInTurn();
+		Player playerInTurn = players.get(playerIdInTurn);
 
-		// Player currentPlayer = players.get(playerInTurn);
-		// switch (currentPlayer.getType()) {
-		// case HUMAN:
-		// throw new
-		// IllegalStateException("Tried to do an AI move using a human player.");
-		// case COMPUTER:
-		// ComputerPlayer computerPlayer = (ComputerPlayer) currentPlayer;
-		// Node nodeToPlayAt = computerPlayer.getMove(rules, board);
-		// return this.move(currentPlayer.getId(), nodeToPlayAt.getId());
-		// }
-		// throw new IllegalStateException("This should never be reached.");
+		Player currentPlayer = players.get(playerInTurn);
+		switch (currentPlayer.getType()) {
+		case HUMAN:
+			throw new IllegalStateException("Tried to do a Computer move using a human player.");
+		case COMPUTER:
+			Coordinates coordinatesToPlayAt = toCoordinates(playerInTurn.getMoveStrategy().move(playerIdInTurn, this));
+			return move(playerIdInTurn, coordinatesToPlayAt);
+		}
+		throw new IllegalStateException("This should never be reached. There is a bug in move() of SimpleOthello.");
 	}
 
 	/**
@@ -178,9 +174,19 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
-		// TODO
 		// Update boardwrapper with the changes from the nodes
-		return null;
+		Node node = boardAPIView.getNodeById(nodeId);
+		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
+		if (!gameModel.isMoveValid(playerId, coordinates)) {
+			return null;
+		} else {
+            return move(playerId, coordinates);
+        }
+	}
+
+	private List<Node> move(String playerId, Coordinates nodeCoordinates) {
+		Collection<Coordinates> swappedCoordinates = gameModel.move(playerId, nodeCoordinates);
+		return boardAPIView.swapNodes(swappedCoordinates, playerId);
 	}
 
 	/**
@@ -203,5 +209,14 @@ public class SimpleOthello implements Othello {
 		// TODO Throw exception if playerId is not among players
 		// Create a new game model
 		// change the nodes on board wrapper according to startBoard
+	}
+
+	private Coordinates coordinatesOfNodeWithId(String nodeId) {
+		Node node = boardAPIView.getNodeById(nodeId);
+		return new Coordinates(node.getXCoordinate(), node.getYCoordinate());
+	}
+
+	private Coordinates toCoordinates(Node node) {
+		return new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 	}
 }
