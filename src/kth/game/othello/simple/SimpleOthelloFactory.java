@@ -130,19 +130,19 @@ public class SimpleOthelloFactory implements OthelloFactory {
 
 		// Create wrappers
 
-		List<NodeAPIView> nodeAPIViews = new ArrayList<NodeAPIView>();
+		List<NodeAdapter> nodeAPIViews = new ArrayList<NodeAdapter>();
 		for (ImmutableNode immutableNode : immutableNodes) {
 			nodeAPIViews.add(getNodeWrapperFromImmuatableNode(immutableNode));
 		}
 		SimpleScore score = new SimpleScore();
 		// Add score as observer for all nodes;
-		for (NodeAPIView nodeAPIView : nodeAPIViews) {
+		for (NodeAdapter nodeAPIView : nodeAPIViews) {
 			nodeAPIView.addObserver(score);
 		}
 
-		BoardAPIView boardAPIView = new BoardAPIView(nodeAPIViews);
+		BoardAdapter boardAdapter = new BoardAdapter(nodeAPIViews);
 		PlayerHandler playerHandler = new PlayerHandler(players);
-		SimpleOthello othello = new SimpleOthello(immutableBoard, boardAPIView, playerHandler, gameModelFactory, score);
+		SimpleOthello othello = new SimpleOthello(immutableBoard, boardAdapter, playerHandler, gameModelFactory, score);
 		return othello;
 	}
 
@@ -151,7 +151,7 @@ public class SimpleOthelloFactory implements OthelloFactory {
 		return null;
 	}
 
-	private NodeAPIView getNodeWrapperFromImmuatableNode(ImmutableNode immutableNode) {
+	private NodeAdapter getNodeWrapperFromImmuatableNode(ImmutableNode immutableNode) {
 		// TODO implement
 		return null;
 	}

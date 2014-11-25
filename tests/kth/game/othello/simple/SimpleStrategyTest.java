@@ -2,7 +2,6 @@ package kth.game.othello.simple;
 
 import static org.junit.Assert.*;
 
-import java.awt.List;
 import java.util.ArrayList;
 
 import kth.game.othello.Othello;
@@ -21,7 +20,7 @@ public class SimpleStrategyTest {
 		Node mockNode = Mockito.mock(Node.class);
 		String nodeId = "id";
 		Mockito.when(mockNode.getId()).thenReturn(nodeId);
-		BoardAPIView mockBoard = Mockito.mock(BoardAPIView.class);
+		BoardAdapter mockBoard = Mockito.mock(BoardAdapter.class);
 		ArrayList<Node> nodesOnBoard = new ArrayList<Node>();
 		nodesOnBoard.add(mockNode);
 		Mockito.when(mockBoard.getNodes()).thenReturn(nodesOnBoard);		

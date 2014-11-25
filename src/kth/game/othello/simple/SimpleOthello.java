@@ -11,20 +11,20 @@ import kth.game.othello.score.Score;
 import kth.game.othello.simple.model.Coordinates;
 import kth.game.othello.simple.model.GameModel;
 import kth.game.othello.simple.model.GameModelFactory;
+import kth.game.othello.simple.model.ImmutableBoard;
 
 /**
  * TODO
  */
 public class SimpleOthello implements Othello {
 
-	private final BoardAPIView boardAPIView;
-	private final Map<String, Player> players = new HashMap<>();
+	private final BoardAdapter boardAdapter;
 	private final GameModelFactory gameModelFactory;
 	private GameModel gameModel;
 	private final Score score;
 
-	public SimpleOthello(BoardAPIView board, PlayerHandler playerHandler, GameModelFactory gameModelFactory, Score score) {
-		this.boardAPIView = board;
+	public SimpleOthello(BoardAdapter board, GameModelFactory gameModelFactory, Score score) {
+		this.boardAdapter = board;
 		this.gameModelFactory = gameModelFactory;
 		this.score = score;
 	}
@@ -36,7 +36,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public Board getBoard() {
-		return boardAPIView;
+		return boardAdapter;
 	}
 
 	/**
@@ -50,12 +50,12 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> getNodesToSwap(String playerId, String nodeId) {
-		Node node = boardAPIView.getNodeById(nodeId);
+		Node node = boardAdapter.getNodeById(nodeId);
 		Coordinates nodeCoordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 
 		Set<Coordinates> swappedCoordinates = gameModel.getNodesToSwap(playerId, nodeCoordinates);
 		List<Node> result = swappedCoordinates.stream()
-				.map(coordinates -> boardAPIView.getNode(coordinates.getXCoordinate(), coordinates.getYCoordinate()))
+				.map(coordinates -> boardAdapter.getNode(coordinates.getXCoordinate(), coordinates.getYCoordinate()))
 				.collect(Collectors.toList());
 
 		return result;
@@ -127,7 +127,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean isMoveValid(String playerId, String nodeId) {
-		Node node = boardAPIView.getNodeById(nodeId);
+		Node node = boardAdapter.getNodeById(nodeId);
 		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 
 		return gameModel.isMoveValid(playerId, coordinates);
@@ -175,7 +175,7 @@ public class SimpleOthello implements Othello {
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
 		// Update boardwrapper with the changes from the nodes
-		Node node = boardAPIView.getNodeById(nodeId);
+		Node node = boardAdapter.getNodeById(nodeId);
 		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 		if (!gameModel.isMoveValid(playerId, coordinates)) {
 			return null;
@@ -186,7 +186,7 @@ public class SimpleOthello implements Othello {
 
 	private List<Node> synchronizedMove(String playerId, Coordinates nodeCoordinates) {
 		Set<Coordinates> swappedCoordinates = gameModel.move(playerId, nodeCoordinates);
-		return boardAPIView.swapNodes(swappedCoordinates, playerId);
+		return boardAdapter.swapNodes(swappedCoordinates, playerId);
 	}
 
 	/**
@@ -212,7 +212,7 @@ public class SimpleOthello implements Othello {
 	}
 
 	private Coordinates coordinatesOfNodeWithId(String nodeId) {
-		Node node = boardAPIView.getNodeById(nodeId);
+		Node node = boardAdapter.getNodeById(nodeId);
 		return new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 	}
 

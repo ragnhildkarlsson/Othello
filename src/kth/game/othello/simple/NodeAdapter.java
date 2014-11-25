@@ -1,33 +1,31 @@
 package kth.game.othello.simple;
 
 import java.util.Observable;
-import java.util.Observer;
 
 import kth.game.othello.board.Node;
+import kth.game.othello.simple.model.ImmutableNode;
 
 /**
  * This class implements an outer, mutable view of the current state of a node on an Othello board.
  */
-public class NodeAPIView extends Observable implements Node {
+public class NodeAdapter extends Observable implements Node {
 
-	private String occupantPlayerId;
-	private int x;
-	private int y;
+	private ImmutableNode nodeData;
 
-	public NodeAPIView(int x, int y, String occupantPlayerId) {
-		this.x = x;
-        this.y = y;
-		this.occupantPlayerId = occupantPlayerId;
+	public NodeAdapter(ImmutableNode node) {
+		this.nodeData = node;
 	}
 
 	/**
-	 * Used to set the occupant player
+	 * Set the underlying immutable node.
      *
-	 * @param playerId the id of the desired occupant player
+	 * @param nodeData the node to act as the underlying data.
 	 */
-	protected void setOccupantPlayerId(String playerId) {
-		occupantPlayerId = playerId;
-        this.setChanged();
+	protected void setNode(ImmutableNode nodeData) {
+		if (this.nodeData.getOccupantPlayerId() != nodeData.getOccupantPlayerId()) {
+            this.setChanged();
+        }
+        this.nodeData = nodeData;
         this.notifyObservers();
 	}
 
@@ -59,7 +57,7 @@ public class NodeAPIView extends Observable implements Node {
 	 */
 	@Override
 	public String getOccupantPlayerId() {
-		return occupantPlayerId;
+		return nodeData.getOccupantPlayerId();
 	}
 
 	/**
@@ -69,7 +67,7 @@ public class NodeAPIView extends Observable implements Node {
 	 */
 	@Override
 	public int getXCoordinate() {
-		return x;
+		return nodeData.getCoordinates().getXCoordinate();
 	}
 
 	/**
@@ -79,7 +77,7 @@ public class NodeAPIView extends Observable implements Node {
 	 */
 	@Override
 	public int getYCoordinate() {
-		return y;
+		return nodeData.getCoordinates().getYCoordinate();
 	}
 
 	/**
@@ -89,7 +87,7 @@ public class NodeAPIView extends Observable implements Node {
 	 */
 	@Override
 	public boolean isMarked() {
-		return occupantPlayerId != null;
+		return nodeData.isMarked();
 	}
 
 }
