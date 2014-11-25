@@ -25,23 +25,27 @@ public class Rules {
 	}
 
 	/**
-	 * Returns true iff the given node (A) is not occupied and there exist a
-	 * node(B) on the board such that B is occupied with the given playerID and
-	 * there exist at least one straight (horizontal, vertical, or diagonal)
-	 * line between A and B where all nodes are occupied by other players.
+	 * Returns true iff the nodeCoordinates exist on board and the corresponding
+	 * node (A) is not occupied and there exist a node(B) on the board such that
+	 * B is occupied with the given playerID and there exist at least one
+	 * straight (horizontal, vertical, or diagonal) line between A and B where
+	 * all nodes are occupied by other players.
 	 * 
-	 * @param Node
-	 *            the node on the board where the player wants to play.
+	 * @param nodeCordinates
+	 *            the coordinates of the node where the player wants to play.
 	 * @param PlayerID
 	 *            the id of the player making the move.
 	 * @param board
 	 *            the board where the move would be made.
 	 * @return true iff move is valid.
 	 */
-	public boolean validMove(ImmutableBoard board, ImmutableNode node, String playerId) {
-
+	public boolean validMove(ImmutableBoard board, Coordinates nodeCordinates, String playerId) {
+		// TODO check if nodes exist on board. else return false
+		if (!board.hasCoordinates(nodeCordinates)) {
+			return false;
+		}
 		// check if any nodes are swapped by move
-		Set<ImmutableNode> swappedNodes = getNodesToSwap(board, node, playerId);
+		Set<ImmutableNode> swappedNodes = getNodesToSwap(board, nodeCordinates, playerId);
 		if (swappedNodes.size() > 0) {
 			return true;
 		}
@@ -64,7 +68,7 @@ public class Rules {
 	public boolean hasValidMove(ImmutableBoard board, String playerId) {
 		Set<ImmutableNode> nodesOnBoard = board.getNodes();
 		for (ImmutableNode node : nodesOnBoard) {
-			if (validMove(board, node, playerId)) {
+			if (validMove(board, node.getCoordinates(), playerId)) {
 				return true;
 			}
 		}
@@ -76,12 +80,13 @@ public class Rules {
 	 * Returns false iff any of the players on the board can make a valid move.
 	 * 
 	 * @board the board to be checked for game over.
-	 * @return Returns false iff any of the players on the board can make a valid move.
+	 * @return Returns false iff any of the players on the board can make a
+	 *         valid move.
 	 */
 	public boolean isGameOver(ImmutableBoard board) {
 		Set<String> playerIDs = board.getPlayerIDs();
-		for(String playerID: playerIDs){
-			if(hasValidMove(board, playerID))
+		for (String playerID : playerIDs) {
+			if (hasValidMove(board, playerID))
 				return false;
 		}
 		return true;
@@ -100,9 +105,16 @@ public class Rules {
 	 * @return the list of nodes that will be swapped for the given move,
 	 *         excluding the node that is placed by the player.
 	 */
-	public Set<ImmutableNode> getNodesToSwap(ImmutableBoard board, ImmutableNode node, String playerId) {
+	public Set<ImmutableNode> getNodesToSwap(ImmutableBoard board, Coordinates nodeCoordinates, String playerId) {
 		Set<ImmutableNode> result = new HashSet<ImmutableNode>();
+		// check if node exist on board
+		if (!board.hasCoordinates(nodeCoordinates)) {
+			return result;
+		}
+
 		// check if node is occupied
+		ImmutableNode node = board.getNodeAtCoordinates(nodeCoordinates);
+
 		if (node.isMarked()) {
 			result.clear();
 			return result;
