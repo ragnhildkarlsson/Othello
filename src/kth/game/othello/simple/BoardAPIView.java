@@ -87,12 +87,18 @@ public class BoardAPIView implements Board {
      * TODO
      * @param coordinateses
      * @param playerId
+     * @throws java.util.NoSuchElementException if one of the coor
      */
-    public List<Node> swapNodes(Collection<Coordinates> coordinateses, String playerId) {
-        for (NodeAPIView  : )
-        List<NodeAPIView> nodes = coordinateses.stream().map(coordinates -> getMutableNode(coordinates)).collect()
-        coordinateses.stream().
-            forEach(coordinates -> getMutableNode(coordinates).ifPresent(node -> node.setOccupantPlayerId(playerId)));
+    public List<Node> swapNodes(Set<Coordinates> coordinateses, String playerId) {
+        List<Node> swappedNodes = new ArrayList<>();
+
+        for (Coordinates coordinates : coordinateses)  {
+            NodeAPIView mutableNode = getMutableNode(coordinates).get();
+            mutableNode.setOccupantPlayerId(playerId);
+            swappedNodes.add(mutableNode);
+        }
+
+        return swappedNodes;
     }
 
 	/**

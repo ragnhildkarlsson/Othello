@@ -21,12 +21,12 @@ public class NodeAPIView extends Observable implements Node {
 	}
 
 	/**
-	 * TODO
+	 * Used to set the occupant player
      *
-	 * @param id
+	 * @param playerId the id of the desired occupant player
 	 */
-	protected void setOccupantPlayerId(String id) {
-		occupantPlayerId = id;
+	protected void setOccupantPlayerId(String playerId) {
+		occupantPlayerId = playerId;
         this.setChanged();
         this.notifyObservers();
 	}
