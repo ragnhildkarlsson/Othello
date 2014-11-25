@@ -1,5 +1,7 @@
 package kth.game.othello.simple;
 
+import java.awt.List;
+
 import kth.game.othello.Othello;
 import kth.game.othello.board.Node;
 import kth.game.othello.player.movestrategy.MoveStrategy;
@@ -8,13 +10,16 @@ import kth.game.othello.player.movestrategy.MoveStrategy;
  * TODO
  */
 public class SimpleStrategy implements MoveStrategy {
+	
+	private final String name = "simple-strategy";
+	
+	
 	/**
 	 * @return the name of the strategy
 	 */
 	@Override
 	public String getName() {
-		// TODO implement
-		return null;
+		return name;
 	}
 
 	/**
@@ -29,33 +34,16 @@ public class SimpleStrategy implements MoveStrategy {
 	 */
 	@Override
 	public Node move(String playerId, Othello othello) {
-		// TODO Implement
-		// old implementation form lousycomputerPlayer
-		// /**
-		// * Returns a node representing a valid move on the board for the
-		// player. If
-		// * no valid move exists returns null;
-		// *
-		// * @param rules
-		// * The rules of the present game
-		// * @param board
-		// * The board where the move should be made
-		// * @return A node representing a valid move on the board for the
-		// player. If
-		// * no valid move exists returns null;
-		// */
-		// public Node getMove(SimpleRules rules, ImmutableBoard board) {
-		// Node result = null;
-		// // Check if player have any valid move;
-		// for (Node move : board.getNodes()) {
-		// if (rules.validMove(board, move, getId())) {
-		// result = move;
-		// break;
-		// }
-		// }
-		// return result;
-		// }
-
+		if(!othello.hasValidMove(playerId)){
+			return null;
+		}	
+		java.util.List<Node> nodesOnBoard = othello.getBoard().getNodes();
+		for (Node node : nodesOnBoard) {
+			if(othello.isMoveValid(playerId, node.getId())){
+				return node;
+			}
+			
+		}
 		return null;
 	}
 }
