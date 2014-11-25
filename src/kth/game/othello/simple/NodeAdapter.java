@@ -6,7 +6,8 @@ import kth.game.othello.board.Node;
 import kth.game.othello.simple.model.ImmutableNode;
 
 /**
- * This class implements an outer, mutable view of the current state of a node on an Othello board.
+ * This class adapts the {@link kth.game.othello.simple.model.ImmutableNode} to
+ * the {@link kth.game.othello.board.Node} API.
  */
 public class NodeAdapter extends Observable implements Node {
 
@@ -18,15 +19,16 @@ public class NodeAdapter extends Observable implements Node {
 
 	/**
 	 * Set the underlying immutable node.
-     *
-	 * @param nodeData the node to act as the underlying data.
+	 *
+	 * @param nodeData
+	 *            the node to act as the underlying data.
 	 */
 	protected void setNode(ImmutableNode nodeData) {
 		if (this.nodeData.getOccupantPlayerId() != nodeData.getOccupantPlayerId()) {
-            this.setChanged();
-        }
-        this.nodeData = nodeData;
-        this.notifyObservers();
+			this.setChanged();
+		}
+		this.nodeData = nodeData;
+		this.notifyObservers();
 	}
 
 	/**
@@ -36,22 +38,23 @@ public class NodeAdapter extends Observable implements Node {
 	 */
 	@Override
 	public String getId() {
-        int idInt = getXCoordinate();
+		int idInt = getXCoordinate();
 
-        // 32-bit idInt:
-        // 0000 0000 0000 0000 0000 0000 0000 0000
-        // | Y goes here      | X goes here      |
-        // Together they become some cryptic integer that does not tempt ppl to use the id to infer coordinates.
-        idInt = idInt | (getYCoordinate() << 16);
+		// 32-bit idInt:
+		// 0000 0000 0000 0000 0000 0000 0000 0000
+		// | Y goes here | X goes here |
+		// Together they become some cryptic integer that does not tempt ppl to
+		// use the id to infer coordinates.
+		idInt = idInt | (getYCoordinate() << 16);
 
-        String id = Integer.toString(idInt);
+		String id = Integer.toString(idInt);
 
 		return id;
 
 	}
 
 	/**
-	 * To get the player id of the occupant player
+	 * Get the id of the occupant player
 	 * 
 	 * @return the id of the occupant player or null if the node is not marked
 	 */

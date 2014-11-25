@@ -10,58 +10,55 @@ import kth.game.othello.simple.model.ImmutableBoard;
 import kth.game.othello.simple.model.ImmutableNode;
 
 /**
- * This class provides an outer view of the current state of an Othello board.
+ * This class adapts the {@link kth.game.othello.simple.model.ImmutableBoard}
+ * class to the {@link kth.game.othello.board.Board} API.
  */
 public class BoardAdapter implements Board {
 
 	private ImmutableBoard boardState;
-	private final ImmutableBoard startingBoard;
 	private List<NodeAdapter> nodeAPIViews;
 
-	protected BoardAdapter(ImmutableBoard startingBoard, List<NodeAdapter> nodeAPIViews) {
-		this.startingBoard = startingBoard;
-		this.nodeAPIViews = nodeAPIViews;
-
-		assert nodeAPIViews.size() == startingBoard.getNodes().size() : "Wrong number of NodeAPIViews: "
-				+ nodeAPIViews.size() + " != " + startingBoard.getNodes().size();
-		Iterator<ImmutableNode> nodeIterator = startingBoard.getNodes().iterator();
-		Iterator<NodeAdapter> nodeViewIterator = nodeAPIViews.iterator();
-		while (nodeIterator.hasNext() && nodeViewIterator.hasNext()) {
-			nodeViewIterator.next().setNode(nodeIterator.next());
-		}
-		this.nodeAPIViews.sort(new NodeComparator());
-		boardState = startingBoard;
+	/**
+	 * Creates a new board adapter. The passed node adapters are assumed to be
+	 * pre-configured with exactly every node in the passed starting board.
+	 * 
+	 * @param startingBoard the board containing the initial state of the adapter.
+	 * @param nodeAdapters the node adapters of the board. Assumed to be
+     * pre-configured with exactly every node in the passed starting board.
+	 */
+	protected BoardAdapter(ImmutableBoard startingBoard, List<NodeAdapter> nodeAdapters) {
+        boardState = startingBoard;
+        this.nodeAPIViews = nodeAdapters;
+        this.nodeAPIViews.sort(new NodeComparator());
 	}
 
 	private class NodeComparator implements Comparator<Node> {
 
 		/**
-		 * TODO
+		 * Sorts Nodes with respect to y first and then x..
+         * For example (x,y): (4,3) (5,3) (1,4) (2,4)
 		 *
-		 * @param o1
+		 * @param node1
 		 *            the first object to be compared.
-		 * @param o2
+		 * @param node2
 		 *            the second object to be compared.
 		 * @return a negative integer, zero, or a positive integer as the first
 		 *         argument is less than, equal to, or greater than the second.
 		 * @throws NullPointerException
 		 *             if an argument is null and this comparator does not
 		 *             permit null arguments
-		 * @throws ClassCastException
-		 *             if the arguments' types prevent them from being compared
-		 *             by this comparator.
 		 */
 		@Override
-		public int compare(Node o1, Node o2) {
-			if (o1.getYCoordinate() < o2.getYCoordinate()) {
+		public int compare(Node node1, Node node2) {
+			if (node1.getYCoordinate() < node2.getYCoordinate()) {
 				return -1;
-			} else if (o1.getYCoordinate() > o2.getYCoordinate()) {
+			} else if (node1.getYCoordinate() > node2.getYCoordinate()) {
 				return 1;
 			} else {
 				// Equal y coordinates
-				if (o1.getXCoordinate() < o2.getXCoordinate()) {
+				if (node1.getXCoordinate() < node2.getXCoordinate()) {
 					return -1;
-				} else if (o1.getXCoordinate() > o2.getXCoordinate()) {
+				} else if (node1.getXCoordinate() > node2.getXCoordinate()) {
 					return 1;
 				} else {
 					return 0;
@@ -84,7 +81,7 @@ public class BoardAdapter implements Board {
 	 */
 	@Override
 	public Node getNode(int x, int y) {
-		return getMutableNode(x, y).orElse(null);
+		return getNodeAdapter(x, y).orElse(null);
 	}
 
 	/**
@@ -101,14 +98,14 @@ public class BoardAdapter implements Board {
 		return getNode(coordinates.getXCoordinate(), coordinates.getYCoordinate());
 	}
 
-	private Optional<NodeAdapter> getMutableNode(int x, int y) {
+	private Optional<NodeAdapter> getNodeAdapter(int x, int y) {
 		Optional<NodeAdapter> maybeNode = nodeAPIViews.stream()
 				.filter(node -> (node.getXCoordinate() == x) && (node.getYCoordinate() == y)).findAny();
 		return maybeNode;
 	}
 
-	private Optional<NodeAdapter> getMutableNode(Coordinates coordinates) {
-		return getMutableNode(coordinates.getXCoordinate(), coordinates.getYCoordinate());
+	private Optional<NodeAdapter> getNodeAdapter(Coordinates coordinates) {
+		return getNodeAdapter(coordinates.getXCoordinate(), coordinates.getYCoordinate());
 	}
 
 	/**
@@ -127,7 +124,7 @@ public class BoardAdapter implements Board {
 		List<Node> changedNodeAdapters = new ArrayList<>();
 
 		for (ImmutableNode node : newNodes) {
-			Optional<NodeAdapter> maybeNodeAdapter = getMutableNode(node.getCoordinates());
+			Optional<NodeAdapter> maybeNodeAdapter = getNodeAdapter(node.getCoordinates());
 			maybeNodeAdapter.ifPresent(nodeAdapter -> nodeAdapter.setNode(node));
 			maybeNodeAdapter.ifPresent(nodeAdapter -> changedNodeAdapters.add(nodeAdapter));
 		}
@@ -150,10 +147,10 @@ public class BoardAdapter implements Board {
 	}
 
 	/**
-	 * TODO return null if node with given Id does not exist on board;
+	 * Returns the distinct Node with the given node id.
 	 *
-	 * @param nodeId
-	 * @return
+	 * @param nodeId the node id of the node to fetch.
+	 * @return the Node with the given id.
 	 */
 	public Node getNodeById(String nodeId) {
 		Optional<NodeAdapter> maybeNode = nodeAPIViews.stream().filter(node -> node.getId().equals(nodeId)).findAny();
