@@ -70,7 +70,7 @@ public class ImmutableBoard {
 	 *             if the coordinates does not exist on the board.
 	 */
 	public ImmutableNode getNodeAtCoordinates(Coordinates coordinates) throws IllegalArgumentException {
-		if (!this.coordinatesAreOnBoard(coordinates)) {
+		if (!this.hasCoordinates(coordinates)) {
 			throw new IllegalArgumentException("Coordinates does not exist on board");
 		}
 		return nodes.get(coordinates);
@@ -95,7 +95,7 @@ public class ImmutableBoard {
 		Coordinates originCoord = originNode.getCoordinates();
 		int x = originCoord.getXCoordinate();
 		int y = originCoord.getYCoordinate();
-		if (!this.coordinatesAreOnBoard(originCoord)) {
+		if (!this.hasCoordinates(originCoord)) {
 			throw new IllegalArgumentException("Used a starting point that was outside of the board: " + x + ", " + y);
 		}
 
@@ -131,7 +131,7 @@ public class ImmutableBoard {
 		}
 		Coordinates newCoordinates = new Coordinates(x, y);
 
-		if (!coordinatesAreOnBoard(newCoordinates)) {
+		if (!hasCoordinates(newCoordinates)) {
 			return null;
 		} else {
 			return getNodeAtCoordinates(newCoordinates);
@@ -139,7 +139,14 @@ public class ImmutableBoard {
 
 	}
 
-	private boolean coordinatesAreOnBoard(Coordinates coordinates) {
+	/**
+	 * Returns true if the given coordinates exist on this board, else false.
+	 * 
+	 * @param coordinates
+	 *            the coordinates to check if they are on the board.
+	 * @return true if the coordinates exist on the board, else false.
+	 */
+	public boolean hasCoordinates(Coordinates coordinates) {
 		return nodes.containsKey(coordinates);
 	}
 
