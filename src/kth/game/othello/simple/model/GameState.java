@@ -5,19 +5,19 @@ import java.util.Set;
 
 public class GameState {
 
-	private TurnKeeper turnKeeper;
+	private TurnCalculator turnCalculator;
 	private Rules rules;
 	private ImmutableBoard board;
 	private String playerInTurn;
 
-	public GameState(ImmutableBoard startBoard, TurnKeeper turnKeeper, Rules rules, String startPlayer) {
+	public GameState(ImmutableBoard startBoard, TurnCalculator turnCalculator, Rules rules, String startPlayer) {
 		board = startBoard;
-		this.turnKeeper = turnKeeper;
+		this.turnCalculator = turnCalculator;
 		this.rules = rules;
 		if (rules.hasValidMove(startBoard, startPlayer)) {
 			playerInTurn = startPlayer;
 		} else {
-			playerInTurn = turnKeeper.getPlayerInTurn(startPlayer, startBoard, rules);
+			playerInTurn = turnCalculator.getPlayerInTurn(startPlayer, startBoard, rules);
 		}
 	}
 
@@ -91,8 +91,8 @@ public class GameState {
 		ImmutableNode playAtNode = board.getNodeAtCoordinates(nodeCoordinates);
 		Set<ImmutableNode> nodesToSwap = rules.getNodesToSwap(board, playAtNode, playerId);
 		ImmutableBoard newBoard = board.swapNodes(nodesToSwap, playerId);
-		String nextPlayerInTurn = turnKeeper.getPlayerInTurn(playerId, newBoard, rules);
-		GameState nextGameState = new GameState(newBoard, turnKeeper, rules, nextPlayerInTurn);
+		String nextPlayerInTurn = turnCalculator.getPlayerInTurn(playerId, newBoard, rules);
+		GameState nextGameState = new GameState(newBoard, turnCalculator, rules, nextPlayerInTurn);
 		return Optional.of(nextGameState);
 	}
 

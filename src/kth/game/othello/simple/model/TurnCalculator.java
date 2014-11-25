@@ -3,27 +3,21 @@ package kth.game.othello.simple.model;
 import java.util.List;
 
 /**
- * This class is responsible for keeping the current player in turn to play the
- * game.
- * 
- * @author mikael
+ * This class is responsible for calculate the next player in turn. game.
  * 
  */
-public class TurnKeeper {
+public class TurnCalculator {
 
 	private List<String> players;
 
-	// private int playerInTurnIndex;
 	/**
 	 * Create a new turnKeeper.
 	 * 
 	 * @param playerIds
 	 * @param startingPlayerId
 	 */
-	public TurnKeeper(List<String> playerIds) {
+	public TurnCalculator(List<String> playerIds) {
 		this.players = playerIds;
-		// this.playerInTurnIndex = players.indexOf(startingPlayerId);
-
 	}
 
 	/**
