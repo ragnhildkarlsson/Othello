@@ -38,6 +38,13 @@ public class GameModel {
 	}
 
 	/**
+	 * Returns the present GameState in the model
+	 */
+	public GameState getGameState() {
+		return gameState;
+	}
+
+	/**
 	 * Determines if the player with given id has any valid move.
 	 * 
 	 * @param playerId
@@ -84,6 +91,9 @@ public class GameModel {
 	 *             if the move is not valid, or if the player is not in turn
 	 */
 	public Set<Coordinates> move(String playerId, Coordinates nodeCoordinate) throws IllegalArgumentException {
+
+		// Optional<GameState> newGameState = gameState.tryMove(playerId,
+		// nodeCoordinates);
 		// TODO
 		// // Check that this player is in turn
 		//

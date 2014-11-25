@@ -3,6 +3,7 @@ package kth.game.othello.simple.model;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * ImmutableBoard is responsible for keeping track of the nodes in the game
@@ -54,6 +55,20 @@ public class ImmutableBoard {
 	public Set<ImmutableNode> getNodes() {
 		HashSet<ImmutableNode> nodesCopy = new HashSet<>(this.nodes.values());
 		return nodesCopy;
+	}
+
+	/**
+	 * TODO testCase
+	 * 
+	 * @param board1
+	 * @param board2
+	 * @return
+	 */
+	public static Set<Coordinates> compare(ImmutableBoard board1, ImmutableBoard board2) {
+		Set<ImmutableNode> board1Nodes = board1.getNodes();
+		Set<ImmutableNode> board2Nodes = board2.getNodes();
+		board2Nodes.remove(board1Nodes);
+		return board2Nodes.stream().map(node -> node.getCoordinates()).collect(Collectors.toSet());
 	}
 
 	/**
