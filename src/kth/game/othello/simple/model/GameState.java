@@ -72,7 +72,7 @@ public class GameState {
 
 	/**
 	 * If the given player is the player in turn and the move is valid, an
-	 * optional of the resulting gameState be returned otherwise an empty
+	 * optional of the resulting gameState is returned or otherwise an empty
 	 * optional.
 	 * 
 	 * @param playerId
