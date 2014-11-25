@@ -4,7 +4,7 @@ import kth.game.othello.Othello;
 import kth.game.othello.board.Node;
 import kth.game.othello.player.movestrategy.MoveStrategy;
 
-public class greedyStrategy implements MoveStrategy {
+public class GreedyStrategy implements MoveStrategy {
 
 	private final String name = "greedy-strategy";
 
