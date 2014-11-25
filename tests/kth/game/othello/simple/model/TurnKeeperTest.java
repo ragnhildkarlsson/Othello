@@ -30,9 +30,9 @@ public class TurnKeeperTest {
 		Mockito.when(rules.hasValidMove(null, player2Id)).thenReturn(false);
 		Mockito.when(rules.hasValidMove(null, player3Id)).thenReturn(false);
 
-		TurnKeeper turnKeeper = new TurnKeeper(playerIds, player2Id);
+		TurnKeeper turnKeeper = new TurnKeeper(playerIds);
 
-		String playerInTurn = turnKeeper.getPlayerInTurn(rules, null);
+		String playerInTurn = turnKeeper.getPlayerInTurn(player2Id, null, rules);
 
 		assertEquals(player1Id, playerInTurn);
 
@@ -56,9 +56,9 @@ public class TurnKeeperTest {
 		Mockito.when(rules.hasValidMove(null, player2Id)).thenReturn(false);
 		Mockito.when(rules.hasValidMove(null, player3Id)).thenReturn(false);
 
-		TurnKeeper turnKeeper = new TurnKeeper(playerIds, player2Id);
+		TurnKeeper turnKeeper = new TurnKeeper(playerIds);
 
-		String playerInTurn = turnKeeper.getPlayerInTurn(rules, null);
+		String playerInTurn = turnKeeper.getPlayerInTurn(player1Id, null, rules);
 
 		assertEquals(null, playerInTurn);
 

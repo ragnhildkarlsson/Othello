@@ -12,41 +12,43 @@ import java.util.List;
 public class TurnKeeper {
 
 	private List<String> players;
-	private int playerInTurnIndex;
 
+	// private int playerInTurnIndex;
 	/**
 	 * Create a new turnKeeper.
 	 * 
 	 * @param playerIds
 	 * @param startingPlayerId
 	 */
-	public TurnKeeper(List<String> playerIds, String startingPlayerId) {
+	public TurnKeeper(List<String> playerIds) {
 		this.players = playerIds;
-		this.playerInTurnIndex = players.indexOf(startingPlayerId);
+		// this.playerInTurnIndex = players.indexOf(startingPlayerId);
 
 	}
 
 	/**
-	 * Get the id of the player in turn or null if no player can move
+	 * Return the player in turn given the previous player and the resulting
+	 * board of the previous players move. If no player can do any move return
+	 * null
 	 * 
-	 * @return the id of the player in turn or null if no player can move;
+	 * @param previousPlayer
+	 *            the id of the previousPlayer
+	 * @param the
+	 * 
 	 */
-	public String getPlayerInTurn(Rules rules, ImmutableBoard board) {
+	public String getPlayerInTurn(String previousPlayer, ImmutableBoard newBoard, Rules rules) {
+		if (rules.isGameOver(newBoard)) {
+			return null;
+		}
+		int playerIndex = players.indexOf(previousPlayer);
 		for (int i = 0; i < players.size(); i++) {
-			String possiblePlayerInTurn = players.get(playerInTurnIndex);
-			if (rules.hasValidMove(board, possiblePlayerInTurn)) {
+			String possiblePlayerInTurn = players.get(playerIndex);
+			if (rules.hasValidMove(newBoard, possiblePlayerInTurn)) {
 				return possiblePlayerInTurn;
 			}
-			this.nextTurn();
+			playerIndex = (playerIndex + 1) % players.size();
 		}
 		return null;
-	}
-
-	/**
-	 * Change the current player in turn to the next player.
-	 */
-	public void nextTurn() {
-		playerInTurnIndex = (playerInTurnIndex + 1) % players.size();
 	}
 
 	/**

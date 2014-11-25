@@ -10,9 +10,7 @@ import java.util.Set;
  */
 public class GameModel {
 
-	private TurnKeeper turnKeeper;
-	private Rules rules;
-	private ImmutableBoard board;
+	private GameState gameState;
 
 	/**
 	 * Create a new GameModel.
@@ -26,28 +24,8 @@ public class GameModel {
 	 * @param ImmutableBoard
 	 *            the starting of the game.
 	 */
-	protected GameModel(Rules rules, TurnKeeper turnKeeper, ImmutableBoard startingBoard) {
-		this.rules = rules;
-		this.board = startingBoard;
-		this.turnKeeper = turnKeeper;
-	}
-
-	/**
-	 * Returns a set with coordinates of the nodes that will be swapped to
-	 * belong to the player with the given id if he/she play at a node with the
-	 * given coordinates;
-	 * 
-	 * @param playerId
-	 *            the id of the player making the move
-	 * @param nodeCoordinates
-	 *            the coordinates of the node where the move is made
-	 * @return Returns a set with coordinates of the nodes that will be swapped
-	 *         if the player with the given id play at a node with the given
-	 *         coordinates.
-	 */
-	public Set<Coordinates> getNodesToSwap(String playerId, Coordinates nodeCoordinates) {
-		return getSetOfCoordinatesFromNodes(rules.getNodesToSwap(board, board.getNodeAtCoordinates(nodeCoordinates),
-				playerId));
+	protected GameModel(GameState startState) {
+		this.gameState = startState;
 	}
 
 	/**
@@ -56,7 +34,7 @@ public class GameModel {
 	 * @return the id of the player in turn
 	 */
 	public String getPlayerInTurn() {
-		return turnKeeper.getPlayerInTurn(rules, board);
+		return gameState.getPlayerInTurn();
 	}
 
 	/**
@@ -67,7 +45,7 @@ public class GameModel {
 	 * @return true if the player with the given id has a valid move.
 	 */
 	public boolean hasValidMove(String playerId) {
-		return rules.hasValidMove(board, playerId);
+		return gameState.hasValidMove(playerId);
 	}
 
 	/**
@@ -75,8 +53,8 @@ public class GameModel {
 	 * 
 	 * @return false if the game is over.
 	 */
-	public boolean isActive() {
-		return !rules.isGameOver(board);
+	public boolean isGameOver() {
+		return gameState.isGameOver();
 	}
 
 	/**
@@ -89,7 +67,7 @@ public class GameModel {
 	 * @return true if the move is valid.
 	 */
 	public boolean isMoveValid(String playerId, Coordinates nodeCoordinates) {
-		return rules.validMove(board, board.getNodeAtCoordinates(nodeCoordinates), playerId);
+		return gameState.isMoveValid(playerId, nodeCoordinates);
 	}
 
 	/**
@@ -106,25 +84,31 @@ public class GameModel {
 	 *             if the move is not valid, or if the player is not in turn
 	 */
 	public Set<Coordinates> move(String playerId, Coordinates nodeCoordinate) throws IllegalArgumentException {
-		// Check that this player is in turn
-		ImmutableNode nodeToPlay = board.getNodeAtCoordinates(nodeCoordinate);
-		if (!turnKeeper.getPlayerInTurn(rules, board).equals(playerId)) {
-			throw new IllegalArgumentException("Trying to make a move with a player not in turn");
-		}
-		// Check that the move is valid
-		if (!rules.validMove(board, nodeToPlay, playerId)) {
-			throw new IllegalArgumentException("Trying to make unvalid move");
-		}
-		// Get the nodes that will be swapped
-		Set<ImmutableNode> nodesToSwap = rules.getNodesToSwap(board, nodeToPlay, playerId);
-
-		// perform the move
-		board = board.swapNodes(nodesToSwap, playerId);
-
-		// go to the next turn
-		turnKeeper.nextTurn();
-
-		return getSetOfCoordinatesFromNodes(nodesToSwap);
+		// TODO
+		// // Check that this player is in turn
+		//
+		// ImmutableNode nodeToPlay =
+		// board.getNodeAtCoordinates(nodeCoordinate);
+		// if (!turnKeeper.getPlayerInTurn(rules, board).equals(playerId)) {
+		// throw new
+		// IllegalArgumentException("Trying to make a move with a player not in turn");
+		// }
+		// // Check that the move is valid
+		// if (!rules.validMove(board, nodeToPlay, playerId)) {
+		// throw new IllegalArgumentException("Trying to make unvalid move");
+		// }
+		// // Get the nodes that will be swapped
+		// Set<ImmutableNode> nodesToSwap = rules.getNodesToSwap(board,
+		// nodeToPlay, playerId);
+		//
+		// // perform the move
+		// board = board.swapNodes(nodesToSwap, playerId);
+		//
+		// // go to the next turn
+		// turnKeeper.nextTurn();
+		//
+		// return getSetOfCoordinatesFromNodes(nodesToSwap);
+		return null;
 	}
 
 	private Set<Coordinates> getSetOfCoordinatesFromNodes(Set<ImmutableNode> nodes) {

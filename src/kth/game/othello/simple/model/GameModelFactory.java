@@ -19,8 +19,9 @@ public class GameModelFactory {
 	}
 
 	public GameModel getNewGameModel(String startPlayerId) {
-		TurnKeeper turnKeeper = new TurnKeeper(playerIds, startPlayerId);
-		GameModel gameModel = new GameModel(rules, turnKeeper, startBoard);
+		TurnKeeper turnKeeper = new TurnKeeper(playerIds);
+		GameState startState = new GameState(startBoard, turnKeeper, rules, startPlayerId);
+		GameModel gameModel = new GameModel(startState);
 		return gameModel;
 	}
 }
