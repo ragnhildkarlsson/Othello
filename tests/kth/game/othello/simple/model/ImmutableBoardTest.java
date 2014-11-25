@@ -1,13 +1,11 @@
 package kth.game.othello.simple.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import kth.game.othello.simple.model.Coordinates;
-import kth.game.othello.simple.model.ImmutableBoard;
-import kth.game.othello.simple.model.ImmutableNode;
 
 import org.junit.Test;
 
@@ -30,7 +28,7 @@ public class ImmutableBoardTest {
 		Set<ImmutableNode> dummyNodes = new HashSet<ImmutableNode>();
 		for (int y = 0; y < numberOfNodesOnSide; y++) {
 			for (int x = 0; x < numberOfNodesOnSide; x++) {
-				// Mock dummy node
+				// Create a new node
 				ImmutableNode dummyNode = new ImmutableNode(new Coordinates(x, y), dummyID);
 				dummyNodes.add(dummyNode);
 			}
@@ -40,7 +38,7 @@ public class ImmutableBoardTest {
 	}
 
 	private ImmutableBoard generateBoardWithSide(int boardSide) {
-		// Mock dummy nodes
+		// Create dummy nodes
 		Set<ImmutableNode> dummyNodes = generateDummyNodes(boardSide);
 		// Create board and retrieve its nodes
 		return new ImmutableBoard(dummyNodes);
@@ -53,7 +51,7 @@ public class ImmutableBoardTest {
 		ImmutableBoard board = generateBoardWithSide(2);
 		Set<ImmutableNode> retrievedNodes = board.getNodes();
 
-		// Mock one node to try and insert
+		// Create one node to try and insert
 		ImmutableNode specificNode = new ImmutableNode(new Coordinates(3, 3), "SpecificNode");
 
 		retrievedNodes.add(specificNode);
@@ -68,21 +66,18 @@ public class ImmutableBoardTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetNodeOutOfRightBoundsShouldReturnNull() throws Exception {
-		// Mock a coordinate object
 		Coordinates cord = new Coordinates(8, 0);
 		assertNull(dummy8x8Board.getNodeAtCoordinates(cord));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetNodeOutOfBottomBoundsShouldReturnNull() throws Exception {
-		// Mock a coordinate object
 		Coordinates cord = new Coordinates(0, -1);
 		assertNull(dummy8x8Board.getNodeAtCoordinates(cord));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetNodeOutOfTopBoundsShouldReturnNull() throws Exception {
-		// Mock a coordinate object
 		Coordinates cord = new Coordinates(0, 8);
 		assertNull(dummy8x8Board.getNodeAtCoordinates(cord));
 	}
