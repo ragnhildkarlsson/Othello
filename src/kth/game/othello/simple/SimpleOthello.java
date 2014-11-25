@@ -154,7 +154,7 @@ public class SimpleOthello implements Othello {
 			throw new IllegalStateException("Tried to do a Computer move using a human player.");
 		case COMPUTER:
 			Coordinates coordinatesToPlayAt = toCoordinates(playerInTurn.getMoveStrategy().move(playerIdInTurn, this));
-			return move(playerIdInTurn, coordinatesToPlayAt);
+			return synchronizedMove(playerIdInTurn, coordinatesToPlayAt);
 		}
 		throw new IllegalStateException("This should never be reached. There is a bug in move() of SimpleOthello.");
 	}
@@ -180,12 +180,12 @@ public class SimpleOthello implements Othello {
 		if (!gameModel.isMoveValid(playerId, coordinates)) {
 			return null;
 		} else {
-            return move(playerId, coordinates);
+            return synchronizedMove(playerId, coordinates);
         }
 	}
 
-	private List<Node> move(String playerId, Coordinates nodeCoordinates) {
-		Collection<Coordinates> swappedCoordinates = gameModel.move(playerId, nodeCoordinates);
+	private List<Node> synchronizedMove(String playerId, Coordinates nodeCoordinates) {
+		Set<Coordinates> swappedCoordinates = gameModel.move(playerId, nodeCoordinates);
 		return boardAPIView.swapNodes(swappedCoordinates, playerId);
 	}
 
