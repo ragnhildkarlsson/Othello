@@ -1,37 +1,82 @@
 package kth.game.othello.simple;
 
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import kth.game.othello.board.Node;
 import kth.game.othello.score.Score;
 import kth.game.othello.score.ScoreItem;
 
-public class SimpleScore implements Score, Observer {
+/**
+ * TODO
+ */
+public class SimpleScore extends Observable implements Score, Observer {
 
-	public SimpleScore() {
+	private Map<Node, String> occupiedNodes = new HashMap<>();
 
+	public SimpleScore(Set<Node> startingNodes) {
+        startingNodes.forEach(node -> {
+            node.addObserver(this);
+            if (node.getOccupantPlayerId() != null) {
+                occupiedNodes.put(node, node.getOccupantPlayerId());
+            }
+        });
 	}
 
-	@Override
-	public void addObserver(Observer observer) {
-		// TODO Auto-generated method stub
-	}
-
+	/**
+	 * A list of the score of all players. The list is sorted in decreasing
+	 * order regarding the score.
+	 *
+	 * @return a map where the keys are the id of the players and the values are
+	 *         the score for that player.
+	 */
 	@Override
 	public List<ScoreItem> getPlayersScore() {
-		// TODO Auto-generated method stub
-		return null;
+		Set<String> playerIds = occupiedNodes.values().stream().distinct().collect(Collectors.toSet());
+		List<ScoreItem> scoreItems = playerIds.stream().map(playerId -> new ScoreItem(playerId, getPoints(playerId)))
+				.collect(Collectors.toList());
+		return scoreItems;
 	}
 
+	/**
+	 * Get the score of a specific player
+	 *
+	 * @param playerId
+	 *            the id of the player
+	 * @return the score
+	 */
 	@Override
 	public int getPoints(String playerId) {
-		// TODO Auto-generated method stub
-		return 0;
+		return (int) occupiedNodes.values().stream().filter(nodePlayerId -> nodePlayerId == playerId).count();
 	}
 
+	/**
+	 * This method is called whenever the observed object is changed. An
+	 * application calls an <tt>Observable</tt> object's
+	 * <code>notifyObservers</code> method to have all the object's observers
+	 * notified of the change.
+	 *
+	 * @param o
+	 *            the observable object.
+	 * @param arg
+	 *            an argument passed to the <code>notifyObservers</code>
+	 */
 	@Override
-	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
+	public void update(Observable o, Object arg) {
+		if (o instanceof Node) {
+			Node node = (Node) o;
+			if (node.getOccupantPlayerId() == null) {
+				occupiedNodes.remove(node);
+			} else {
+				occupiedNodes.put(node, node.getOccupantPlayerId());
+			}
+		}
+	}
+
+	/**
+	 * TODO
+	 */
+	private void reset(Set<Node> startingNodes) {
+
 	}
 }
