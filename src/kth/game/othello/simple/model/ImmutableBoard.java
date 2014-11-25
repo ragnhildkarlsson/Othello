@@ -181,9 +181,21 @@ public class ImmutableBoard {
 			ImmutableNode newNode = new ImmutableNode(node.getCoordinates(), playerId);
 			newNodes.add(newNode);
 		}
-		// Add all the old nodes (old nodes with the same coordinates as the new
-		// will be ignored by the Set logic)
-		newNodes.addAll(this.getNodes());
+		Set<Coordinates> newNodeCoordinates = getCoordinateSet(newNodes);
+		for (ImmutableNode oldNode : this.nodes.values()) {
+			if (!newNodeCoordinates.contains(oldNode.getCoordinates())) {
+				// if this node has not been swapped, add it to new nodes
+				newNodes.add(oldNode);
+			}
+		}
 		return new ImmutableBoard(newNodes);
+	}
+
+	private Set<Coordinates> getCoordinateSet(Set<ImmutableNode> nodes) {
+		Set<Coordinates> coordinates = new HashSet<>();
+		for (ImmutableNode node : nodes) {
+			coordinates.add(node.getCoordinates());
+		}
+		return coordinates;
 	}
 }
