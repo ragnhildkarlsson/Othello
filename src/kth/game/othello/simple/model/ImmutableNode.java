@@ -62,6 +62,7 @@ public final class ImmutableNode {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((coordinates == null) ? 0 : coordinates.hashCode());
+		result = prime * result + ((occupantPlayerId == null) ? 0 : occupantPlayerId.hashCode());
 		return result;
 	}
 
@@ -78,6 +79,11 @@ public final class ImmutableNode {
 			if (other.coordinates != null)
 				return false;
 		} else if (!coordinates.equals(other.coordinates))
+			return false;
+		if (occupantPlayerId == null) {
+			if (other.occupantPlayerId != null)
+				return false;
+		} else if (!occupantPlayerId.equals(other.occupantPlayerId))
 			return false;
 		return true;
 	}

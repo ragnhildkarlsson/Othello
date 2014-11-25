@@ -5,16 +5,25 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashSet;
 import java.util.Set;
 
-import kth.game.othello.simple.model.Coordinates;
-import kth.game.othello.simple.model.ImmutableBoard;
-import kth.game.othello.simple.model.ImmutableNode;
-import kth.game.othello.simple.model.Rules;
 import kth.game.othello.simple.model.ImmutableBoard.Direction;
 
 import org.junit.Test;
 import org.mockito.Mockito;
 
 public class RulesTest {
+
+	/**
+	 * Test that the method validMove return false if the player want to play
+	 * outside board.
+	 */
+	@Test
+	void testMoveOutsideBoardIsNotValid() {
+		Coordinates playAtCoordinates = new Coordinates(0, 0);
+		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
+		Mockito.when(mockBoard.hasCoordinates(playAtCoordinates)).thenReturn(false);
+		Rules rules = new Rules();
+		assertEquals(false, rules.validMove(mockBoard, playAtCoordinates, null));
+	}
 
 	/**
 	 * <pre>
@@ -34,14 +43,14 @@ public class RulesTest {
 		ImmutableNode playAtNode = null;
 		ImmutableBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
 		Set<ImmutableNode> nodes = mockBoard.getNodes();
-		for(ImmutableNode node : nodes){
-			if(!node.isMarked()){
+		for (ImmutableNode node : nodes) {
+			if (!node.isMarked()) {
 				playAtNode = node; // get the node which is unmarked
 			}
 		}
-		
+
 		Rules rules = new Rules();
-		boolean res = rules.validMove(mockBoard, playAtNode, player1Id);
+		boolean res = rules.validMove(mockBoard, playAtNode.getCoordinates(), player1Id);
 		for (Direction dir : Direction.values()) {
 			Mockito.verify(mockBoard).getNextNodeInDirection(playAtNode, dir);
 		}
@@ -135,10 +144,13 @@ public class RulesTest {
 		// Check that the right nodes (and no other nodes) where listed as nodes
 		// to swap
 		Rules rules = new Rules();
-		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode, xPlayerID).contains(boardNode41));
-		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode, xPlayerID).contains(boardNode21));
-		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode, xPlayerID).contains(boardNode11));
-		assertEquals(3, rules.getNodesToSwap(mockBoard, playAtNode, xPlayerID).size());
+		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode.getCoordinates(), xPlayerID)
+				.contains(boardNode41));
+		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode.getCoordinates(), xPlayerID)
+				.contains(boardNode21));
+		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode.getCoordinates(), xPlayerID)
+				.contains(boardNode11));
+		assertEquals(3, rules.getNodesToSwap(mockBoard, playAtNode.getCoordinates(), xPlayerID).size());
 
 		final int callsToGetNodesToSwap = 4;
 
@@ -171,8 +183,8 @@ public class RulesTest {
 		Rules rules = new Rules();
 		// By giving null as the argument board, this test will fail if the
 		// method validMove() tries to calculate if this move is valid
-		assertEquals(false, rules.validMove(null, boardNode, player1Id));
-		assertEquals(false, rules.validMove(null, boardNode, player2Id));
+		assertEquals(false, rules.validMove(null, boardNode.getCoordinates(), player1Id));
+		assertEquals(false, rules.validMove(null, boardNode.getCoordinates(), player2Id));
 	}
 
 	/**
@@ -186,8 +198,8 @@ public class RulesTest {
 		Rules rules = new Rules();
 		// By giving null as the argument board, this test will fail if the
 		// method getNodesToSwap() tries to calculate the nodes to swap
-		assertEquals(true, rules.getNodesToSwap(null, boardNode, null).isEmpty());
-		assertEquals(true, rules.getNodesToSwap(null, boardNode, player1Id).isEmpty());
+		assertEquals(true, rules.getNodesToSwap(null, boardNode.getCoordinates(), null).isEmpty());
+		assertEquals(true, rules.getNodesToSwap(null, boardNode.getCoordinates(), player1Id).isEmpty());
 	}
 
 	/**
@@ -351,6 +363,5 @@ public class RulesTest {
 		Mockito.when(mockBoard.getNodes()).thenReturn(nodesOnBoard);
 		return mockBoard;
 	}
-
 
 }

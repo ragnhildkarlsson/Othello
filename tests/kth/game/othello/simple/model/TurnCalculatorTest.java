@@ -8,12 +8,11 @@ import java.util.List;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class TurnKeeperTest {
+public class TurnCalculatorTest {
 
 	/**
-	 * Given that we create a turnKeeper with a starting player with no valid
-	 * move, check that getPlayerInTurn finds the player with a valid move.
-	 * 
+	 * Given that the game is active, check that getPlayerInTurn finds the next
+	 * player with a valid move.
 	 */
 	@Test
 	public void testGetPlayerInTurnWithActiveGame() {
@@ -30,9 +29,9 @@ public class TurnKeeperTest {
 		Mockito.when(rules.hasValidMove(null, player2Id)).thenReturn(false);
 		Mockito.when(rules.hasValidMove(null, player3Id)).thenReturn(false);
 
-		TurnKeeper turnKeeper = new TurnKeeper(playerIds);
+		TurnCalculator turnCalculator = new TurnCalculator(playerIds);
 
-		String playerInTurn = turnKeeper.getPlayerInTurn(player2Id, null, rules);
+		String playerInTurn = turnCalculator.getPlayerInTurn(player2Id, null, rules);
 
 		assertEquals(player1Id, playerInTurn);
 
@@ -56,9 +55,9 @@ public class TurnKeeperTest {
 		Mockito.when(rules.hasValidMove(null, player2Id)).thenReturn(false);
 		Mockito.when(rules.hasValidMove(null, player3Id)).thenReturn(false);
 
-		TurnKeeper turnKeeper = new TurnKeeper(playerIds);
+		TurnCalculator turnCalculator = new TurnCalculator(playerIds);
 
-		String playerInTurn = turnKeeper.getPlayerInTurn(player1Id, null, rules);
+		String playerInTurn = turnCalculator.getPlayerInTurn(player1Id, null, rules);
 
 		assertEquals(null, playerInTurn);
 

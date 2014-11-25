@@ -5,19 +5,19 @@ import java.util.Set;
 
 public class GameState {
 
-	private TurnKeeper turnKeeper;
+	private TurnCalculator turnCalculator;
 	private Rules rules;
 	private ImmutableBoard board;
 	private String playerInTurn;
 
-	public GameState(ImmutableBoard startBoard, TurnKeeper turnKeeper, Rules rules, String startPlayer) {
+	public GameState(ImmutableBoard startBoard, TurnCalculator turnCalculator, Rules rules, String startPlayer) {
 		board = startBoard;
-		this.turnKeeper = turnKeeper;
+		this.turnCalculator = turnCalculator;
 		this.rules = rules;
 		if (rules.hasValidMove(startBoard, startPlayer)) {
 			playerInTurn = startPlayer;
 		} else {
-			playerInTurn = turnKeeper.getPlayerInTurn(startPlayer, startBoard, rules);
+			playerInTurn = turnCalculator.getPlayerInTurn(startPlayer, startBoard, rules);
 		}
 	}
 
@@ -67,33 +67,36 @@ public class GameState {
 	 * @return true if the move is valid.
 	 */
 	public boolean isMoveValid(String playerId, Coordinates nodeCoordinates) {
-		return rules.validMove(board, board.getNodeAtCoordinates(nodeCoordinates), playerId);
+		return rules.validMove(board, nodeCoordinates, playerId);
 	}
 
 	/**
-	 * 
-	 * If move is valid an optional of the resulting gameState be returned
-	 * otherwise an empty optional.
+	 * If the given player is the player in turn and the move is valid, an
+	 * optional of the resulting gameState be returned otherwise an empty
+	 * optional.
 	 * 
 	 * @param playerId
 	 *            id of the player that do the move
 	 * @param nodeCoordinates
 	 *            The coordinates of the node where the player want to do the
 	 *            move
-	 * @return If move is valid an optional of the resulting gameState be
-	 *         returned otherwise an empty optional.
+	 * @return If the given player is the player in turn and the move is valid,
+	 *         an optional of the resulting gameState is returned otherwise an
+	 *         empty optional.
 	 */
 	public Optional<GameState> tryMove(String playerId, Coordinates nodeCoordinates) {
 
-		if (!rules.validMove(board, board.getNodeAtCoordinates(nodeCoordinates), playerId)) {
+		if (!playerId.equals(playerInTurn)) {
 			return Optional.empty();
 		}
-		ImmutableNode playAtNode = board.getNodeAtCoordinates(nodeCoordinates);
-		Set<ImmutableNode> nodesToSwap = rules.getNodesToSwap(board, playAtNode, playerId);
+
+		if (!rules.validMove(board, nodeCoordinates, playerId)) {
+			return Optional.empty();
+		}
+		Set<ImmutableNode> nodesToSwap = rules.getNodesToSwap(board, nodeCoordinates, playerId);
 		ImmutableBoard newBoard = board.swapNodes(nodesToSwap, playerId);
-		String nextPlayerInTurn = turnKeeper.getPlayerInTurn(playerId, newBoard, rules);
-		GameState nextGameState = new GameState(newBoard, turnKeeper, rules, nextPlayerInTurn);
+		String nextPlayerInTurn = turnCalculator.getPlayerInTurn(playerId, newBoard, rules);
+		GameState nextGameState = new GameState(newBoard, turnCalculator, rules, nextPlayerInTurn);
 		return Optional.of(nextGameState);
 	}
-
 }
