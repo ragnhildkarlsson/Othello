@@ -12,8 +12,8 @@ import org.mockito.Mockito;
 
 public class SimpleStrategyTest {
 	/**
-	 * This test that the Strategy return a valid move when it exist a valid
-	 * move for the given player;
+	 * Test that the Strategy returns a valid move when it exist a valid move
+	 * for the given player;
 	 */
 	@Test
 	public void testMoveReturnValidMoveWhenValidMoveExist() {

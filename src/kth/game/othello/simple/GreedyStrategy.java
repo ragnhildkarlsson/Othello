@@ -4,6 +4,13 @@ import kth.game.othello.Othello;
 import kth.game.othello.board.Node;
 import kth.game.othello.player.movestrategy.MoveStrategy;
 
+/**
+ * A simple strategy to perform a move for a computer player, choosing the move
+ * which generates the most swapped nodes for the given player.
+ * 
+ * @author mikael
+ *
+ */
 public class GreedyStrategy implements MoveStrategy {
 
 	private final String name = "greedy-strategy";
