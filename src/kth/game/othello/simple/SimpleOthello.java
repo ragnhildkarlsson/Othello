@@ -11,7 +11,8 @@ import kth.game.othello.score.Score;
 import kth.game.othello.simple.model.*;
 
 /**
- * TODO
+ * This class provides a facade that implements the
+ * {@link kth.game.othello.Othello} API. Use it to play Othello.
  */
 public class SimpleOthello implements Othello {
 
@@ -19,16 +20,28 @@ public class SimpleOthello implements Othello {
 	private final GameModelFactory gameModelFactory;
 	private GameModel gameModel;
 	private final Score score;
-    private final Map<String, Player> playerMap = new HashMap<>();
+	private final Map<String, Player> playerMap = new HashMap<>();
 
-	public SimpleOthello(Collection<Player> players, BoardAdapter board, GameModelFactory gameModelFactory, Score score) {
-        players.stream().forEach(player -> playerMap.put(player.getId(), player));
-        this.boardAdapter = board;
-        this.gameModelFactory = gameModelFactory;
-        this.score = score;
-        Player anyPlayer = players.stream().findAny().get();
-        gameModel = gameModelFactory.getNewGameModel(anyPlayer.getId());
-    }
+	/**
+	 * Creates a new SimpleOthello game. Assumes the GameModelFactory to always
+	 * produce game models with the board that the given board adapter is
+	 * pre-configured with.
+	 *
+	 * @param players the players present on the given board.
+	 * @param board the board adaptor that will be used.
+	 * @param gameModelFactory the factory from which the game should produce it's game models.
+	 * @param score the score object that should keep track of the score.
+	 */
+	protected SimpleOthello(Collection<Player> players, BoardAdapter board, GameModelFactory gameModelFactory,
+			SimpleScore score) {
+		players.stream().forEach(player -> playerMap.put(player.getId(), player));
+		this.boardAdapter = board;
+		this.gameModelFactory = gameModelFactory;
+		this.score = score;
+		Player anyPlayer = players.stream().findAny().get();
+		gameModel = gameModelFactory.getNewGameModel(anyPlayer.getId());
+		board.setBoardState(gameModel.getGameState().getBoard());
+	}
 
 	/**
 	 * The board on which the game is played.
@@ -54,16 +67,17 @@ public class SimpleOthello implements Othello {
 		Node node = boardAdapter.getNodeById(nodeId);
 		Coordinates nodeCoordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 
-        List<Node> nodesToSwap = new ArrayList<>();
+		List<Node> nodesToSwap = new ArrayList<>();
 
-        GameState oldState = gameModel.getGameState();
-        Optional<GameState> maybeNewState = oldState.tryMove(playerId, nodeCoordinates);
-        maybeNewState.ifPresent(newState -> {
-            ImmutableBoard oldBoard = oldState.getBoard();
-            ImmutableBoard newBoard = newState.getBoard();
-            Set<Coordinates> difference = ImmutableBoard.compare(oldBoard, newBoard);
-            nodesToSwap.addAll(difference.stream().map(coordinates -> boardAdapter.getNode(coordinates)).collect(Collectors.toList()));
-        });
+		GameState oldState = gameModel.getGameState();
+		Optional<GameState> maybeNewState = oldState.tryMove(playerId, nodeCoordinates);
+		maybeNewState.ifPresent(newState -> {
+			ImmutableBoard oldBoard = oldState.getBoard();
+			ImmutableBoard newBoard = newState.getBoard();
+			Set<Coordinates> difference = ImmutableBoard.compare(oldBoard, newBoard);
+			nodesToSwap.addAll(difference.stream().map(coordinates -> boardAdapter.getNode(coordinates))
+					.collect(Collectors.toList()));
+		});
 
 		return nodesToSwap;
 	}
@@ -185,8 +199,8 @@ public class SimpleOthello implements Othello {
 		if (!gameModel.isMoveValid(playerId, coordinates)) {
 			return null;
 		} else {
-            return synchronizedMove(playerId, coordinates);
-        }
+			return synchronizedMove(playerId, coordinates);
+		}
 	}
 
 	private List<Node> synchronizedMove(String playerId, Coordinates nodeCoordinates) {
@@ -199,9 +213,9 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start() {
-        Random random = new Random();
-        int randomPlayerIndex = random.nextInt(playerMap.size());
-        Player randomPlayer = (new ArrayList<>(playerMap.values())).get(randomPlayerIndex);
+		Random random = new Random();
+		int randomPlayerIndex = random.nextInt(playerMap.size());
+		Player randomPlayer = (new ArrayList<>(playerMap.values())).get(randomPlayerIndex);
 		start(randomPlayer.getId());
 	}
 
@@ -213,8 +227,8 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start(String playerId) {
-        gameModel = gameModelFactory.getNewGameModel(playerId);
-        boardAdapter.setBoardState(gameModel.getGameState().getBoard());
+		gameModel = gameModelFactory.getNewGameModel(playerId);
+		boardAdapter.setBoardState(gameModel.getGameState().getBoard());
 	}
 
 	private Coordinates toCoordinates(Node node) {
