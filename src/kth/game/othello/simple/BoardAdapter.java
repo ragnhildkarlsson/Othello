@@ -86,6 +86,20 @@ public class BoardAdapter implements Board {
 		return getMutableNode(x, y).orElse(null);
 	}
 
+	/**
+	 * Returns the node with the given x- and y-coordinate
+	 *
+	 * @param coordinates
+	 *            the coordinates of the node
+	 * @return the node with given coordinates
+	 * @throws IllegalArgumentException
+	 *             if there is no {@link kth.game.othello.board.Node} having the
+	 *             specific x- and y-coordinate
+	 */
+	public Node getNode(Coordinates coordinates) {
+		return getNode(coordinates.getXCoordinate(), coordinates.getYCoordinate());
+	}
+
 	private Optional<NodeAdapter> getMutableNode(int x, int y) {
 		Optional<NodeAdapter> maybeNode = nodeAPIViews.stream()
 				.filter(node -> (node.getXCoordinate() == x) && (node.getYCoordinate() == y)).findAny();
@@ -109,16 +123,16 @@ public class BoardAdapter implements Board {
 		Set<ImmutableNode> updatedNodes = newBoardState.getNodes();
 		updatedNodes.removeAll(oldNodes);
 
-        List<Node> changedNodeAdapters = new ArrayList<>();
+		List<Node> changedNodeAdapters = new ArrayList<>();
 
-        for (ImmutableNode node : updatedNodes) {
-            Optional<NodeAdapter> maybeNodeAdapter = getMutableNode(node.getCoordinates());
-            maybeNodeAdapter.ifPresent(nodeAdapter -> nodeAdapter.setNode(node));
-            maybeNodeAdapter.ifPresent(nodeAdapter -> changedNodeAdapters.add(nodeAdapter));
-        }
+		for (ImmutableNode node : updatedNodes) {
+			Optional<NodeAdapter> maybeNodeAdapter = getMutableNode(node.getCoordinates());
+			maybeNodeAdapter.ifPresent(nodeAdapter -> nodeAdapter.setNode(node));
+			maybeNodeAdapter.ifPresent(nodeAdapter -> changedNodeAdapters.add(nodeAdapter));
+		}
 
 		this.boardState = newBoardState;
-        return changedNodeAdapters;
+		return changedNodeAdapters;
 	}
 
 	/**

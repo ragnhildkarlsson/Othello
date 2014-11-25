@@ -8,10 +8,7 @@ import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
 import kth.game.othello.player.Player;
 import kth.game.othello.score.Score;
-import kth.game.othello.simple.model.Coordinates;
-import kth.game.othello.simple.model.GameModel;
-import kth.game.othello.simple.model.GameModelFactory;
-import kth.game.othello.simple.model.ImmutableBoard;
+import kth.game.othello.simple.model.*;
 
 /**
  * TODO
@@ -22,12 +19,16 @@ public class SimpleOthello implements Othello {
 	private final GameModelFactory gameModelFactory;
 	private GameModel gameModel;
 	private final Score score;
+    private final Map<String, Player> playerMap = new HashMap<>();
 
-	public SimpleOthello(BoardAdapter board, GameModelFactory gameModelFactory, Score score) {
-		this.boardAdapter = board;
-		this.gameModelFactory = gameModelFactory;
-		this.score = score;
-	}
+	public SimpleOthello(Collection<Player> players, BoardAdapter board, GameModelFactory gameModelFactory, Score score) {
+        players.stream().forEach(player -> playerMap.put(player.getId(), player));
+        this.boardAdapter = board;
+        this.gameModelFactory = gameModelFactory;
+        this.score = score;
+        Player anyPlayer = players.stream().findAny().get();
+        gameModel = gameModelFactory.getNewGameModel(anyPlayer.getId());
+    }
 
 	/**
 	 * The board on which the game is played.
@@ -53,12 +54,18 @@ public class SimpleOthello implements Othello {
 		Node node = boardAdapter.getNodeById(nodeId);
 		Coordinates nodeCoordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 
-		Set<Coordinates> swappedCoordinates = gameModel.getNodesToSwap(playerId, nodeCoordinates);
-		List<Node> result = swappedCoordinates.stream()
-				.map(coordinates -> boardAdapter.getNode(coordinates.getXCoordinate(), coordinates.getYCoordinate()))
-				.collect(Collectors.toList());
+        List<Node> nodesToSwap = new ArrayList<>();
 
-		return result;
+        GameState oldState = gameModel.getGameState();
+        Optional<GameState> maybeNewState = oldState.tryMove(playerId, nodeCoordinates);
+        maybeNewState.ifPresent(newState -> {
+            ImmutableBoard oldBoard = oldState.getBoard();
+            ImmutableBoard newBoard = newState.getBoard();
+            Set<Coordinates> difference = ImmutableBoard.compare(oldBoard, newBoard);
+            nodesToSwap.addAll(difference.stream().map(coordinates -> boardAdapter.getNode(coordinates)).collect(Collectors.toList()));
+        });
+
+		return nodesToSwap;
 	}
 
 	/**
@@ -69,7 +76,7 @@ public class SimpleOthello implements Othello {
 	@Override
 	public Player getPlayerInTurn() {
 		String playerIdInTurn = gameModel.getPlayerInTurn();
-		return players.get(playerIdInTurn);
+		return playerMap.get(playerIdInTurn);
 	}
 
 	/**
@@ -80,7 +87,7 @@ public class SimpleOthello implements Othello {
 	@Override
 	public List<Player> getPlayers() {
 		List<Player> playerList = new ArrayList<>();
-		playerList.addAll(players.values());
+		playerList.addAll(playerMap.values());
 		return playerList;
 	}
 
