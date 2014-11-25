@@ -46,6 +46,32 @@ public class ImmutableBoardTest {
 	}
 
 	@Test
+	public void testCompareBoards() {
+		Set<ImmutableNode> nodesOnBoard1 = new HashSet<ImmutableNode>();
+		ImmutableNode node0Board1 = new ImmutableNode(new Coordinates(0, 0), "1");
+		ImmutableNode node1Board1 = new ImmutableNode(new Coordinates(1, 1), "1");
+		nodesOnBoard1.add(node0Board1);
+		nodesOnBoard1.add(node1Board1);
+
+		Set<ImmutableNode> nodesOnBoard2 = new HashSet<ImmutableNode>();
+		ImmutableNode node0Board2 = new ImmutableNode(new Coordinates(0, 0), "2");
+		ImmutableNode node1Board2 = new ImmutableNode(new Coordinates(1, 1), "1");
+		nodesOnBoard2.add(node0Board2);
+		nodesOnBoard2.add(node1Board2);
+
+		ImmutableBoard board1 = new ImmutableBoard(nodesOnBoard1);
+		ImmutableBoard board2 = new ImmutableBoard(nodesOnBoard2);
+
+		Set<Coordinates> diffCoords = ImmutableBoard.compare(board1, board2);
+
+		Set<Coordinates> correctDiff = new HashSet<>();
+		correctDiff.add(new Coordinates(0, 0));
+
+		assertEquals(correctDiff, diffCoords);
+
+	}
+
+	@Test
 	public void testGetNodesShouldReturnCopy() throws Exception {
 
 		ImmutableBoard board = generateBoardWithSide(2);

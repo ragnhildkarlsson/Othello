@@ -58,16 +58,18 @@ public class ImmutableBoard {
 	}
 
 	/**
-	 * TODO testCase
+	 * Return the coordinates of the nodes that differ between the two nodes.
 	 * 
 	 * @param board1
+	 *            a board
 	 * @param board2
-	 * @return
+	 *            an other board that you want to compare with board1
+	 * @return the coordinates of the nodes that differ between the two nodes.
 	 */
 	public static Set<Coordinates> compare(ImmutableBoard board1, ImmutableBoard board2) {
 		Set<ImmutableNode> board1Nodes = board1.getNodes();
 		Set<ImmutableNode> board2Nodes = board2.getNodes();
-		board2Nodes.remove(board1Nodes);
+		board2Nodes.removeAll(board1Nodes);
 		return board2Nodes.stream().map(node -> node.getCoordinates()).collect(Collectors.toSet());
 	}
 
