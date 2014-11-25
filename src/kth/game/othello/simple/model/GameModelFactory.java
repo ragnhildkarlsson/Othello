@@ -3,7 +3,7 @@ package kth.game.othello.simple.model;
 import java.util.List;
 
 /**
- * TODO
+ * This class is responsible for creating new game models.
  * 
  */
 
