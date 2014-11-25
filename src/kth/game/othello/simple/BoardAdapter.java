@@ -1,6 +1,7 @@
 package kth.game.othello.simple;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
@@ -119,13 +120,13 @@ public class BoardAdapter implements Board {
 	 */
 	public List<Node> setBoardState(ImmutableBoard newBoardState) {
 
-		Set<ImmutableNode> oldNodes = boardState.getNodes();
-		Set<ImmutableNode> updatedNodes = newBoardState.getNodes();
-		updatedNodes.removeAll(oldNodes);
+		Set<Coordinates> changedCoordinates = ImmutableBoard.compare(boardState, newBoardState);
+		Set<ImmutableNode> newNodes = changedCoordinates.stream()
+				.map(coordinates -> newBoardState.getNodeAtCoordinates(coordinates)).collect(Collectors.toSet());
 
 		List<Node> changedNodeAdapters = new ArrayList<>();
 
-		for (ImmutableNode node : updatedNodes) {
+		for (ImmutableNode node : newNodes) {
 			Optional<NodeAdapter> maybeNodeAdapter = getMutableNode(node.getCoordinates());
 			maybeNodeAdapter.ifPresent(nodeAdapter -> nodeAdapter.setNode(node));
 			maybeNodeAdapter.ifPresent(nodeAdapter -> changedNodeAdapters.add(nodeAdapter));
