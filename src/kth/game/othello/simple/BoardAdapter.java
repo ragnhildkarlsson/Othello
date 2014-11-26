@@ -22,21 +22,23 @@ public class BoardAdapter implements Board {
 	 * Creates a new board adapter. The passed node adapters are assumed to be
 	 * pre-configured with exactly every node in the passed starting board.
 	 * 
-	 * @param startingBoard the board containing the initial state of the adapter.
-	 * @param nodeAdapters the node adapters of the board. Assumed to be
-     * pre-configured with exactly every node in the passed starting board.
+	 * @param startingBoard
+	 *            the board containing the initial state of the adapter.
+	 * @param nodeAdapters
+	 *            the node adapters of the board. Assumed to be pre-configured
+	 *            with exactly every node in the passed starting board.
 	 */
 	protected BoardAdapter(ImmutableBoard startingBoard, List<NodeAdapter> nodeAdapters) {
-        boardState = startingBoard;
-        this.nodeAPIViews = nodeAdapters;
-        this.nodeAPIViews.sort(new NodeComparator());
+		boardState = startingBoard;
+		this.nodeAPIViews = nodeAdapters;
+		this.nodeAPIViews.sort(new NodeComparator());
 	}
 
 	private class NodeComparator implements Comparator<Node> {
 
 		/**
-		 * Sorts Nodes with respect to y first and then x..
-         * For example (x,y): (4,3) (5,3) (1,4) (2,4)
+		 * Sorts Nodes with respect to y first and then x.. For example (x,y):
+		 * (4,3) (5,3) (1,4) (2,4)
 		 *
 		 * @param node1
 		 *            the first object to be compared.
@@ -81,7 +83,8 @@ public class BoardAdapter implements Board {
 	 */
 	@Override
 	public Node getNode(int x, int y) {
-		return getNodeAdapter(x, y).orElse(null);
+		return getNodeAdapter(x, y).orElseThrow(
+				() -> new IllegalArgumentException("There is no node with coordinates (" + x + "," + y + ")"));
 	}
 
 	/**
@@ -149,12 +152,13 @@ public class BoardAdapter implements Board {
 	/**
 	 * Returns the distinct Node with the given node id.
 	 *
-	 * @param nodeId the node id of the node to fetch.
+	 * @param nodeId
+	 *            the node id of the node to fetch.
 	 * @return the Node with the given id.
 	 */
-	public Node getNodeById(String nodeId) {
+	public Optional<Node> getNodeById(String nodeId) {
 		Optional<NodeAdapter> maybeNode = nodeAPIViews.stream().filter(node -> node.getId().equals(nodeId)).findAny();
-		return maybeNode.orElse(null);
+		return Optional.ofNullable(maybeNode.orElse(null));
 	}
 
 }
