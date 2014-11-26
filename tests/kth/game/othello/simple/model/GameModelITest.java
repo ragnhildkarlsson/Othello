@@ -109,8 +109,20 @@ public class GameModelITest {
 		assertEquals("Should get a new GameState", true, optionalSecondGameState.isPresent());
 		GameState secondGameState = optionalSecondGameState.get();
 
-		// Check that the second game state has player2 in turn
+		// Check that the second game state is in order
 		assertEquals("Player2 should be second in turn", player2Id, secondGameState.getPlayerInTurn());
+		assertEquals("Node at (1,4) should be occupied", true,
+				secondGameState.getBoard().getNodeAtCoordinates(new Coordinates(1, 4)).isMarked());
+		assertEquals("Player2 should not be able to play at an occupied node", false,
+				secondGameState.isMoveValid(player2Id, new Coordinates(1, 4)));
+
+		// Perform a move with player 2 that should be valid
+		Optional<GameState> optionalThirdGameState = secondGameState.tryMove(player2Id, new Coordinates(0, 1));
+		assertEquals("Should get a new GameState", true, optionalThirdGameState.isPresent());
+		GameState thirdGameState = optionalThirdGameState.get();
+
+		// Check that player3 is now in turn
+		assertEquals("Player 3 should be in turn", player3Id, thirdGameState.getPlayerInTurn());
 
 	}
 }

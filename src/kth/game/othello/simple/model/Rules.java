@@ -40,7 +40,7 @@ public class Rules {
 	 * @return true iff move is valid.
 	 */
 	public boolean validMove(ImmutableBoard board, Coordinates nodeCordinates, String playerId) {
-		// TODO check if nodes exist on board. else return false
+		// check if nodes exist on board. else return false
 		if (!board.hasCoordinates(nodeCordinates)) {
 			return false;
 		}
