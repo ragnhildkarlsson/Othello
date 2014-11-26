@@ -17,7 +17,7 @@ public class RulesTest {
 	 * outside board.
 	 */
 	@Test
-	void testMoveOutsideBoardIsNotValid() {
+	public void testMoveOutsideBoardIsNotValid() {
 		Coordinates playAtCoordinates = new Coordinates(0, 0);
 		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
 		Mockito.when(mockBoard.hasCoordinates(playAtCoordinates)).thenReturn(false);
@@ -141,6 +141,8 @@ public class RulesTest {
 		Mockito.when(mockBoard.getNextNodeInDirection(boardNode42, Direction.SOUTHEAST)).thenReturn(boardNode53);
 		Mockito.when(mockBoard.getNextNodeInDirection(boardNode53, Direction.SOUTHEAST)).thenReturn(boardNode64);
 
+		Mockito.when(mockBoard.getNodeAtCoordinates(playAtNode.getCoordinates())).thenReturn(playAtNode);
+		Mockito.when(mockBoard.hasCoordinates(playAtNode.getCoordinates())).thenReturn(true);
 		// Check that the right nodes (and no other nodes) where listed as nodes
 		// to swap
 		Rules rules = new Rules();
@@ -179,27 +181,15 @@ public class RulesTest {
 	public void testMoveOnOccupiedNodeShouldBeInvalid() {
 		String player1Id = "1";
 		String player2Id = "2";
-		ImmutableNode boardNode = new ImmutableNode(new Coordinates(0, 0), player1Id);
+		Coordinates coordinates = new Coordinates(0, 0);
+		ImmutableNode boardNode = new ImmutableNode(coordinates, player1Id);
 		Rules rules = new Rules();
-		// By giving null as the argument board, this test will fail if the
-		// method validMove() tries to calculate if this move is valid
-		assertEquals(false, rules.validMove(null, boardNode.getCoordinates(), player1Id));
-		assertEquals(false, rules.validMove(null, boardNode.getCoordinates(), player2Id));
-	}
-
-	/**
-	 * Test that given a board with an occupied node getNodesToSwap will return
-	 * an empty list if any player plays on this node
-	 */
-	@Test
-	public void testMoveOnOccupiedNodeShouldSwapNoNodes() {
-		String player1Id = "1";
-		ImmutableNode boardNode = new ImmutableNode(new Coordinates(0, 0), player1Id);
-		Rules rules = new Rules();
-		// By giving null as the argument board, this test will fail if the
-		// method getNodesToSwap() tries to calculate the nodes to swap
-		assertEquals(true, rules.getNodesToSwap(null, boardNode.getCoordinates(), null).isEmpty());
-		assertEquals(true, rules.getNodesToSwap(null, boardNode.getCoordinates(), player1Id).isEmpty());
+		// Mock ImmutableBoard
+		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
+		Mockito.when(mockBoard.hasCoordinates(coordinates)).thenReturn(true);
+		Mockito.when(mockBoard.getNodeAtCoordinates(coordinates)).thenReturn(boardNode);
+		assertEquals(false, rules.validMove(mockBoard, boardNode.getCoordinates(), player1Id));
+		assertEquals(false, rules.validMove(mockBoard, boardNode.getCoordinates(), player2Id));
 	}
 
 	/**
@@ -340,6 +330,14 @@ public class RulesTest {
 		nodesOnBoard.add(boardNode1);
 		ImmutableNode boardNode2 = new ImmutableNode(new Coordinates(2, 0), null);
 		nodesOnBoard.add(boardNode2);
+
+		Mockito.when(mockBoard.hasCoordinates(new Coordinates(0, 0))).thenReturn(true);
+		Mockito.when(mockBoard.hasCoordinates(new Coordinates(1, 0))).thenReturn(true);
+		Mockito.when(mockBoard.hasCoordinates(new Coordinates(2, 0))).thenReturn(true);
+
+		Mockito.when(mockBoard.getNodeAtCoordinates(new Coordinates(2, 0))).thenReturn(boardNode2);
+		Mockito.when(mockBoard.getNodeAtCoordinates(new Coordinates(1, 0))).thenReturn(boardNode1);
+		Mockito.when(mockBoard.getNodeAtCoordinates(new Coordinates(0, 0))).thenReturn(boardNode0);
 
 		for (Direction dir : Direction.values()) {
 			switch (dir) {
