@@ -92,7 +92,7 @@ public class GameModelITest {
 	 *  1 - c a b -     1 - c a b -     1 B B B b -     1 b b b b -
 	 *  2 - b c a - --> 2 - b c a - --> 2 - b c a - --> 2 - b c a -   
 	 *  3 - a b c -     3 - a A c -     3 - a a c -     3 C C C c -
-	 *  4 x - - - x     4 x A - - x     4 x a - - x		4 x a - - x 
+	 *  4 x - - - x     4 x A - - x     4 x a - - x	    4 x a - - x 
 	 *  
 	 *  where:
 	 *  - marks unmarked node
