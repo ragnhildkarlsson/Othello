@@ -34,6 +34,17 @@ public class TurnCalculatorTest {
 		String playerInTurn = turnCalculator.getPlayerInTurn(player2Id, null, rules);
 		// Should return player1 since player2 was the previous player.
 		assertEquals(player1Id, playerInTurn);
+		//Check that the turncalculator can jump to next player if this player
+		//does not have a valid move
+		
+		Mockito.when(rules.hasValidMove(null, player1Id)).thenReturn(true);
+		Mockito.when(rules.hasValidMove(null, player2Id)).thenReturn(false);
+		Mockito.when(rules.hasValidMove(null, player3Id)).thenReturn(true);
+		playerInTurn = turnCalculator.getPlayerInTurn(player1Id, null, rules);
+		// Should return player3 since player2 can not do any move.
+		assertEquals(player1Id, playerInTurn);
+				
+
 
 	}
 

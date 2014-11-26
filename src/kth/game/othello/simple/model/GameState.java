@@ -11,21 +11,20 @@ public class GameState {
 	private String playerInTurn;
 
 	/**
-	 * Creates a new game state with the given board and Turncalculator. The
-	 * startPlayer will be be the player in turn if this player have a valid
-	 * move, else will the next player that have a a valid move be the
-	 * playerInTurn.
+	 * Creates a new game state with the given board and TurnCalculator. The
+	 * player in turn for the game state will be the startPlayer if this player
+	 * has a valid move, else the next player that has a valid move will be the
+	 * player in turn. If no player has a valid move the player in turn will be
+	 * null.
 	 * 
 	 * @param board
 	 *            the board of this game state
 	 * @param turnCalculator
+	 *            the turnaCalcuator of this game state
 	 * @param rules
-	 *            the rules in this game state
+	 *            the rules of this game
 	 * @param startPlayer
-	 *            the id of the wanted player in turn in this game state, if the
-	 *            startPlayer does not have any valid move will the player in
-	 *            turn be the next player with valid move, if no player have a
-	 *            valid move will the player in turn be null
+	 *            the id of the wanted player in turn in this game state.
 	 */
 	public GameState(ImmutableBoard board, TurnCalculator turnCalculator, Rules rules, String startPlayerId) {
 		this.board = board;
@@ -109,8 +108,8 @@ public class GameState {
 		if (!playerId.equals(playerInTurn)) {
 			return Optional.empty();
 		}
-		// That the player is the player in turn implies that this player have a
-		// valid move therefore no need for checking that
+		// That the player is the player in turn implies that this player has a
+		// valid move therefore no need to check that.
 		Set<ImmutableNode> nodesToSwap = rules.getNodesToSwap(board, nodeCoordinates, playerId);
 		nodesToSwap.add(new ImmutableNode(nodeCoordinates, playerId));
 		// Add the node played at

@@ -31,13 +31,15 @@ public class GameStateTest {
 	 * 
 	 * <pre>
 	 * X o *
+	 * X=node occupied by player1
+	 * o = node occupied by player2
+	 * * not occupied node
 	 * </pre>
 	 * 
-	 * X=node occupied by player1 o = node occupied by player2 * not occupied
-	 * node Will a new gameState be returned with the following board X X X
+	 * then will a new gameState be returned with the following board X X X
 	 */
 	@Test
-	public void testTryMoveReturnNextGameStateWhenPlayerHaveAValidMove() {
+	public void testTryMoveReturnNextGameStateWhenPlayerHasAValidMove() {
 		String player1 = "1";
 		String player2 = "2";
 		ImmutableNode node1 = new ImmutableNode(new Coordinates(0, 0), player1);
@@ -67,7 +69,7 @@ public class GameStateTest {
 
 		// Verify that mockBoard.swapNodes are called with a set of nodes that
 		// contains both node 2 and playedNode. The rest is ImmutableBoards
-		// responsibilty.
+		// responsibility.
 		Mockito.verify(mockBoard).swapNodes(nodesActuallyChangedOfThisMove, player1);
 
 	}
