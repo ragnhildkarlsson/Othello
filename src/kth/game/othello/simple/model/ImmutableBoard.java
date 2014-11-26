@@ -58,12 +58,12 @@ public class ImmutableBoard {
 	}
 
 	/**
-	 * Return the coordinates of the nodes that differ between the two nodes.
+	 * Return the coordinates of the nodes that differ between the two given boards.
 	 * 
 	 * @param board1
 	 *            a board
 	 * @param board2
-	 *            an other board that you want to compare with board1
+	 *            another board that you want to compare with board1
 	 * @return the coordinates of the nodes that differ between the two nodes.
 	 */
 	public static Set<Coordinates> compare(ImmutableBoard board1, ImmutableBoard board2) {
