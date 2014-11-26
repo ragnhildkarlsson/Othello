@@ -3,28 +3,38 @@ package kth.game.othello;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import kth.game.othello.board.factory.Diamond;
 import kth.game.othello.player.Player;
 import kth.game.othello.player.Player.Type;
 import kth.game.othello.player.movestrategy.MoveStrategy;
+import kth.game.othello.simple.GreedyStrategy;
+import kth.game.othello.simple.SimpleOthelloFactory;
+import kth.game.othello.simple.SimplePlayer;
+import kth.game.othello.simple.SimpleStrategy;
 
+import org.junit.Assert;
+import org.junit.Test;
 
 public class OthelloLab2IT {
 
 	private MoveStrategy getNewMoveStrategy() {
-		return null;
+		return new GreedyStrategy();
 	}
 
 	private OthelloFactory getOthelloFactory() {
-		return null;
+		return new SimpleOthelloFactory();
 	}
 
-    private Player createComputer(String name) { return null; }
+	private Player createComputer(String name) {
+		SimpleStrategy strategy = new SimpleStrategy();
+		return new SimplePlayer(name, name, strategy);
 
-    private Player createHuman(String name) { return null; }
+	}
+
+	private Player createHuman(String name) {
+
+		return new SimplePlayer(name, name);
+	}
 
 	private void makeNumberOfComputerMoves(int numberOfMoves, Othello othello) {
 		for (int i = 0; i < numberOfMoves; i++) {
@@ -56,7 +66,7 @@ public class OthelloLab2IT {
 		players.add(createComputer("black"));
 		players.add(createComputer("white"));
 		players.add(createComputer("orange"));
-        Diamond diamond = new Diamond();
+		Diamond diamond = new Diamond();
 		Othello othello = getOthelloFactory().createGame(diamond.getNodes(11, players), players);
 		othello.start();
 		while (othello.isActive()) {
