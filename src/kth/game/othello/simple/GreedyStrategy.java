@@ -24,7 +24,8 @@ public class GreedyStrategy implements MoveStrategy {
 	}
 
 	/**
-	 * Determines which node the given player will move at.
+	 * Returns the node that would generate the most swaps for this player, or
+	 * null if no move is possible.
 	 * 
 	 * @param playerId
 	 *            the id of the player that will make a move
