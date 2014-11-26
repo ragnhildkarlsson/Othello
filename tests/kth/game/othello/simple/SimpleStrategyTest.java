@@ -1,6 +1,6 @@
 package kth.game.othello.simple;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
@@ -12,8 +12,8 @@ import org.mockito.Mockito;
 
 public class SimpleStrategyTest {
 	/**
-	 * This test that the Strategy return a valid move when 
-	 * it exist a valid move for the given player;
+	 * Test that the Strategy returns a valid move when it exist a valid move
+	 * for the given player;
 	 */
 	@Test
 	public void testMoveReturnValidMoveWhenValidMoveExist() {
@@ -23,29 +23,28 @@ public class SimpleStrategyTest {
 		BoardAdapter mockBoard = Mockito.mock(BoardAdapter.class);
 		ArrayList<Node> nodesOnBoard = new ArrayList<Node>();
 		nodesOnBoard.add(mockNode);
-		Mockito.when(mockBoard.getNodes()).thenReturn(nodesOnBoard);		
-		Othello mockOthello = Mockito.mock(Othello.class);			
+		Mockito.when(mockBoard.getNodes()).thenReturn(nodesOnBoard);
+		Othello mockOthello = Mockito.mock(Othello.class);
 		String playerId = "player";
 		Mockito.when(mockOthello.hasValidMove(playerId)).thenReturn(true);
 		Mockito.when(mockOthello.getBoard()).thenReturn(mockBoard);
 		Mockito.when(mockOthello.isMoveValid(playerId, nodeId)).thenReturn(true);
-		
+
 		SimpleStrategy strategy = new SimpleStrategy();
-		assertEquals(mockNode, strategy.move(playerId, mockOthello));		
+		assertEquals(mockNode, strategy.move(playerId, mockOthello));
 	}
-	
+
 	/**
-	 * This test that the Strategy return a valid move when 
-	 * it not exist any valid move for the given player;
+	 * This test that the Strategy returns a null when it does not exist any
+	 * valid move for the given player.
 	 */
 	@Test
-	public void testMoveReturnNullWhenNoValidMoveExist(){
-		Othello mockOthello = Mockito.mock(Othello.class);			
+	public void testMoveReturnNullWhenNoValidMoveExist() {
+		Othello mockOthello = Mockito.mock(Othello.class);
 		String playerId = "player";
 		Mockito.when(mockOthello.hasValidMove(playerId)).thenReturn(false);
 		SimpleStrategy strategy = new SimpleStrategy();
-		assertEquals(null, strategy.move(playerId, mockOthello));			
+		assertEquals(null, strategy.move(playerId, mockOthello));
 	}
-	
 
 }

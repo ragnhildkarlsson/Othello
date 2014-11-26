@@ -5,7 +5,8 @@ import kth.game.othello.board.Node;
 import kth.game.othello.player.movestrategy.MoveStrategy;
 
 /**
- * TODO
+ * A simple strategy to perform a move for a computer player, taking a random
+ * valid move.
  */
 public class SimpleStrategy implements MoveStrategy {
 
@@ -20,7 +21,9 @@ public class SimpleStrategy implements MoveStrategy {
 	}
 
 	/**
-	 * Determines which node the given player will move at.
+	 * Determines which node the given player will move at, this will be a
+	 * random valid move or null if no valid move exists.
+	 * 
 	 * 
 	 * @param playerId
 	 *            the id of the player that will make a move
