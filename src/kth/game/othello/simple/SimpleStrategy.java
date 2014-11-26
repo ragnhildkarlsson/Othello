@@ -1,7 +1,5 @@
 package kth.game.othello.simple;
 
-import java.awt.List;
-
 import kth.game.othello.Othello;
 import kth.game.othello.board.Node;
 import kth.game.othello.player.movestrategy.MoveStrategy;
@@ -10,10 +8,9 @@ import kth.game.othello.player.movestrategy.MoveStrategy;
  * TODO
  */
 public class SimpleStrategy implements MoveStrategy {
-	
+
 	private final String name = "simple-strategy";
-	
-	
+
 	/**
 	 * @return the name of the strategy
 	 */
@@ -34,15 +31,15 @@ public class SimpleStrategy implements MoveStrategy {
 	 */
 	@Override
 	public Node move(String playerId, Othello othello) {
-		if(!othello.hasValidMove(playerId)){
+		if (!othello.hasValidMove(playerId)) {
 			return null;
-		}	
+		}
 		java.util.List<Node> nodesOnBoard = othello.getBoard().getNodes();
 		for (Node node : nodesOnBoard) {
-			if(othello.isMoveValid(playerId, node.getId())){
+			if (othello.isMoveValid(playerId, node.getId())) {
 				return node;
 			}
-			
+
 		}
 		return null;
 	}
