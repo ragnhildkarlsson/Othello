@@ -1,6 +1,7 @@
 package kth.game.othello.simple.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -86,6 +87,25 @@ public class GameModelITest {
 		return nodeRow;
 	}
 
+	/**
+	 * Try that a game with 3 players and a non square board can be started, and
+	 * that each player can perform a valid move according to the boards below:
+	 * 
+	 * <pre>
+	 *    0 1 2 3 4       0 1 2 3 4       0 1 2 3 4       0 1 2 3 4
+	 *  0 x	- - - x     0 x	- - - x     0 x	- - - x     0 x	- - - x 
+	 *  1 - c a b -     1 - c a b -     1 B B B b -     1 b b b b -
+	 *  2 - b c a - --> 2 - b c a - --> 2 - b c a - --> 2 - b c a -   
+	 *  3 - a b c -     3 - a A c -     3 - a a c -     3 C C C c -
+	 *  4 x - - - x     4 x A - - x     4 x a - - x		4 x a - - x 
+	 *  
+	 *  where:
+	 *  - marks unmarked node
+	 * a,b and c represents nodes marked by player 1,2 and 3 respectively.
+	 * Capital letters mark newly swapped nodes.
+	 * 
+	 * <pre>
+	 */
 	@Test
 	public void TestWith3Players() {
 		ImmutableBoard startingBoard = generateBoard();
@@ -123,6 +143,39 @@ public class GameModelITest {
 
 		// Check that player3 is now in turn
 		assertEquals("Player 3 should be in turn", player3Id, thirdGameState.getPlayerInTurn());
+		assertEquals("Should not be able to play at non existing node", false,
+				thirdGameState.isMoveValid(player3Id, new Coordinates(0, 0)));
+		Optional<GameState> optionalFourthGameState = thirdGameState.tryMove(player3Id, new Coordinates(0, 3));
+		assertEquals("Player 3 should be able to play at (0,3)", true, optionalFourthGameState.isPresent());
+
+		// Check that the game is still not over
+		assertEquals(false, optionalFourthGameState.get().isGameOver());
+
+	}
+
+	@Test
+	public void testThatGameOverCanBeReached() {
+		// Generate a board consisting of one row:
+		// a b -
+		// where a and b is nodes marked by player 1 and 2 respectively, and "-"
+		// is an unmarked node.
+		Set<ImmutableNode> nodes = getRowOfNodes("a b -", 0);
+		ImmutableBoard startingBoard = new ImmutableBoard(nodes);
+
+		List<String> playerIds = new ArrayList<>();
+		playerIds.add(player1Id);
+		playerIds.add(player2Id);
+		Rules rules = new Rules();
+		GameModelFactory gameModelFactory = new GameModelFactory(startingBoard, playerIds, rules);
+		GameModel gameModel = gameModelFactory.getNewGameModel(player1Id);
+
+		// Get the first GameState and perform the only valid move for player 1
+		GameState firstGameState = gameModel.getGameState();
+		Optional<GameState> optionalSecondGameState = firstGameState.tryMove(player1Id, new Coordinates(2, 0));
+		// Check that the new gameState has no player in turn and is game over
+		GameState secondGameState = optionalSecondGameState.get();
+		assertNull(secondGameState.getPlayerInTurn());
+		assertEquals(true, secondGameState.isGameOver());
 
 	}
 }
