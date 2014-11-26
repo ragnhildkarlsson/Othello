@@ -1,6 +1,14 @@
 package kth.game.othello.simple;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import kth.game.othello.board.Node;
@@ -13,7 +21,8 @@ import kth.game.othello.score.ScoreItem;
  */
 public class SimpleScore extends Observable implements Score, Observer {
 
-	private Map<Node, String> occupiedNodes = new HashMap<>();
+	private Set<String> playerIds = new HashSet<String>();
+	private Map<String, String> occupiedNodes = new HashMap<>();
 
 	/**
 	 * Creates a SimpleScore object, initiating its score to that in the given
@@ -30,7 +39,8 @@ public class SimpleScore extends Observable implements Score, Observer {
 		startingNodes.forEach(node -> {
 			node.addObserver(this);
 			if (node.getOccupantPlayerId() != null) {
-				occupiedNodes.put(node, node.getOccupantPlayerId());
+				playerIds.add(node.getOccupantPlayerId());
+				occupiedNodes.put(node.getId(), node.getOccupantPlayerId());
 			}
 		});
 	}
@@ -47,8 +57,21 @@ public class SimpleScore extends Observable implements Score, Observer {
 		Set<String> playerIds = occupiedNodes.values().stream().distinct().collect(Collectors.toSet());
 		List<ScoreItem> scoreItems = playerIds.stream().map(playerId -> new ScoreItem(playerId, getPoints(playerId)))
 				.collect(Collectors.toList());
+		scoreItems.sort(ScoreComparator);
 		return scoreItems;
 	}
+
+	public static Comparator<ScoreItem> ScoreComparator = new Comparator<ScoreItem>() {
+
+		public int compare(ScoreItem scoreItem1, ScoreItem scoreItem2) {
+
+			int score1 = scoreItem1.getScore();
+			int score2 = scoreItem2.getScore();
+
+			return Integer.compare(score2, score1);
+		}
+
+	};
 
 	/**
 	 * Get the score of a specific player
@@ -78,9 +101,22 @@ public class SimpleScore extends Observable implements Score, Observer {
 		if (o instanceof Node) {
 			Node node = (Node) o;
 			if (node.getOccupantPlayerId() == null) {
-				occupiedNodes.remove(node);
+				String oldPlayer = occupiedNodes.remove(node.getId());
+				if (oldPlayer != null) {
+					ArrayList<String> updatedPlayers = new ArrayList<String>();
+					updatedPlayers.add(oldPlayer);
+					notifyObservers(updatedPlayers);
+				}
 			} else {
-				occupiedNodes.put(node, node.getOccupantPlayerId());
+
+				String oldPlayer = occupiedNodes.put(node.getId(), node.getOccupantPlayerId());
+				List<String> updatedPlayers = new ArrayList<String>();
+				if (oldPlayer != null) {
+					updatedPlayers.add(oldPlayer);
+				}
+				updatedPlayers.add(node.getOccupantPlayerId());
+				setChanged();
+				notifyObservers(updatedPlayers);
 			}
 		}
 	}

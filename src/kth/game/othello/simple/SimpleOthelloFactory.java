@@ -116,19 +116,15 @@ public class SimpleOthelloFactory implements OthelloFactory {
 		GameModelFactory gameModelFactory = new GameModelFactory(immutableBoard, playerIds, rules);
 
 		// Create adapters
-		List<NodeAdapter> nodeAPIViews = new ArrayList<NodeAdapter>();
+		List<NodeAdapter> nodeAdapters = new ArrayList<NodeAdapter>();
 		for (ImmutableNode immutableNode : immutableNodes) {
-			nodeAPIViews.add(new NodeAdapter(immutableNode));
+			nodeAdapters.add(new NodeAdapter(immutableNode));
 		}
 
-		Set<Node> nodeAPIViewsSet = new HashSet<Node>(nodeAPIViews);
-		SimpleScore score = new SimpleScore(nodeAPIViewsSet);
-		// Add score as observer for all nodes;
-		for (NodeAdapter nodeAPIView : nodeAPIViews) {
-			nodeAPIView.addObserver(score);
-		}
+		Set<Node> nodeAdapterSet = new HashSet<Node>(nodeAdapters);
+		SimpleScore score = new SimpleScore(nodeAdapterSet);
 
-		BoardAdapter boardAdapter = new BoardAdapter(immutableBoard, nodeAPIViews);
+		BoardAdapter boardAdapter = new BoardAdapter(immutableBoard, nodeAdapters);
 		SimpleOthello othello = new SimpleOthello(players, boardAdapter, gameModelFactory, score);
 		return othello;
 	}
