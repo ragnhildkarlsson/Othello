@@ -16,6 +16,7 @@ import kth.game.othello.simple.model.*;
  */
 public class SimpleOthello implements Othello {
 
+	boolean startedWithInvalidPlayer = false;
 	private final BoardAdapter boardAdapter;
 	private final GameModelFactory gameModelFactory;
 	private GameModel gameModel;
@@ -69,22 +70,22 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> getNodesToSwap(String playerId, String nodeId) {
+        checkPlayerId(playerId);
+        checkNodeId(nodeId);
 		List<Node> nodesToSwap = new ArrayList<>();
 
-		Optional<Node> maybeNode = boardAdapter.getNodeById(nodeId);
-		maybeNode.ifPresent(node -> {
-			Coordinates nodeCoordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
+		Node node = boardAdapter.getNodeById(nodeId).get();
+        Coordinates nodeCoordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 
-			GameState oldState = gameModel.getGameState();
-			Optional<GameState> maybeNewState = oldState.tryMove(playerId, nodeCoordinates);
-			maybeNewState.ifPresent(newState -> {
-				ImmutableBoard oldBoard = oldState.getBoard();
-				ImmutableBoard newBoard = newState.getBoard();
-				Set<Coordinates> difference = ImmutableBoard.compare(oldBoard, newBoard);
-				nodesToSwap.addAll(difference.stream().map(coordinates -> boardAdapter.getNode(coordinates))
-						.collect(Collectors.toList()));
-			});
-		});
+        GameState oldState = gameModel.getGameState();
+        Optional<GameState> maybeNewState = oldState.tryMove(playerId, nodeCoordinates);
+        maybeNewState.ifPresent(newState -> {
+            ImmutableBoard oldBoard = oldState.getBoard();
+            ImmutableBoard newBoard = newState.getBoard();
+            Set<Coordinates> difference = ImmutableBoard.compare(oldBoard, newBoard);
+            nodesToSwap.addAll(difference.stream().map(coordinates -> boardAdapter.getNode(coordinates))
+                    .collect(Collectors.toList()));
+        });
 
 		return nodesToSwap;
 	}
@@ -131,6 +132,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean hasValidMove(String playerId) {
+        checkPlayerId(playerId);
 		return gameModel.hasValidMove(playerId);
 	}
 
@@ -155,16 +157,14 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean isMoveValid(String playerId, String nodeId) {
-		boolean isMoveValid = false;
-		Optional<Node> maybeNode = boardAdapter.getNodeById(nodeId);
+		checkPlayerId(playerId);
 
-		if (maybeNode.isPresent()) {
-			Node node = maybeNode.get();
-			Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
-			isMoveValid = gameModel.isMoveValid(playerId, coordinates);
-		}
+        checkNodeId(nodeId);
+        Node node = boardAdapter.getNodeById(nodeId).get();
 
-		return isMoveValid;
+		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
+
+		return gameModel.isMoveValid(playerId, coordinates);
 	}
 
 	/**
@@ -207,12 +207,9 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
-		Optional<Node> maybeNode = boardAdapter.getNodeById(nodeId);
-
-		if (!playerMap.keySet().contains(playerId)) {
-			throw new IllegalArgumentException("The player was not in turn: " + playerId);
-		}
-		Node node = maybeNode.orElseThrow(() -> new IllegalArgumentException("The node ID does not exist: " + nodeId));
+		checkPlayerId(playerId);
+		checkNodeId(nodeId);
+		Node node = boardAdapter.getNodeById(nodeId).get();
 
 		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 		if (!gameModel.isMoveValid(playerId, coordinates)) {
@@ -250,9 +247,21 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start(String playerId) {
-		// TODO Game over if wrong playerId
+		checkPlayerId(playerId);
 		gameModel = gameModelFactory.getNewGameModel(playerId);
 		boardAdapter.setBoardState(gameModel.getGameState().getBoard());
+	}
+
+	private void checkNodeId(String nodeId) {
+		if (!boardAdapter.getNodeById(nodeId).isPresent()) {
+			throw new NoSuchElementException("Node id \"" + nodeId + "\" does not exist.");
+		}
+	}
+
+	private void checkPlayerId(String playerId) {
+		if (!playerMap.containsKey(playerId)) {
+			throw new NoSuchElementException("Player id \"" + playerId + "\" does not exist.");
+		}
 	}
 
 	private Coordinates toCoordinates(Node node) {
