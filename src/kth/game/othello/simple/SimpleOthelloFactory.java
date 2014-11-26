@@ -7,6 +7,7 @@ import java.util.Set;
 
 import kth.game.othello.Othello;
 import kth.game.othello.OthelloFactory;
+import kth.game.othello.board.Node;
 import kth.game.othello.board.factory.NodeData;
 import kth.game.othello.board.factory.Square;
 import kth.game.othello.player.Player;
@@ -119,7 +120,9 @@ public class SimpleOthelloFactory implements OthelloFactory {
 		for (ImmutableNode immutableNode : immutableNodes) {
 			nodeAPIViews.add(new NodeAdapter(immutableNode));
 		}
-		SimpleScore score = new SimpleScore();
+
+		Set<Node> nodeAPIViewsSet = new HashSet<Node>(nodeAPIViews);
+		SimpleScore score = new SimpleScore(nodeAPIViewsSet);
 		// Add score as observer for all nodes;
 		for (NodeAdapter nodeAPIView : nodeAPIViews) {
 			nodeAPIView.addObserver(score);
