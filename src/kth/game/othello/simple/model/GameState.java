@@ -54,7 +54,7 @@ public class GameState {
 	 * @return false if the game is over.
 	 */
 	public boolean isGameOver() {
-		return !rules.isGameOver(board);
+		return rules.isGameOver(board);
 	}
 
 	/**
