@@ -8,25 +8,45 @@ import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
 import kth.game.othello.player.Player;
 import kth.game.othello.score.Score;
-import kth.game.othello.simple.model.Coordinates;
-import kth.game.othello.simple.model.GameModel;
-import kth.game.othello.simple.model.GameModelFactory;
+import kth.game.othello.simple.model.*;
 
 /**
- * TODO
+ * This class provides a facade that implements the
+ * {@link kth.game.othello.Othello} API. Use it to play Othello.
  */
 public class SimpleOthello implements Othello {
 
-	private final BoardAPIView boardAPIView;
-	private final Map<String, Player> players = new HashMap<>();
+	boolean startedWithInvalidPlayer = false;
+	private final BoardAdapter boardAdapter;
 	private final GameModelFactory gameModelFactory;
 	private GameModel gameModel;
 	private final Score score;
+	private final Map<String, Player> playerMap = new HashMap<>();
 
-	public SimpleOthello(BoardAPIView board, PlayerHandler playerHandler, GameModelFactory gameModelFactory, Score score) {
-		this.boardAPIView = board;
+	/**
+	 * Creates a new SimpleOthello game. Assumes the GameModelFactory to always
+	 * produce game models with the board that the given board adapter is
+	 * pre-configured with.
+	 *
+	 * @param players
+	 *            the players present on the given board.
+	 * @param board
+	 *            the board adaptor that will be used.
+	 * @param gameModelFactory
+	 *            the factory from which the game should produce it's game
+	 *            models.
+	 * @param score
+	 *            the score object that should keep track of the score.
+	 */
+	protected SimpleOthello(Collection<Player> players, BoardAdapter board, GameModelFactory gameModelFactory,
+			SimpleScore score) {
+		players.stream().forEach(player -> playerMap.put(player.getId(), player));
+		this.boardAdapter = board;
 		this.gameModelFactory = gameModelFactory;
 		this.score = score;
+		Player anyPlayer = players.stream().findAny().get();
+		gameModel = gameModelFactory.getNewGameModel(anyPlayer.getId());
+		board.setBoardState(gameModel.getGameState().getBoard());
 	}
 
 	/**
@@ -36,7 +56,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public Board getBoard() {
-		return boardAPIView;
+		return boardAdapter;
 	}
 
 	/**
@@ -50,15 +70,24 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> getNodesToSwap(String playerId, String nodeId) {
-		Node node = boardAPIView.getNodeById(nodeId);
-		Coordinates nodeCoordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
+        checkPlayerId(playerId);
+        checkNodeId(nodeId);
+		List<Node> nodesToSwap = new ArrayList<>();
 
-		Set<Coordinates> swappedCoordinates = gameModel.getNodesToSwap(playerId, nodeCoordinates);
-		List<Node> result = swappedCoordinates.stream()
-				.map(coordinates -> boardAPIView.getNode(coordinates.getXCoordinate(), coordinates.getYCoordinate()))
-				.collect(Collectors.toList());
+		Node node = boardAdapter.getNodeById(nodeId).get();
+        Coordinates nodeCoordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 
-		return result;
+        GameState oldState = gameModel.getGameState();
+        Optional<GameState> maybeNewState = oldState.tryMove(playerId, nodeCoordinates);
+        maybeNewState.ifPresent(newState -> {
+            ImmutableBoard oldBoard = oldState.getBoard();
+            ImmutableBoard newBoard = newState.getBoard();
+            Set<Coordinates> difference = ImmutableBoard.compare(oldBoard, newBoard);
+            nodesToSwap.addAll(difference.stream().map(coordinates -> boardAdapter.getNode(coordinates))
+                    .collect(Collectors.toList()));
+        });
+
+		return nodesToSwap;
 	}
 
 	/**
@@ -69,7 +98,7 @@ public class SimpleOthello implements Othello {
 	@Override
 	public Player getPlayerInTurn() {
 		String playerIdInTurn = gameModel.getPlayerInTurn();
-		return players.get(playerIdInTurn);
+		return playerMap.get(playerIdInTurn);
 	}
 
 	/**
@@ -80,7 +109,7 @@ public class SimpleOthello implements Othello {
 	@Override
 	public List<Player> getPlayers() {
 		List<Player> playerList = new ArrayList<>();
-		playerList.addAll(players.values());
+		playerList.addAll(playerMap.values());
 		return playerList;
 	}
 
@@ -103,6 +132,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean hasValidMove(String playerId) {
+        checkPlayerId(playerId);
 		return gameModel.hasValidMove(playerId);
 	}
 
@@ -113,7 +143,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean isActive() {
-		return gameModel.isActive();
+		return !gameModel.isGameOver();
 	}
 
 	/**
@@ -127,7 +157,11 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean isMoveValid(String playerId, String nodeId) {
-		Node node = boardAPIView.getNodeById(nodeId);
+		checkPlayerId(playerId);
+
+        checkNodeId(nodeId);
+        Node node = boardAdapter.getNodeById(nodeId).get();
+
 		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 
 		return gameModel.isMoveValid(playerId, coordinates);
@@ -144,17 +178,16 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move() {
-
 		String playerIdInTurn = gameModel.getPlayerInTurn();
-		Player playerInTurn = players.get(playerIdInTurn);
+		Player playerInTurn = playerMap.get(playerIdInTurn);
 
-		Player currentPlayer = players.get(playerInTurn);
+		Player currentPlayer = playerMap.get(playerInTurn);
 		switch (currentPlayer.getType()) {
 		case HUMAN:
-			throw new IllegalStateException("Tried to do a Computer move using a human player.");
+			throw new IllegalStateException("Tried to do a Computer move using a human player: " + currentPlayer);
 		case COMPUTER:
 			Coordinates coordinatesToPlayAt = toCoordinates(playerInTurn.getMoveStrategy().move(playerIdInTurn, this));
-			return move(playerIdInTurn, coordinatesToPlayAt);
+			return synchronizedMove(playerIdInTurn, coordinatesToPlayAt);
 		}
 		throw new IllegalStateException("This should never be reached. There is a bug in move() of SimpleOthello.");
 	}
@@ -174,19 +207,25 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
-		// Update boardwrapper with the changes from the nodes
-		Node node = boardAPIView.getNodeById(nodeId);
+		checkPlayerId(playerId);
+		checkNodeId(nodeId);
+		Node node = boardAdapter.getNodeById(nodeId).get();
+
 		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 		if (!gameModel.isMoveValid(playerId, coordinates)) {
-			return null;
+			throw new IllegalArgumentException("The player was not allowed to make a move at the given node.");
 		} else {
-            return move(playerId, coordinates);
-        }
+			return synchronizedMove(playerId, coordinates);
+		}
 	}
 
-	private List<Node> move(String playerId, Coordinates nodeCoordinates) {
-		Collection<Coordinates> swappedCoordinates = gameModel.move(playerId, nodeCoordinates);
-		return boardAPIView.swapNodes(swappedCoordinates, playerId);
+	/**
+	 * Performs a move that is assured to be reflected both in the game model
+	 * and the board adapter.
+	 */
+	private List<Node> synchronizedMove(String playerId, Coordinates nodeCoordinates) {
+		gameModel.move(playerId, nodeCoordinates);
+		return boardAdapter.setBoardState(gameModel.getGameState().getBoard());
 	}
 
 	/**
@@ -194,8 +233,10 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start() {
-		// Create a new game model
-		// change the nodes on board wrapper according to startBoard
+		Random random = new Random();
+		int randomPlayerIndex = random.nextInt(playerMap.size());
+		Player randomPlayer = (new ArrayList<>(playerMap.values())).get(randomPlayerIndex);
+		start(randomPlayer.getId());
 	}
 
 	/**
@@ -206,14 +247,21 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start(String playerId) {
-		// TODO Throw exception if playerId is not among players
-		// Create a new game model
-		// change the nodes on board wrapper according to startBoard
+		checkPlayerId(playerId);
+		gameModel = gameModelFactory.getNewGameModel(playerId);
+		boardAdapter.setBoardState(gameModel.getGameState().getBoard());
 	}
 
-	private Coordinates coordinatesOfNodeWithId(String nodeId) {
-		Node node = boardAPIView.getNodeById(nodeId);
-		return new Coordinates(node.getXCoordinate(), node.getYCoordinate());
+	private void checkNodeId(String nodeId) {
+		if (!boardAdapter.getNodeById(nodeId).isPresent()) {
+			throw new NoSuchElementException("Node id \"" + nodeId + "\" does not exist.");
+		}
+	}
+
+	private void checkPlayerId(String playerId) {
+		if (!playerMap.containsKey(playerId)) {
+			throw new NoSuchElementException("Player id \"" + playerId + "\" does not exist.");
+		}
 	}
 
 	private Coordinates toCoordinates(Node node) {
