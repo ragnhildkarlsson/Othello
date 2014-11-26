@@ -10,14 +10,34 @@ public class GameState {
 	private ImmutableBoard board;
 	private String playerInTurn;
 
-	public GameState(ImmutableBoard startBoard, TurnCalculator turnCalculator, Rules rules, String startPlayer) {
-		board = startBoard;
+	/**
+	 * Creates a new game state with the given board and Turncalculator. The
+	 * startPlayer will be be the player in turn if this player have a valid
+	 * move, else will the next player that have a a valid move be the
+	 * playerInTurn.
+	 * 
+	 * @param board
+	 *            the board of this game state
+	 * @param turnCalculator
+	 * @param rules
+	 *            the rules in this game state
+	 * @param startPlayer
+	 *            the id of the wanted player in turn in this game state, if the
+	 *            startPlayer does not have any valid move will the player in
+	 *            turn be the next player with valid move, if no player have a
+	 *            valid move will the player in turn be null
+	 */
+	public GameState(ImmutableBoard board, TurnCalculator turnCalculator, Rules rules, String startPlayerId) {
+		this.board = board;
 		this.turnCalculator = turnCalculator;
 		this.rules = rules;
-		if (rules.hasValidMove(startBoard, startPlayer)) {
-			playerInTurn = startPlayer;
+		if (startPlayerId == null) {
+			playerInTurn = startPlayerId;
+		}
+		if (rules.hasValidMove(board, startPlayerId)) {
+			playerInTurn = startPlayerId;
 		} else {
-			playerInTurn = turnCalculator.getPlayerInTurn(startPlayer, startBoard, rules);
+			playerInTurn = turnCalculator.getPlayerInTurn(startPlayerId, board, rules);
 		}
 	}
 
@@ -31,7 +51,7 @@ public class GameState {
 	/**
 	 * Get the id of the player in turn or null if no player can move.
 	 * 
-	 * @return the id of the player in turn
+	 * @return the id of the player in turn or null if no player can move
 	 */
 	public String getPlayerInTurn() {
 		return playerInTurn;
@@ -89,16 +109,11 @@ public class GameState {
 		if (!playerId.equals(playerInTurn)) {
 			return Optional.empty();
 		}
-
-		if (!rules.validMove(board, nodeCoordinates, playerId)) {
-			return Optional.empty();
-		}
+		// That the player is the player in turn implies that this player have a
+		// valid move therefore no need for checking that
 		Set<ImmutableNode> nodesToSwap = rules.getNodesToSwap(board, nodeCoordinates, playerId);
-		nodesToSwap.add(new ImmutableNode(nodeCoordinates, playerId)); // Add
-																		// the
-																		// node
-																		// played
-																		// at
+		nodesToSwap.add(new ImmutableNode(nodeCoordinates, playerId));
+		// Add the node played at
 		ImmutableBoard newBoard = board.swapNodes(nodesToSwap, playerId);
 		String nextPlayerInTurn = turnCalculator.getPlayerInTurn(playerId, newBoard, rules);
 		GameState nextGameState = new GameState(newBoard, turnCalculator, rules, nextPlayerInTurn);
