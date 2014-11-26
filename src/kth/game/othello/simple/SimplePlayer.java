@@ -13,7 +13,6 @@ public class SimplePlayer implements Player {
 	private String id;
 	private String name;
 	private MoveStrategy moveStrategy;
-	private Type type;
 
 	/**
 	 * Construct a player of type Human
@@ -21,7 +20,6 @@ public class SimplePlayer implements Player {
 	public SimplePlayer(String name, String id) {
 		this.name = name;
 		this.id = id;
-		this.type = Type.HUMAN;
 		this.moveStrategy = null;
 	}
 
@@ -31,7 +29,6 @@ public class SimplePlayer implements Player {
 	public SimplePlayer(String name, String id, MoveStrategy moveStrategy) {
 		this.name = name;
 		this.id = id;
-		this.type = Type.HUMAN;
 		this.moveStrategy = moveStrategy;
 	}
 
@@ -76,7 +73,11 @@ public class SimplePlayer implements Player {
 	 */
 	@Override
 	public Type getType() {
-		return type;
+		if (this.moveStrategy == null) {
+			return Type.HUMAN;
+		} else {
+			return Type.COMPUTER;
+		}
 	}
 
 	/**
@@ -95,6 +96,6 @@ public class SimplePlayer implements Player {
 
 	@Override
 	public String toString() {
-		return "Player{" + "ID='" + id + '\'' + ", Name='" + name + '\'' + ", Type='" + type + '\'' + '}';
+		return "Player{" + "ID='" + id + '\'' + ", Name='" + name + '\'' + ", Type='" + this.getType() + '\'' + '}';
 	}
 }
