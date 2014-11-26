@@ -27,8 +27,9 @@ public class NodeAdapter extends Observable implements Node {
 		if (this.nodeData.getOccupantPlayerId() != nodeData.getOccupantPlayerId()) {
 			this.setChanged();
 		}
+		String oldPlayerId = this.getOccupantPlayerId();
 		this.nodeData = nodeData;
-		this.notifyObservers();
+		this.notifyObservers(oldPlayerId);
 	}
 
 	/**
