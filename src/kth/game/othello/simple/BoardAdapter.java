@@ -98,7 +98,7 @@ public class BoardAdapter implements Board {
 	 *             specific x- and y-coordinate
 	 */
 	public Node getNode(Coordinates coordinates) {
-		return getNode(coordinates.getXCoordinate(), coordinates.getYCoordinate());
+		return getNode(coordinates.getX(), coordinates.getY());
 	}
 
 	private Optional<NodeAdapter> getNodeAdapter(int x, int y) {
@@ -108,7 +108,7 @@ public class BoardAdapter implements Board {
 	}
 
 	private Optional<NodeAdapter> getNodeAdapter(Coordinates coordinates) {
-		return getNodeAdapter(coordinates.getXCoordinate(), coordinates.getYCoordinate());
+		return getNodeAdapter(coordinates.getX(), coordinates.getY());
 	}
 
 	/**

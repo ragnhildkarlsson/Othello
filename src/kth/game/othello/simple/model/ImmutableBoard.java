@@ -110,8 +110,8 @@ public class ImmutableBoard {
 			throws IllegalArgumentException {
 
 		Coordinates originCoord = originNode.getCoordinates();
-		int x = originCoord.getXCoordinate();
-		int y = originCoord.getYCoordinate();
+		int x = originCoord.getX();
+		int y = originCoord.getY();
 		if (!this.hasCoordinates(originCoord)) {
 			throw new IllegalArgumentException("Used a starting point that was outside of the board: " + x + ", " + y);
 		}

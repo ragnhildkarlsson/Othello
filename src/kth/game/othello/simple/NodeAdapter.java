@@ -71,7 +71,7 @@ public class NodeAdapter extends Observable implements Node {
 	 */
 	@Override
 	public int getXCoordinate() {
-		return nodeData.getCoordinates().getXCoordinate();
+		return nodeData.getCoordinates().getX();
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class NodeAdapter extends Observable implements Node {
 	 */
 	@Override
 	public int getYCoordinate() {
-		return nodeData.getCoordinates().getYCoordinate();
+		return nodeData.getCoordinates().getY();
 	}
 
 	/**

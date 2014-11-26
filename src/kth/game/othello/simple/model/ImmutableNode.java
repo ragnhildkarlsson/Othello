@@ -54,7 +54,7 @@ public final class ImmutableNode {
 	@Override
 	public String toString() {
 		return "ImmutableNode{" + ", occupantPlayerId='" + occupantPlayerId + '\'' + ", x="
-				+ coordinates.getXCoordinate() + ", y=" + coordinates.getYCoordinate() + '}';
+				+ coordinates.getX() + ", y=" + coordinates.getY() + '}';
 	}
 
 	@Override

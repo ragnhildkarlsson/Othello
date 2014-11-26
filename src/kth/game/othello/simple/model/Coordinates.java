@@ -10,11 +10,11 @@ public final class Coordinates {
 		this.yCoordinate = yCoordinate;
 	}
 
-	public int getXCoordinate() {
+	public int getX() {
 		return xCoordinate;
 	}
 
-	public int getYCoordinate() {
+	public int getY() {
 		return yCoordinate;
 	}
 
