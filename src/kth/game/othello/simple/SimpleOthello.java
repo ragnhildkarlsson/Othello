@@ -203,6 +203,9 @@ public class SimpleOthello implements Othello {
 		}
 	}
 
+    /**
+     * Performs a move that is assured to be reflected both in the game model and the board adapter.
+     */
 	private List<Node> synchronizedMove(String playerId, Coordinates nodeCoordinates) {
 		gameModel.move(playerId, nodeCoordinates);
 		return boardAdapter.setBoardState(gameModel.getGameState().getBoard());

@@ -8,19 +8,31 @@ import kth.game.othello.score.Score;
 import kth.game.othello.score.ScoreItem;
 
 /**
- * TODO
+ * A simple implementation of the {@link kth.game.othello.score.Score}
+ * interface. Keeps the score of all nodes that it observes.
  */
 public class SimpleScore extends Observable implements Score, Observer {
 
 	private Map<Node, String> occupiedNodes = new HashMap<>();
 
+	/**
+	 * Creates a SimpleScore object, initiating its score to that in the given
+	 * starting nodes. Also ads itself as an observer of these nodes, it is
+	 * therefore appropriate to pass all the nodes of a board as starting nodes.
+	 * 
+	 * @param startingNodes
+	 *            the starting nodes containing any score-giving starting state.
+	 *            These nodes are also observed for future changes, it is
+	 *            therefore appropriate to pass all the nodes of a board as
+	 *            starting nodes.
+	 */
 	public SimpleScore(Set<Node> startingNodes) {
-        startingNodes.forEach(node -> {
-            node.addObserver(this);
-            if (node.getOccupantPlayerId() != null) {
-                occupiedNodes.put(node, node.getOccupantPlayerId());
-            }
-        });
+		startingNodes.forEach(node -> {
+			node.addObserver(this);
+			if (node.getOccupantPlayerId() != null) {
+				occupiedNodes.put(node, node.getOccupantPlayerId());
+			}
+		});
 	}
 
 	/**
@@ -71,12 +83,5 @@ public class SimpleScore extends Observable implements Score, Observer {
 				occupiedNodes.put(node, node.getOccupantPlayerId());
 			}
 		}
-	}
-
-	/**
-	 * TODO
-	 */
-	private void reset(Set<Node> startingNodes) {
-
 	}
 }
