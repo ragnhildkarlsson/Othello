@@ -19,8 +19,9 @@ public class GameModelFactory {
 	}
 
 	public GameModel getNewGameModel(String startPlayerId) {
-		MoveMaker moveMaker = new MoveMaker(startBoard, startPlayerId, playerIds, rules);
-		GameModel gameModel = new GameModel(moveMaker);
+		TurnCalculator turnCalculator = new TurnCalculator(playerIds);
+		GameState startState = new GameState(startBoard, turnCalculator, rules, startPlayerId);
+		GameModel gameModel = new GameModel(startState);
 		return gameModel;
 	}
 }

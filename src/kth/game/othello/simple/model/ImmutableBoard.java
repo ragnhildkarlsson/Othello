@@ -3,6 +3,7 @@ package kth.game.othello.simple.model;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * ImmutableBoard is responsible for keeping track of the nodes in the game
@@ -57,6 +58,20 @@ public class ImmutableBoard {
 	}
 
 	/**
+	 * TODO testCase
+	 * 
+	 * @param board1
+	 * @param board2
+	 * @return
+	 */
+	public static Set<Coordinates> compare(ImmutableBoard board1, ImmutableBoard board2) {
+		Set<ImmutableNode> board1Nodes = board1.getNodes();
+		Set<ImmutableNode> board2Nodes = board2.getNodes();
+		board2Nodes.remove(board1Nodes);
+		return board2Nodes.stream().map(node -> node.getCoordinates()).collect(Collectors.toSet());
+	}
+
+	/**
 	 * Returns the node at the given coordinates. Throws
 	 * IllegalArgumentException if the given coordinates are not within the
 	 * board.
@@ -70,7 +85,7 @@ public class ImmutableBoard {
 	 *             if the coordinates does not exist on the board.
 	 */
 	public ImmutableNode getNodeAtCoordinates(Coordinates coordinates) throws IllegalArgumentException {
-		if (!this.coordinatesAreOnBoard(coordinates)) {
+		if (!this.hasCoordinates(coordinates)) {
 			throw new IllegalArgumentException("Coordinates does not exist on board");
 		}
 		return nodes.get(coordinates);
@@ -95,7 +110,7 @@ public class ImmutableBoard {
 		Coordinates originCoord = originNode.getCoordinates();
 		int x = originCoord.getXCoordinate();
 		int y = originCoord.getYCoordinate();
-		if (!this.coordinatesAreOnBoard(originCoord)) {
+		if (!this.hasCoordinates(originCoord)) {
 			throw new IllegalArgumentException("Used a starting point that was outside of the board: " + x + ", " + y);
 		}
 
@@ -131,7 +146,7 @@ public class ImmutableBoard {
 		}
 		Coordinates newCoordinates = new Coordinates(x, y);
 
-		if (!coordinatesAreOnBoard(newCoordinates)) {
+		if (!hasCoordinates(newCoordinates)) {
 			return null;
 		} else {
 			return getNodeAtCoordinates(newCoordinates);
@@ -139,7 +154,14 @@ public class ImmutableBoard {
 
 	}
 
-	private boolean coordinatesAreOnBoard(Coordinates coordinates) {
+	/**
+	 * Returns true if the given coordinates exist on this board, else false.
+	 * 
+	 * @param coordinates
+	 *            the coordinates to check if they are on the board.
+	 * @return true if the coordinates exist on the board, else false.
+	 */
+	public boolean hasCoordinates(Coordinates coordinates) {
 		return nodes.containsKey(coordinates);
 	}
 
@@ -181,9 +203,21 @@ public class ImmutableBoard {
 			ImmutableNode newNode = new ImmutableNode(node.getCoordinates(), playerId);
 			newNodes.add(newNode);
 		}
-		// Add all the old nodes (old nodes with the same coordinates as the new
-		// will be ignored by the Set logic)
-		newNodes.addAll(this.getNodes());
+		Set<Coordinates> newNodeCoordinates = getCoordinateSet(newNodes);
+		for (ImmutableNode oldNode : this.nodes.values()) {
+			if (!newNodeCoordinates.contains(oldNode.getCoordinates())) {
+				// if this node has not been swapped, add it to new nodes
+				newNodes.add(oldNode);
+			}
+		}
 		return new ImmutableBoard(newNodes);
+	}
+
+	private Set<Coordinates> getCoordinateSet(Set<ImmutableNode> nodes) {
+		Set<Coordinates> coordinates = new HashSet<>();
+		for (ImmutableNode node : nodes) {
+			coordinates.add(node.getCoordinates());
+		}
+		return coordinates;
 	}
 }
