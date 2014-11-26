@@ -20,11 +20,6 @@ import org.junit.Test;
  */
 public class GameModelITest {
 
-	public static void main(String[] args) {
-		GameModelITest test = new GameModelITest();
-		test.TestWith3Players();
-	}
-
 	private final String player1Id = "a";
 	private final String player2Id = "b";
 	private final String player3Id = "c";
