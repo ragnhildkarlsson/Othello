@@ -4,7 +4,7 @@ import kth.game.othello.player.Player;
 import kth.game.othello.player.movestrategy.MoveStrategy;
 
 /**
- * A simple player implementing the Player interface, can either construct a
+ * A simple player implementing the Player interface, can either be a
  * computer player or a human player.
  * 
  */
