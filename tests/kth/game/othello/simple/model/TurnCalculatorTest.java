@@ -34,7 +34,6 @@ public class TurnCalculatorTest {
 		String playerInTurn = turnCalculator.getPlayerInTurn(player2Id, null, rules);
 		// Should return player1 since player2 was the previous player.
 		assertEquals(player1Id, playerInTurn);
-
 	}
 
 	/**
