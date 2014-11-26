@@ -132,7 +132,9 @@ public class BoardAdapter implements Board {
 		}
 
 		this.boardState = newBoardState;
-		return changedNodeAdapters;
+
+        System.out.println(newBoardState);
+        return changedNodeAdapters;
 	}
 
 	/**

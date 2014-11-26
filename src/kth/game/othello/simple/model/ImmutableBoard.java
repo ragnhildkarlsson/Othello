@@ -1,7 +1,10 @@
 package kth.game.othello.simple.model;
 
+import kth.game.othello.board.Node;
+
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -180,10 +183,53 @@ public class ImmutableBoard {
 
 	@Override
 	public String toString() {
+        int minX = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int minY = Integer.MAX_VALUE;
+        int maxY = Integer.MIN_VALUE;
+        for (ImmutableNode node : nodes.values()) {
+            minX = Math.min(minX, node.getCoordinates().getX());
+            maxX = Math.max(maxX, node.getCoordinates().getX());
+            minY = Math.min(minY, node.getCoordinates().getY());
+            maxY = Math.max(maxY, node.getCoordinates().getY());
+        }
+
+        Map<String, Character> playerSymbols = new HashMap<>();
+        Set<String> players = getPlayerIDs();
+        int minLength = players.stream().map(player -> player.length()).reduce(Integer.MAX_VALUE, (min, current) -> Math.min(current, min));
+        for (int i = 0; i < minLength; i++) {
+            Set<Character> chars = new HashSet<>();
+            for (String player : players) {
+                chars.add(player.charAt(i));
+            }
+            if (chars.size() == players.size()) {
+                final int goodIndex = i;
+                players.stream().forEach(player -> playerSymbols.put(player, player.charAt(goodIndex)));
+                break;
+            }
+        }
+        if (playerSymbols.isEmpty()) {
+            int i = 1;
+            for (String player : players) {
+                playerSymbols.put(player, Integer.toString(i++).charAt(0));
+            }
+        }
+
 		StringBuilder sb = new StringBuilder();
-		for (ImmutableNode node : this.nodes.values()) {
-			sb.append(node.toString());
-		}
+
+        for (int y = minY; y <= maxY; y++) {
+            for (int x = minX; x <= maxX; x++) {
+                Coordinates coordinates = new Coordinates(x,y);
+                if (nodes.containsKey(coordinates)) {
+                    String occupantPlayerId = nodes.get(coordinates).getOccupantPlayerId();
+                    sb.append(occupantPlayerId == null ? '•' : playerSymbols.get(occupantPlayerId));
+                } else {
+                    sb.append(' ');
+                }
+                sb.append(' ');
+            }
+            sb.append('\n');
+        }
 		return sb.toString();
 	}
 
