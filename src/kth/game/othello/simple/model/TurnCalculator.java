@@ -3,7 +3,7 @@ package kth.game.othello.simple.model;
 import java.util.List;
 
 /**
- * This class is responsible for calculate the next player in turn. game.
+ * This class is responsible for calculate the next player in turn.
  * 
  */
 public class TurnCalculator {
