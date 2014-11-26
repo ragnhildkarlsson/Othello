@@ -94,6 +94,11 @@ public class GameState {
 			return Optional.empty();
 		}
 		Set<ImmutableNode> nodesToSwap = rules.getNodesToSwap(board, nodeCoordinates, playerId);
+		nodesToSwap.add(new ImmutableNode(nodeCoordinates, playerId)); // Add
+																		// the
+																		// node
+																		// played
+																		// at
 		ImmutableBoard newBoard = board.swapNodes(nodesToSwap, playerId);
 		String nextPlayerInTurn = turnCalculator.getPlayerInTurn(playerId, newBoard, rules);
 		GameState nextGameState = new GameState(newBoard, turnCalculator, rules, nextPlayerInTurn);
