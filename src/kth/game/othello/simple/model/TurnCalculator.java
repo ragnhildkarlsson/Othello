@@ -35,6 +35,9 @@ public class TurnCalculator {
 			return null;
 		}
 		int playerIndex = players.indexOf(previousPlayer);
+		if (playerIndex < 0) {
+			return null;
+		}
 		playerIndex = (playerIndex + 1) % players.size(); // jump to player
 															// after the
 															// previous player
