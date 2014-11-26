@@ -58,7 +58,7 @@ public class ImmutableBoard {
 	}
 
 	/**
-	 * Return the coordinates of the nodes that differ between the two nodes.
+	 * Return the coordinates of the nodes that differ between the two given boards.
 	 * 
 	 * @param board1
 	 *            a board
