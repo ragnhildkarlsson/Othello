@@ -8,10 +8,12 @@ import java.util.Set;
 import kth.game.othello.Othello;
 import kth.game.othello.OthelloFactory;
 import kth.game.othello.board.factory.NodeData;
+import kth.game.othello.board.factory.Square;
 import kth.game.othello.player.Player;
+import kth.game.othello.player.movestrategy.MoveStrategy;
+import kth.game.othello.simple.model.Coordinates;
 import kth.game.othello.simple.model.GameModelFactory;
 import kth.game.othello.simple.model.ImmutableBoard;
-import kth.game.othello.simple.model.ImmutableBoardFactory;
 import kth.game.othello.simple.model.ImmutableNode;
 import kth.game.othello.simple.model.Rules;
 
@@ -20,14 +22,7 @@ import kth.game.othello.simple.model.Rules;
  */
 public class SimpleOthelloFactory implements OthelloFactory {
 
-	private final String nameOfPlayer1 = "WhitePlayer";
-	private final String nameOfPlayer2 = "BlackPlayer";
-	private ImmutableBoardFactory immutableBoardFactory;
-	private PlayerFactory playerFactory;
-
 	public SimpleOthelloFactory() {
-		this.immutableBoardFactory = new ImmutableBoardFactory();
-		this.playerFactory = new PlayerFactory();
 	}
 
 	/**
@@ -38,20 +33,17 @@ public class SimpleOthelloFactory implements OthelloFactory {
 	@Override
 	public Othello createComputerGame() {
 
-		// TODO implement
-		// See if it is possible to extract general tasks done in createGame
-		// method below to private methods and reuse code
+		MoveStrategy moveStrategy = new SimpleStrategy();
+		SimplePlayer computer1 = new SimplePlayer("computer1", "computer1ID", moveStrategy);
+		SimplePlayer computer2 = new SimplePlayer("computer2", "computer2ID", moveStrategy);
 
-		// BoardFactory boardFactory = new BoardFactory(player1Id, player2Id);
-		// SimpleRules rules = new SimpleRules();
-		// ComputerPlayer computer = new LousyComputerPlayer(player1Id,
-		// nameOfPlayer1);
-		// ComputerPlayer computer2 = new LousyComputerPlayer(player2Id,
-		// nameOfPlayer2);
-		//
-		// SimpleOthello computerGame = new SimpleOthello(boardFactory, rules,
-		// computer, computer2);
-		return null;
+		Square square = new Square();
+		List<Player> players = new ArrayList<Player>();
+		players.add(computer1);
+		players.add(computer2);
+		Set<NodeData> nodesData = square.getNodes(8, players);
+
+		return createGame(nodesData, players);
 	}
 
 	/**
@@ -61,18 +53,16 @@ public class SimpleOthelloFactory implements OthelloFactory {
 	 */
 	@Override
 	public Othello createHumanGame() {
-		// TODO implement
+		SimplePlayer player1 = new SimplePlayer("player1", "player1ID");
+		SimplePlayer player2 = new SimplePlayer("player2", "player2ID");
 
-		// Old Implementation
-		// BoardFactory boardFactory = new BoardFactory(player1Id, player2Id);
-		// SimpleRules rules = new SimpleRules();
-		// HumanPlayer human = new HumanPlayer(player1Id, nameOfPlayer1);
-		// HumanPlayer human2 = new HumanPlayer(player2Id, nameOfPlayer2);
-		//
-		// SimpleOthello humanGame = new SimpleOthello(boardFactory, rules,
-		// human, human2);
+		Square square = new Square();
+		List<Player> players = new ArrayList<Player>();
+		players.add(player1);
+		players.add(player2);
+		Set<NodeData> nodesData = square.getNodes(8, players);
 
-		return null;
+		return createGame(nodesData, players);
 	}
 
 	/**
@@ -83,21 +73,17 @@ public class SimpleOthelloFactory implements OthelloFactory {
 	@Override
 	public Othello createHumanVersusComputerGame() {
 
-		// See if it is possible to extract general tasks done in createGame
-		// method below to private methods and reuse code
+		MoveStrategy moveStrategy = new SimpleStrategy();
+		SimplePlayer player1 = new SimplePlayer("player1", "player1ID");
+		SimplePlayer computer2 = new SimplePlayer("computer2", "computer2ID", moveStrategy);
 
-		// TODO implement
-		// BoardFactory boardFactory = new BoardFactory(player1Id, player2Id);
-		// SimpleRules rules = new SimpleRules();
-		//
-		// HumanPlayer human = new HumanPlayer(player1Id, nameOfPlayer1);
-		// ComputerPlayer computer = new LousyComputerPlayer(player2Id,
-		// nameOfPlayer2);
-		//
-		// SimpleOthello humanVersusComputerGame = new
-		// SimpleOthello(boardFactory, rules, human, computer);
+		Square square = new Square();
+		List<Player> players = new ArrayList<Player>();
+		players.add(player1);
+		players.add(computer2);
+		Set<NodeData> nodesData = square.getNodes(8, players);
 
-		return null;
+		return createGame(nodesData, players);
 	}
 
 	/**
@@ -118,7 +104,7 @@ public class SimpleOthelloFactory implements OthelloFactory {
 		for (NodeData node : nodesData) {
 			immutableNodes.add(getImmutableNodeFromNodeData(node));
 		}
-		ImmutableBoard immutableBoard = immutableBoardFactory.boardFromNodes(immutableNodes);
+		ImmutableBoard immutableBoard = new ImmutableBoard(immutableNodes);
 
 		ArrayList<String> playerIds = new ArrayList<String>();
 		for (Player player : players) {
@@ -128,11 +114,10 @@ public class SimpleOthelloFactory implements OthelloFactory {
 
 		GameModelFactory gameModelFactory = new GameModelFactory(immutableBoard, playerIds, rules);
 
-		// Create wrappers
-
+		// Create adapters
 		List<NodeAdapter> nodeAPIViews = new ArrayList<NodeAdapter>();
 		for (ImmutableNode immutableNode : immutableNodes) {
-			nodeAPIViews.add(getNodeWrapperFromImmuatableNode(immutableNode));
+			nodeAPIViews.add(new NodeAdapter(immutableNode));
 		}
 		SimpleScore score = new SimpleScore();
 		// Add score as observer for all nodes;
@@ -140,19 +125,13 @@ public class SimpleOthelloFactory implements OthelloFactory {
 			nodeAPIView.addObserver(score);
 		}
 
-		BoardAdapter boardAdapter = new BoardAdapter(nodeAPIViews);
-		PlayerHandler playerHandler = new PlayerHandler(players);
-		SimpleOthello othello = new SimpleOthello(immutableBoard, boardAdapter, playerHandler, gameModelFactory, score);
+		BoardAdapter boardAdapter = new BoardAdapter(immutableBoard, nodeAPIViews);
+		SimpleOthello othello = new SimpleOthello(players, boardAdapter, gameModelFactory, score);
 		return othello;
 	}
 
 	private ImmutableNode getImmutableNodeFromNodeData(NodeData nodeData) {
-		// TODO implement
-		return null;
-	}
-
-	private NodeAdapter getNodeWrapperFromImmuatableNode(ImmutableNode immutableNode) {
-		// TODO implement
-		return null;
+		return new ImmutableNode(new Coordinates(nodeData.getXCoordinate(), nodeData.getYCoordinate()),
+				nodeData.getOccupantPlayerId());
 	}
 }
