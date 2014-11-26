@@ -4,7 +4,9 @@ import kth.game.othello.player.Player;
 import kth.game.othello.player.movestrategy.MoveStrategy;
 
 /**
- * TODO.
+ * A simple player implementing the Player interface, can either construct a
+ * computer player or a human player.
+ * 
  */
 public class SimplePlayer implements Player {
 
@@ -54,8 +56,7 @@ public class SimplePlayer implements Player {
 	 */
 	@Override
 	public MoveStrategy getMoveStrategy() {
-		// TODO implement
-		return null;
+		return this.moveStrategy;
 	}
 
 	/**
@@ -89,7 +90,7 @@ public class SimplePlayer implements Player {
 	 */
 	@Override
 	public void setMoveStrategy(MoveStrategy moveStrategy) {
-		// TODO implement
+		this.moveStrategy = moveStrategy;
 	}
 
 	@Override
