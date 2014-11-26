@@ -18,7 +18,7 @@ import org.junit.Test;
 public class OthelloLab2IT {
 
 	private MoveStrategy getNewMoveStrategy() {
-		return new GreedyStrategy();
+		return new SimpleStrategy();
 	}
 
 	private OthelloFactory getOthelloFactory() {
