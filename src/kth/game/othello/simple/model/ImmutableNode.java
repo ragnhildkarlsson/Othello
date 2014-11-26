@@ -1,8 +1,8 @@
 package kth.game.othello.simple.model;
 
 /**
- * TODO write class doc here
- * 
+ * Holds information about the position and occupant player of a node on a
+ * board.
  */
 public final class ImmutableNode {
 
@@ -10,11 +10,12 @@ public final class ImmutableNode {
 	private final Coordinates coordinates;
 
 	/**
-	 * Construct an immutable node given its coordinates and an optional player
-	 * ID. TODO correct
+	 * Construct an immutable node given its coordinates and occupying player
+	 * ID.
 	 * 
 	 * @param playerId
-	 *            optional, set to null if the node is unmarked.
+	 *            the player occupying the node. Set to null if the node is
+	 *            unmarked.
 	 */
 	public ImmutableNode(Coordinates coordinates, String playerId) {
 		this.coordinates = coordinates;
@@ -22,7 +23,7 @@ public final class ImmutableNode {
 	}
 
 	/**
-	 * To get the player id of the occupant player
+	 * Get the player id of the occupant player
 	 * 
 	 * @return the id of the occupant player or null if the node is not marked
 	 */
@@ -53,8 +54,8 @@ public final class ImmutableNode {
 
 	@Override
 	public String toString() {
-		return "ImmutableNode{" + ", occupantPlayerId='" + occupantPlayerId + '\'' + ", x="
-				+ coordinates.getX() + ", y=" + coordinates.getY() + '}';
+		return "ImmutableNode{" + ", occupantPlayerId='" + occupantPlayerId + '\'' + ", x=" + coordinates.getX()
+				+ ", y=" + coordinates.getY() + '}';
 	}
 
 	@Override

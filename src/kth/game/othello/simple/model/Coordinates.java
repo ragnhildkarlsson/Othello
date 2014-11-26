@@ -1,19 +1,35 @@
 package kth.game.othello.simple.model;
 
-//TODO Doc
+/**
+ * Holds a set of immutable x and y coordinates in a cartesian system.
+ */
 public final class Coordinates {
 	private final int xCoordinate;
 	private final int yCoordinate;
 
+	/**
+	 * Create a new pair of coordinates.
+	 * 
+	 * @param xCoordinate
+	 *            the x coordinate.
+	 * @param yCoordinate
+	 *            the y coordinate.
+	 */
 	public Coordinates(int xCoordinate, int yCoordinate) {
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
 	}
 
+	/**
+	 * @return the x coordinate.
+	 */
 	public int getX() {
 		return xCoordinate;
 	}
 
+	/**
+	 * @return the y coordinate.
+	 */
 	public int getY() {
 		return yCoordinate;
 	}
