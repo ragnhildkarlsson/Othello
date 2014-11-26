@@ -1,8 +1,6 @@
 package kth.game.othello.simple.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,7 +23,7 @@ public class ImmutableBoardTest {
 
 	private Set<ImmutableNode> generateDummyNodes(int numberOfNodesOnSide) {
 		// Construct a set of dummy nodes with real coordinates
-		Set<ImmutableNode> dummyNodes = new HashSet<ImmutableNode>();
+		Set<ImmutableNode> dummyNodes = new HashSet<>();
 		for (int y = 0; y < numberOfNodesOnSide; y++) {
 			for (int x = 0; x < numberOfNodesOnSide; x++) {
 				// Create a new node
@@ -47,13 +45,13 @@ public class ImmutableBoardTest {
 
 	@Test
 	public void testCompareBoards() {
-		Set<ImmutableNode> nodesOnBoard1 = new HashSet<ImmutableNode>();
+		Set<ImmutableNode> nodesOnBoard1 = new HashSet<>();
 		ImmutableNode node0Board1 = new ImmutableNode(new Coordinates(0, 0), "1");
 		ImmutableNode node1Board1 = new ImmutableNode(new Coordinates(1, 1), "1");
 		nodesOnBoard1.add(node0Board1);
 		nodesOnBoard1.add(node1Board1);
 
-		Set<ImmutableNode> nodesOnBoard2 = new HashSet<ImmutableNode>();
+		Set<ImmutableNode> nodesOnBoard2 = new HashSet<>();
 		ImmutableNode node0Board2 = new ImmutableNode(new Coordinates(0, 0), "2");
 		ImmutableNode node1Board2 = new ImmutableNode(new Coordinates(1, 1), "1");
 		nodesOnBoard2.add(node0Board2);

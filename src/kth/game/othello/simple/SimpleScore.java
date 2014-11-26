@@ -1,14 +1,6 @@
 package kth.game.othello.simple;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import kth.game.othello.board.Node;
@@ -21,7 +13,7 @@ import kth.game.othello.score.ScoreItem;
  */
 public class SimpleScore extends Observable implements Score, Observer {
 
-	private Set<String> playerIds = new HashSet<String>();
+	private Set<String> playerIds = new HashSet<>();
 	private Map<String, String> occupiedNodes = new HashMap<>();
 
 	/**
@@ -54,35 +46,31 @@ public class SimpleScore extends Observable implements Score, Observer {
 	 */
 	@Override
 	public List<ScoreItem> getPlayersScore() {
-		Set<String> playerIds = occupiedNodes.values().stream().distinct().collect(Collectors.toSet());
 		List<ScoreItem> scoreItems = playerIds.stream().map(playerId -> new ScoreItem(playerId, getPoints(playerId)))
 				.collect(Collectors.toList());
 		scoreItems.sort(ScoreComparator);
 		return scoreItems;
 	}
 
-	public static Comparator<ScoreItem> ScoreComparator = new Comparator<ScoreItem>() {
+	public static Comparator<ScoreItem> ScoreComparator = (scoreItem1, scoreItem2) -> {
 
-		public int compare(ScoreItem scoreItem1, ScoreItem scoreItem2) {
+		int score1 = scoreItem1.getScore();
+		int score2 = scoreItem2.getScore();
 
-			int score1 = scoreItem1.getScore();
-			int score2 = scoreItem2.getScore();
-
-			return Integer.compare(score2, score1);
-		}
-
+		return Integer.compare(score2, score1);
 	};
 
 	/**
 	 * Get the score of a specific player
 	 *
-	 * @param playerId
+	 * @param requestedPlayerId
 	 *            the id of the player
 	 * @return the score
 	 */
 	@Override
-	public int getPoints(String playerId) {
-		return (int) occupiedNodes.values().stream().filter(nodePlayerId -> nodePlayerId == playerId).count();
+	public int getPoints(String requestedPlayerId) {
+		return (int) occupiedNodes.values().stream().filter(nodePlayerId -> nodePlayerId.equals(requestedPlayerId))
+				.count();
 	}
 
 	/**
@@ -103,14 +91,14 @@ public class SimpleScore extends Observable implements Score, Observer {
 			if (node.getOccupantPlayerId() == null) {
 				String oldPlayer = occupiedNodes.remove(node.getId());
 				if (oldPlayer != null) {
-					ArrayList<String> updatedPlayers = new ArrayList<String>();
+					ArrayList<String> updatedPlayers = new ArrayList<>();
 					updatedPlayers.add(oldPlayer);
 					notifyObservers(updatedPlayers);
 				}
 			} else {
 
 				String oldPlayer = occupiedNodes.put(node.getId(), node.getOccupantPlayerId());
-				List<String> updatedPlayers = new ArrayList<String>();
+				List<String> updatedPlayers = new ArrayList<>();
 				if (oldPlayer != null) {
 					updatedPlayers.add(oldPlayer);
 				}

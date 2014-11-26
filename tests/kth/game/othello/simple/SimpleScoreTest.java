@@ -2,16 +2,12 @@ package kth.game.othello.simple;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Observer;
-import java.util.Set;
+import java.util.*;
 
 import kth.game.othello.board.Node;
 import kth.game.othello.score.ScoreItem;
-
 import kth.game.othello.simple.adapter.NodeAdapter;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -51,7 +47,7 @@ public class SimpleScoreTest {
 		Mockito.when(mockNode1.getId()).thenReturn("node1");
 		Mockito.when(mockNode2.getId()).thenReturn("node2");
 		Mockito.when(mockNode3.getId()).thenReturn("node3");
-		Set<Node> startingNodes = new HashSet<Node>();
+		Set<Node> startingNodes = new HashSet<>();
 		startingNodes.add(mockNode1);
 		startingNodes.add(mockNode2);
 		startingNodes.add(mockNode3);
@@ -89,7 +85,7 @@ public class SimpleScoreTest {
 		Mockito.when(mockNode1.getId()).thenReturn("node1");
 		Mockito.when(mockNode2.getId()).thenReturn("node2");
 		Mockito.when(mockNode3.getId()).thenReturn("node3");
-		Set<Node> startingNodes = new HashSet<Node>();
+		Set<Node> startingNodes = new HashSet<>();
 		startingNodes.add(mockNode1);
 		startingNodes.add(mockNode2);
 		startingNodes.add(mockNode3);
@@ -115,14 +111,14 @@ public class SimpleScoreTest {
 		Mockito.when(updatedNode.getOccupantPlayerId()).thenReturn(playerId);
 		Mockito.when(updatedNode.getId()).thenReturn("node1");
 
-		Set<Node> startingNodes = new HashSet<Node>();
+		Set<Node> startingNodes = new HashSet<>();
 		startingNodes.add(startNode);
 		SimpleScore score = new SimpleScore(startingNodes);
 
 		Observer mockObserver = Mockito.mock(Observer.class);
 		score.addObserver(mockObserver);
 		score.update(updatedNode, playerId);
-		ArrayList<String> updatedPlayers = new ArrayList<String>();
+		ArrayList<String> updatedPlayers = new ArrayList<>();
 		updatedPlayers.add(playerId);
 		Mockito.verify(mockObserver).update(score, updatedPlayers);
 	}
@@ -146,14 +142,14 @@ public class SimpleScoreTest {
 		Mockito.when(updatedNode.getOccupantPlayerId()).thenReturn(player2Id);
 		Mockito.when(updatedNode.getId()).thenReturn("node1");
 
-		Set<Node> startingNodes = new HashSet<Node>();
+		Set<Node> startingNodes = new HashSet<>();
 		startingNodes.add(startNode);
 		SimpleScore score = new SimpleScore(startingNodes);
 
 		Observer mockObserver = Mockito.mock(Observer.class);
 		score.addObserver(mockObserver);
 		score.update(updatedNode, player2Id);
-		ArrayList<String> updatedPlayers = new ArrayList<String>();
+		ArrayList<String> updatedPlayers = new ArrayList<>();
 		updatedPlayers.add(player1Id);
 		updatedPlayers.add(player2Id);
 		Mockito.verify(mockObserver).update(score, updatedPlayers);

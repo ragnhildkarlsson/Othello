@@ -13,14 +13,12 @@ import kth.game.othello.player.movestrategy.MoveStrategy;
  */
 public class GreedyStrategy implements MoveStrategy {
 
-	private final String name = "greedy-strategy";
-
 	/**
 	 * @return the name of the strategy
 	 */
 	@Override
 	public String getName() {
-		return name;
+		return "greedy-strategy";
 	}
 
 	/**

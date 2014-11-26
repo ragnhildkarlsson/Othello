@@ -14,7 +14,7 @@ public class TurnCalculator {
 	 * Create a new turnKeeper.
 	 * 
 	 * @param playerIds
-	 * @param startingPlayerId
+	 *            the players that the turn keeper is to cycle between.
 	 */
 	public TurnCalculator(List<String> playerIds) {
 		this.players = playerIds;
@@ -26,12 +26,15 @@ public class TurnCalculator {
 	 * null
 	 * 
 	 * @param previousPlayer
-	 *            the id of the previousPlayer
-	 * @param the
+	 *            the id of the previous player.
+	 * @param board
+	 *            the board on which the players are playing.
+	 * @param rules
+	 *            the rules with which the players are playing.
 	 * 
 	 */
-	public String getPlayerInTurn(String previousPlayer, ImmutableBoard newBoard, Rules rules) {
-		if (rules.isGameOver(newBoard)) {
+	public String getPlayerInTurn(String previousPlayer, ImmutableBoard board, Rules rules) {
+		if (rules.isGameOver(board)) {
 			return null;
 		}
 		int playerIndex = players.indexOf(previousPlayer);
@@ -43,7 +46,7 @@ public class TurnCalculator {
 															// previous player
 		for (int i = 0; i < players.size(); i++) {
 			String possiblePlayerInTurn = players.get(playerIndex);
-			if (rules.hasValidMove(newBoard, possiblePlayerInTurn)) {
+			if (rules.hasValidMove(board, possiblePlayerInTurn)) {
 				return possiblePlayerInTurn;
 			}
 			playerIndex = (playerIndex + 1) % players.size();

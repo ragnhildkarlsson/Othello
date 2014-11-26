@@ -4,8 +4,8 @@ import kth.game.othello.player.Player;
 import kth.game.othello.player.movestrategy.MoveStrategy;
 
 /**
- * A simple player implementing the Player interface, can either be a
- * computer player or a human player.
+ * A simple player implementing the Player interface, can either be a computer
+ * player or a human player.
  * 
  */
 public class SimplePlayer implements Player {
@@ -85,12 +85,16 @@ public class SimplePlayer implements Player {
 	 * {@link kth.game.othello.player.Player.Type} COMPUTER
 	 * 
 	 * @param moveStrategy
+	 *            the new move strategy
 	 * @throws UnsupportedOperationException
 	 *             if the player is of
 	 *             {@link kth.game.othello.player.Player.Type} HUMAN
 	 */
 	@Override
 	public void setMoveStrategy(MoveStrategy moveStrategy) {
+		if (this.getType() == Type.HUMAN) {
+			throw new UnsupportedOperationException("Tried to set a move strategy for human player.");
+		}
 		this.moveStrategy = moveStrategy;
 	}
 

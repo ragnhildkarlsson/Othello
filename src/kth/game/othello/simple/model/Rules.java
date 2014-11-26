@@ -31,21 +31,21 @@ public class Rules {
 	 * straight (horizontal, vertical, or diagonal) line between A and B where
 	 * all nodes are occupied by other players.
 	 * 
-	 * @param nodeCordinates
+	 * @param nodeCoordinates
 	 *            the coordinates of the node where the player wants to play.
-	 * @param PlayerID
+	 * @param playerId
 	 *            the id of the player making the move.
 	 * @param board
 	 *            the board where the move would be made.
 	 * @return true iff move is valid.
 	 */
-	public boolean validMove(ImmutableBoard board, Coordinates nodeCordinates, String playerId) {
+	public boolean validMove(ImmutableBoard board, Coordinates nodeCoordinates, String playerId) {
 		// check if nodes exist on board. else return false
-		if (!board.hasCoordinates(nodeCordinates)) {
+		if (!board.hasCoordinates(nodeCoordinates)) {
 			return false;
 		}
 		// check if any nodes are swapped by move
-		Set<ImmutableNode> swappedNodes = getNodesToSwap(board, nodeCordinates, playerId);
+		Set<ImmutableNode> swappedNodes = getNodesToSwap(board, nodeCoordinates, playerId);
 		if (swappedNodes.size() > 0) {
 			return true;
 		}
@@ -59,7 +59,7 @@ public class Rules {
 	 * exist at least one straight (horizontal, vertical, or diagonal) line
 	 * between A and B where all nodes are occupied by the other players.
 	 * 
-	 * @param PlayerID
+	 * @param playerId
 	 *            the id of the player making the move.
 	 * @param board
 	 *            the board in which to look for a valid move.
@@ -79,7 +79,7 @@ public class Rules {
 	/**
 	 * Returns false iff any of the players on the board can make a valid move.
 	 * 
-	 * @board the board to be checked for game over.
+	 * @param board the board to be checked for game over.
 	 * @return Returns false iff any of the players on the board can make a
 	 *         valid move.
 	 */
@@ -98,15 +98,16 @@ public class Rules {
 	 * 
 	 * @param board
 	 *            the board where the move would be made.
+	 * @param nodeCoordinates
+	 *            the coordinates of the node on the board where the player
+	 *            wants to play.
 	 * @param playerId
 	 *            the id of the player making the move.
-	 * @param node
-	 *            a node on the board where the player wants to play.
 	 * @return the list of nodes that will be swapped for the given move,
 	 *         excluding the node that is placed by the player.
 	 */
 	public Set<ImmutableNode> getNodesToSwap(ImmutableBoard board, Coordinates nodeCoordinates, String playerId) {
-		Set<ImmutableNode> result = new HashSet<ImmutableNode>();
+		Set<ImmutableNode> result = new HashSet<>();
 		// check if node exist on board
 		if (!board.hasCoordinates(nodeCoordinates)) {
 			return result;
@@ -141,7 +142,7 @@ public class Rules {
 		// check that the following nodes in the given direction belongs to the
 		// opponent until we reach a node marked by the given player. If this
 		// never happens, return an empty list.
-		Set<ImmutableNode> result = new HashSet<ImmutableNode>();
+		Set<ImmutableNode> result = new HashSet<>();
 		while (true) {
 			ImmutableNode nextNodeInDirection = board.getNextNodeInDirection(originNode, direction);
 			if (nextNodeInDirection == null || nextNodeInDirection.getOccupantPlayerId() == null) {

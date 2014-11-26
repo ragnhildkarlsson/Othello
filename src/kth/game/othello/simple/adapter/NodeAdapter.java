@@ -24,7 +24,8 @@ public class NodeAdapter extends Observable implements Node {
 	 *            the node to act as the underlying data.
 	 */
 	public void setNode(ImmutableNode nodeData) {
-		if (this.nodeData.getOccupantPlayerId() != nodeData.getOccupantPlayerId()) {
+		if (this.nodeData.getOccupantPlayerId() == null
+				|| !this.nodeData.getOccupantPlayerId().equals(nodeData.getOccupantPlayerId())) {
 			this.setChanged();
 		}
 		String oldPlayerId = this.getOccupantPlayerId();
@@ -48,9 +49,7 @@ public class NodeAdapter extends Observable implements Node {
 		// use the id to infer coordinates.
 		idInt = idInt | (getYCoordinate() << 16);
 
-		String id = Integer.toString(idInt);
-
-		return id;
+		return Integer.toString(idInt);
 
 	}
 

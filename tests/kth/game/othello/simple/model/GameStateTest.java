@@ -1,13 +1,13 @@
 package kth.game.othello.simple.model;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import org.junit.Test;
-import org.mockito.Mockito;
+import static org.junit.Assert.assertFalse;
 
 public class GameStateTest {
 
@@ -22,7 +22,7 @@ public class GameStateTest {
 		Mockito.when(mockRules.hasValidMove(null, playerInTurn)).thenReturn(true);
 		GameState gameState = new GameState(null, null, mockRules, playerInTurn);
 		Optional<GameState> res = gameState.tryMove("2", null);
-		assertEquals(Optional.empty(), res);
+		assertFalse(res.isPresent());
 	}
 
 	/**
@@ -42,15 +42,13 @@ public class GameStateTest {
 	public void testTryMoveReturnNextGameStateWhenPlayerHasAValidMove() {
 		String player1 = "1";
 		String player2 = "2";
-		ImmutableNode node1 = new ImmutableNode(new Coordinates(0, 0), player1);
-		ImmutableNode node2 = new ImmutableNode(new Coordinates(1, 0), player2);
+        ImmutableNode node2 = new ImmutableNode(new Coordinates(1, 0), player2);
 		Coordinates playAtCoordinates = new Coordinates(2, 0);
-		ImmutableNode node3 = new ImmutableNode(playAtCoordinates, null);
 
-		Set<ImmutableNode> nodesToSwap = new HashSet<ImmutableNode>();
+        Set<ImmutableNode> nodesToSwap = new HashSet<>();
 		nodesToSwap.add(node2);
 
-		Set<ImmutableNode> nodesActuallyChangedOfThisMove = new HashSet<ImmutableNode>();
+		Set<ImmutableNode> nodesActuallyChangedOfThisMove = new HashSet<>();
 		nodesActuallyChangedOfThisMove.add(node2);
 		ImmutableNode playedNode = new ImmutableNode(playAtCoordinates, player1);
 		nodesActuallyChangedOfThisMove.add(playedNode);

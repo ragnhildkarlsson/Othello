@@ -43,7 +43,6 @@ public class GameModelFactory {
 	public GameModel getNewGameModel(String startPlayerId) {
 		TurnCalculator turnCalculator = new TurnCalculator(playerIds);
 		GameState startState = new GameState(startBoard, turnCalculator, rules, startPlayerId);
-		GameModel gameModel = new GameModel(startState);
-		return gameModel;
+		return new GameModel(startState);
 	}
 }

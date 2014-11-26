@@ -46,11 +46,8 @@ public final class ImmutableNode {
 	 * @return true if the node is occupied by any player
 	 */
 	public boolean isMarked() {
-		if (occupantPlayerId != null) {
-			return true;
-		}
-		return false;
-	}
+        return occupantPlayerId != null;
+    }
 
 	@Override
 	public String toString() {

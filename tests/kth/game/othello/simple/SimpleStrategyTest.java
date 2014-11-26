@@ -23,7 +23,7 @@ public class SimpleStrategyTest {
 		String nodeId = "id";
 		Mockito.when(mockNode.getId()).thenReturn(nodeId);
 		BoardAdapter mockBoard = Mockito.mock(BoardAdapter.class);
-		ArrayList<Node> nodesOnBoard = new ArrayList<Node>();
+		ArrayList<Node> nodesOnBoard = new ArrayList<>();
 		nodesOnBoard.add(mockNode);
 		Mockito.when(mockBoard.getNodes()).thenReturn(nodesOnBoard);
 		Othello mockOthello = Mockito.mock(Othello.class);

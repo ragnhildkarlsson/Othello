@@ -78,7 +78,7 @@ public class RulesTest {
 	 * </pre>
 	 */
 	@Test
-	public void testValidMoveShouldGiveCorrectNumberOfSwapedNodes() {
+	public void testValidMoveShouldGiveCorrectNumberOfSwappedNodes() {
 		String oPlayerID = "o";
 		String xPlayerID = "x";
 		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);

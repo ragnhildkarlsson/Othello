@@ -1,8 +1,8 @@
 package kth.game.othello.simple.model;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * This class represents a model of an Othello game. It is responsible for all
@@ -16,14 +16,8 @@ public class GameModel {
 	/**
 	 * Create a new GameModel.
 	 * 
-	 * @param rules
-	 *            the rules of the game.
-	 * 
-	 * @param turnKeeper
-	 *            the turn keeper of the game.
-	 * 
-	 * @param ImmutableBoard
-	 *            the starting of the game.
+	 * @param startState
+	 *            the starting GameState of the game.
 	 */
 	protected GameModel(GameState startState) {
 		this.gameState = startState;
@@ -103,10 +97,6 @@ public class GameModel {
 	}
 
 	private Set<Coordinates> getSetOfCoordinatesFromNodes(Set<ImmutableNode> nodes) {
-		Set<Coordinates> coordinates = new HashSet<Coordinates>();
-		for (ImmutableNode immutableNode : nodes) {
-			coordinates.add(immutableNode.getCoordinates());
-		}
-		return coordinates;
+		return nodes.stream().map(ImmutableNode::getCoordinates).collect(Collectors.toSet());
 	}
 }

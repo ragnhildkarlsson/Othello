@@ -20,10 +20,10 @@ public class GameState {
 	 * @param board
 	 *            the board of this game state
 	 * @param turnCalculator
-	 *            the turnaCalcuator of this game state
+	 *            the turnCalculator of this game state
 	 * @param rules
 	 *            the rules of this game
-	 * @param startPlayer
+	 * @param startPlayerId
 	 *            the id of the wanted player in turn in this game state.
 	 */
 	public GameState(ImmutableBoard board, TurnCalculator turnCalculator, Rules rules, String startPlayerId) {
@@ -31,7 +31,7 @@ public class GameState {
 		this.turnCalculator = turnCalculator;
 		this.rules = rules;
 		if (startPlayerId == null) {
-			playerInTurn = startPlayerId;
+			playerInTurn = null;
 		}
 		if (rules.hasValidMove(board, startPlayerId)) {
 			playerInTurn = startPlayerId;

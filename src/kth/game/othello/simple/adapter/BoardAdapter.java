@@ -28,7 +28,7 @@ public class BoardAdapter implements Board {
 	 *            the node adapters of the board. Assumed to be pre-configured
 	 *            with exactly every node in the passed starting board.
 	 */
-	protected BoardAdapter(ImmutableBoard startingBoard, List<NodeAdapter> nodeAdapters) {
+    public BoardAdapter(ImmutableBoard startingBoard, List<NodeAdapter> nodeAdapters) {
 		boardState = startingBoard;
 		this.nodeAPIViews = nodeAdapters;
 		this.nodeAPIViews.sort(new NodeComparator());
@@ -102,9 +102,8 @@ public class BoardAdapter implements Board {
 	}
 
 	private Optional<NodeAdapter> getNodeAdapter(int x, int y) {
-		Optional<NodeAdapter> maybeNode = nodeAPIViews.stream()
-				.filter(node -> (node.getXCoordinate() == x) && (node.getYCoordinate() == y)).findAny();
-		return maybeNode;
+		return nodeAPIViews.stream().filter(node -> (node.getXCoordinate() == x) && (node.getYCoordinate() == y))
+				.findAny();
 	}
 
 	private Optional<NodeAdapter> getNodeAdapter(Coordinates coordinates) {
@@ -121,15 +120,15 @@ public class BoardAdapter implements Board {
 	public List<Node> setBoardState(ImmutableBoard newBoardState) {
 
 		Set<Coordinates> changedCoordinates = ImmutableBoard.compare(boardState, newBoardState);
-		Set<ImmutableNode> newNodes = changedCoordinates.stream()
-				.map(coordinates -> newBoardState.getNodeAtCoordinates(coordinates)).collect(Collectors.toSet());
+		Set<ImmutableNode> newNodes = changedCoordinates.stream().map(newBoardState::getNodeAtCoordinates)
+				.collect(Collectors.toSet());
 
 		List<Node> changedNodeAdapters = new ArrayList<>();
 
 		for (ImmutableNode node : newNodes) {
 			Optional<NodeAdapter> maybeNodeAdapter = getNodeAdapter(node.getCoordinates());
 			maybeNodeAdapter.ifPresent(nodeAdapter -> nodeAdapter.setNode(node));
-			maybeNodeAdapter.ifPresent(nodeAdapter -> changedNodeAdapters.add(nodeAdapter));
+			maybeNodeAdapter.ifPresent(changedNodeAdapters::add);
 		}
 
 		this.boardState = newBoardState;

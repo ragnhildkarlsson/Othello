@@ -40,7 +40,7 @@ public class TurnCalculatorTest {
 	 * Check that null is returned when no player has a valid move.
 	 */
 	@Test
-	public void testgetPlayerInTurnWithGameOver() {
+	public void testGetPlayerInTurnWithGameOver() {
 		String player1Id = "1";
 		String player2Id = "2";
 		String player3Id = "3";

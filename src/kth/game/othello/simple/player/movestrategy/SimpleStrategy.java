@@ -10,14 +10,12 @@ import kth.game.othello.player.movestrategy.MoveStrategy;
  */
 public class SimpleStrategy implements MoveStrategy {
 
-	private final String name = "simple-strategy";
-
 	/**
 	 * @return the name of the strategy
 	 */
 	@Override
 	public String getName() {
-		return name;
+		return "simple-strategy";
 	}
 
 	/**

@@ -41,7 +41,7 @@ public class ImmutableBoard {
 	 *            the nodes which the board should consist of.
 	 */
 	public ImmutableBoard(Set<ImmutableNode> nodes) {
-		this.nodes = new HashMap<Coordinates, ImmutableNode>();
+		this.nodes = new HashMap<>();
 		for (ImmutableNode immutableNode : nodes) {
 			this.nodes.put(immutableNode.getCoordinates(), immutableNode);
 		}
@@ -53,12 +53,12 @@ public class ImmutableBoard {
 	 * @return the nodes of this board.
 	 */
 	public Set<ImmutableNode> getNodes() {
-		HashSet<ImmutableNode> nodesCopy = new HashSet<>(this.nodes.values());
-		return nodesCopy;
+		return new HashSet<>(this.nodes.values());
 	}
 
 	/**
-	 * Return the coordinates of the nodes that differ between the two given boards.
+	 * Return the coordinates of the nodes that differ between the two given
+	 * boards.
 	 * 
 	 * @param board1
 	 *            a board
@@ -70,7 +70,7 @@ public class ImmutableBoard {
 		Set<ImmutableNode> board1Nodes = board1.getNodes();
 		Set<ImmutableNode> board2Nodes = board2.getNodes();
 		board2Nodes.removeAll(board1Nodes);
-		return board2Nodes.stream().map(node -> node.getCoordinates()).collect(Collectors.toSet());
+		return board2Nodes.stream().map(ImmutableNode::getCoordinates).collect(Collectors.toSet());
 	}
 
 	/**
@@ -109,10 +109,10 @@ public class ImmutableBoard {
 	public ImmutableNode getNextNodeInDirection(ImmutableNode originNode, Direction direction)
 			throws IllegalArgumentException {
 
-		Coordinates originCoord = originNode.getCoordinates();
-		int x = originCoord.getX();
-		int y = originCoord.getY();
-		if (!this.hasCoordinates(originCoord)) {
+		Coordinates originCoordinates = originNode.getCoordinates();
+		int x = originCoordinates.getX();
+		int y = originCoordinates.getY();
+		if (!this.hasCoordinates(originCoordinates)) {
 			throw new IllegalArgumentException("Used a starting point that was outside of the board: " + x + ", " + y);
 		}
 
@@ -206,20 +206,13 @@ public class ImmutableBoard {
 			newNodes.add(newNode);
 		}
 		Set<Coordinates> newNodeCoordinates = getCoordinateSet(newNodes);
-		for (ImmutableNode oldNode : this.nodes.values()) {
-			if (!newNodeCoordinates.contains(oldNode.getCoordinates())) {
-				// if this node has not been swapped, add it to new nodes
-				newNodes.add(oldNode);
-			}
-		}
+		// if this node has not been swapped, add it to new nodes
+		newNodes.addAll(this.nodes.values().stream()
+				.filter(oldNode -> !newNodeCoordinates.contains(oldNode.getCoordinates())).collect(Collectors.toList()));
 		return new ImmutableBoard(newNodes);
 	}
 
 	private Set<Coordinates> getCoordinateSet(Set<ImmutableNode> nodes) {
-		Set<Coordinates> coordinates = new HashSet<>();
-		for (ImmutableNode node : nodes) {
-			coordinates.add(node.getCoordinates());
-		}
-		return coordinates;
+		return nodes.stream().map(ImmutableNode::getCoordinates).collect(Collectors.toSet());
 	}
 }
