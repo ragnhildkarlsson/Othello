@@ -8,18 +8,16 @@ import java.util.List;
 import java.util.Optional;
 
 import kth.game.othello.Othello;
-import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
 import kth.game.othello.player.Player;
 
 import kth.game.othello.player.movestrategy.MoveStrategy;
 import kth.game.othello.score.Score;
+import kth.game.othello.simple.adapter.BoardAdapter;
 import kth.game.othello.simple.model.*;
+import kth.game.othello.simple.player.SimplePlayer;
 import org.junit.Test;
-import org.mockito.AdditionalMatchers;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 public class SimpleOthelloTest {
 

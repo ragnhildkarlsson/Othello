@@ -8,6 +8,7 @@ import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
 import kth.game.othello.player.Player;
 import kth.game.othello.score.Score;
+import kth.game.othello.simple.adapter.BoardAdapter;
 import kth.game.othello.simple.model.*;
 
 /**

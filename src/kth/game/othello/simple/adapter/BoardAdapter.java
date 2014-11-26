@@ -1,4 +1,4 @@
-package kth.game.othello.simple;
+package kth.game.othello.simple.adapter;
 
 import java.util.*;
 import java.util.stream.Collectors;

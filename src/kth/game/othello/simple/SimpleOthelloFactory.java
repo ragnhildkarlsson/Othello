@@ -12,11 +12,15 @@ import kth.game.othello.board.factory.NodeData;
 import kth.game.othello.board.factory.Square;
 import kth.game.othello.player.Player;
 import kth.game.othello.player.movestrategy.MoveStrategy;
+import kth.game.othello.simple.adapter.BoardAdapter;
+import kth.game.othello.simple.adapter.NodeAdapter;
 import kth.game.othello.simple.model.Coordinates;
 import kth.game.othello.simple.model.GameModelFactory;
 import kth.game.othello.simple.model.ImmutableBoard;
 import kth.game.othello.simple.model.ImmutableNode;
 import kth.game.othello.simple.model.Rules;
+import kth.game.othello.simple.player.SimplePlayer;
+import kth.game.othello.simple.player.movestrategy.SimpleStrategy;
 
 /**
  * A factory for producing simple Othello games.

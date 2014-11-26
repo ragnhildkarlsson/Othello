@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import kth.game.othello.Othello;
 import kth.game.othello.board.Node;
 
+import kth.game.othello.simple.adapter.BoardAdapter;
+import kth.game.othello.simple.player.movestrategy.SimpleStrategy;
 import org.junit.Test;
 import org.mockito.Mockito;
 

@@ -1,4 +1,4 @@
-package kth.game.othello.simple;
+package kth.game.othello.simple.adapter;
 
 import java.util.Observable;
 
@@ -23,7 +23,7 @@ public class NodeAdapter extends Observable implements Node {
 	 * @param nodeData
 	 *            the node to act as the underlying data.
 	 */
-	protected void setNode(ImmutableNode nodeData) {
+	public void setNode(ImmutableNode nodeData) {
 		if (this.nodeData.getOccupantPlayerId() != nodeData.getOccupantPlayerId()) {
 			this.setChanged();
 		}

@@ -1,4 +1,4 @@
-package kth.game.othello.simple;
+package kth.game.othello.simple.player.movestrategy;
 
 import kth.game.othello.Othello;
 import kth.game.othello.board.Node;

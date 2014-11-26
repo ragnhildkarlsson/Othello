@@ -11,6 +11,7 @@ import java.util.Set;
 import kth.game.othello.board.Node;
 import kth.game.othello.score.ScoreItem;
 
+import kth.game.othello.simple.adapter.NodeAdapter;
 import org.junit.Test;
 import org.mockito.Mockito;
 
