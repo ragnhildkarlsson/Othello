@@ -39,7 +39,7 @@ public class SimpleOthello implements Othello {
 	 *            the score object that should keep track of the score.
 	 */
 	protected SimpleOthello(Collection<Player> players, BoardAdapter board, GameModelFactory gameModelFactory,
-			SimpleScore score) {
+			Score score) {
 		players.stream().forEach(player -> playerMap.put(player.getId(), player));
 		this.boardAdapter = board;
 		this.gameModelFactory = gameModelFactory;
@@ -179,14 +179,12 @@ public class SimpleOthello implements Othello {
 	@Override
 	public List<Node> move() {
 		String playerIdInTurn = gameModel.getPlayerInTurn();
-		Player playerInTurn = playerMap.get(playerIdInTurn);
-
-		Player currentPlayer = playerMap.get(playerInTurn);
+		Player currentPlayer = playerMap.get(playerIdInTurn);
 		switch (currentPlayer.getType()) {
 		case HUMAN:
 			throw new IllegalStateException("Tried to do a Computer move using a human player: " + currentPlayer);
 		case COMPUTER:
-			Coordinates coordinatesToPlayAt = toCoordinates(playerInTurn.getMoveStrategy().move(playerIdInTurn, this));
+			Coordinates coordinatesToPlayAt = toCoordinates(currentPlayer.getMoveStrategy().move(playerIdInTurn, this));
 			return synchronizedMove(playerIdInTurn, coordinatesToPlayAt);
 		}
 		throw new IllegalStateException("This should never be reached. There is a bug in move() of SimpleOthello.");
