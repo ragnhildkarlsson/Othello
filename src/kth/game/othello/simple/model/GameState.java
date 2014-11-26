@@ -54,7 +54,7 @@ public class GameState {
 	 * @return false if the game is over.
 	 */
 	public boolean isGameOver() {
-		return !rules.isGameOver(board);
+		return rules.isGameOver(board);
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class GameState {
 
 	/**
 	 * If the given player is the player in turn and the move is valid, an
-	 * optional of the resulting gameState be returned otherwise an empty
+	 * optional of the resulting gameState is returned or otherwise an empty
 	 * optional.
 	 * 
 	 * @param playerId
@@ -94,6 +94,11 @@ public class GameState {
 			return Optional.empty();
 		}
 		Set<ImmutableNode> nodesToSwap = rules.getNodesToSwap(board, nodeCoordinates, playerId);
+		nodesToSwap.add(new ImmutableNode(nodeCoordinates, playerId)); // Add
+																		// the
+																		// node
+																		// played
+																		// at
 		ImmutableBoard newBoard = board.swapNodes(nodesToSwap, playerId);
 		String nextPlayerInTurn = turnCalculator.getPlayerInTurn(playerId, newBoard, rules);
 		GameState nextGameState = new GameState(newBoard, turnCalculator, rules, nextPlayerInTurn);

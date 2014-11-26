@@ -35,6 +35,9 @@ public class TurnCalculator {
 			return null;
 		}
 		int playerIndex = players.indexOf(previousPlayer);
+		playerIndex = (playerIndex + 1) % players.size(); // jump to player
+															// after the
+															// previous player
 		for (int i = 0; i < players.size(); i++) {
 			String possiblePlayerInTurn = players.get(playerIndex);
 			if (rules.hasValidMove(newBoard, possiblePlayerInTurn)) {

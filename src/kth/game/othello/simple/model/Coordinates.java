@@ -15,7 +15,7 @@ public final class Coordinates {
 	}
 
 	public int getYCoordinate() {
-		return xCoordinate;
+		return yCoordinate;
 	}
 
 	@Override

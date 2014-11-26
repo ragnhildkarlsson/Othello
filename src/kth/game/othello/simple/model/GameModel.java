@@ -1,6 +1,7 @@
 package kth.game.othello.simple.model;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -92,33 +93,13 @@ public class GameModel {
 	 */
 	public Set<Coordinates> move(String playerId, Coordinates nodeCoordinate) throws IllegalArgumentException {
 
-		// Optional<GameState> newGameState = gameState.tryMove(playerId,
-		// nodeCoordinates);
-		// TODO
-		// // Check that this player is in turn
-		//
-		// ImmutableNode nodeToPlay =
-		// board.getNodeAtCoordinates(nodeCoordinate);
-		// if (!turnKeeper.getPlayerInTurn(rules, board).equals(playerId)) {
-		// throw new
-		// IllegalArgumentException("Trying to make a move with a player not in turn");
-		// }
-		// // Check that the move is valid
-		// if (!rules.validMove(board, nodeToPlay, playerId)) {
-		// throw new IllegalArgumentException("Trying to make unvalid move");
-		// }
-		// // Get the nodes that will be swapped
-		// Set<ImmutableNode> nodesToSwap = rules.getNodesToSwap(board,
-		// nodeToPlay, playerId);
-		//
-		// // perform the move
-		// board = board.swapNodes(nodesToSwap, playerId);
-		//
-		// // go to the next turn
-		// turnKeeper.nextTurn();
-		//
-		// return getSetOfCoordinatesFromNodes(nodesToSwap);
-		return null;
+		Optional<GameState> maybeNewGameState = gameState.tryMove(playerId, nodeCoordinate);
+		if (!maybeNewGameState.isPresent()) {
+			throw new IllegalArgumentException();
+		}
+		GameState newGameState = maybeNewGameState.get();
+		gameState = newGameState;
+		return getSetOfCoordinatesFromNodes(newGameState.getBoard().getNodes());
 	}
 
 	private Set<Coordinates> getSetOfCoordinatesFromNodes(Set<ImmutableNode> nodes) {
