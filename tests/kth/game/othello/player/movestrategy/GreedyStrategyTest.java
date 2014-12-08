@@ -37,7 +37,7 @@ public class GreedyStrategyTest {
 	 */
 	@Test
 	public void testMoveIsGreedy() {
-		// Mock the Othello
+		// Mock the rules and the board
 		Rules mockRules = Mockito.mock(Rules.class);
 		String playerId = "id";
 		Mockito.when(mockRules.hasValidMove(playerId)).thenReturn(true);
