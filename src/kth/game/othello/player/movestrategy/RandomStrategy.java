@@ -39,7 +39,9 @@ public class RandomStrategy implements MoveStrategy {
 	 * @param playerId
 	 *            the id of the player that will make a move
 	 * @param rules
-	 *            the rules of this game
+	 *            the rules of this game.
+	 * @param board
+	 *            the current board of this game.
 	 * @return the node where the player wants to move. If the player is not
 	 *         able to move then null is returned.
 	 */
@@ -48,7 +50,6 @@ public class RandomStrategy implements MoveStrategy {
 
 		if (rules.hasValidMove(playerId)) {
 			List<Node> nodes = board.getNodes();
-
 			// remove the nodes which there is no valid move for.
 			for (Node node : nodes) {
 				if (!rules.isMoveValid(playerId, node.getId())) {
@@ -57,7 +58,6 @@ public class RandomStrategy implements MoveStrategy {
 			}
 			// pick one of the valid moves randomly
 			return nodes.get(random.nextInt(nodes.size()));
-
 		}
 		// return null if there is no valid move
 		return null;

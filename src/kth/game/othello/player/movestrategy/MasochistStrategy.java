@@ -32,6 +32,8 @@ public class MasochistStrategy implements MoveStrategy {
 	 *            the id of the player that will make a move
 	 * @param rules
 	 *            the rules of this game.
+	 * @param board
+	 *            the current board of this game.
 	 * @return the node where the player wants to move. If the player is not
 	 *         able to move then null is returned.
 	 */
