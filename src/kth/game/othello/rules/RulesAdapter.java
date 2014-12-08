@@ -48,15 +48,18 @@ public class RulesAdapter implements Rules {
 
 		Optional<Node> node = boardAdapter.getNodeById(nodeId);
 		Coordinates nodeCoordinates = possiblyGetCoordinates(node);
-
-		Set<ImmutableNode> nodeSet = this.modelRules.getNodesToSwap(boardAdapter.getImmutableBoard(), nodeCoordinates,
-				playerId);
-
 		List<Node> nodeAdapters = new ArrayList<>();
-		for (ImmutableNode immutableNode : nodeSet) {
-			nodeAdapters.add(boardAdapter.getNode(immutableNode.getCoordinates()));
+
+		if (node.isPresent()) {
+			Set<ImmutableNode> nodeSet = this.modelRules.getNodesToSwap(boardAdapter.getImmutableBoard(),
+					nodeCoordinates, playerId);
+
+			for (ImmutableNode immutableNode : nodeSet) {
+				nodeAdapters.add(boardAdapter.getNode(immutableNode.getCoordinates()));
+			}
 		}
 		return nodeAdapters;
+
 	}
 
 	private Coordinates possiblyGetCoordinates(Optional<Node> node) {
