@@ -43,30 +43,30 @@ public class MasochistStrategyTest {
 		Board mockBoard = Mockito.mock(Board.class);
 
 		// Mock the nodes of the board
-		String nodeBadID = "nodeBadID";
-		Node nodeBad = Mockito.mock(Node.class);
-		Mockito.when(nodeBad.getId()).thenReturn(nodeBadID);
-		String nodeGoodID = "nodeGoodID";
-		Node nodeGood = Mockito.mock(Node.class);
-		Mockito.when(nodeGood.getId()).thenReturn(nodeGoodID);
+		String nodeLeastID = "nodeLeastID";
+		Node nodeLeast = Mockito.mock(Node.class);
+		Mockito.when(nodeLeast.getId()).thenReturn(nodeLeastID);
+		String nodeMostID = "nodeMostID";
+		Node nodeMost = Mockito.mock(Node.class);
+		Mockito.when(nodeMost.getId()).thenReturn(nodeMostID);
 		List<Node> twoNodes = new ArrayList<>();
-		twoNodes.add(nodeGood);
-		twoNodes.add(nodeBad);
+		twoNodes.add(nodeMost);
+		twoNodes.add(nodeLeast);
 		Mockito.when(mockBoard.getNodes()).thenReturn(twoNodes);
 
 		// Create a smaller list to return when the bad node is tried
 		List<Node> oneNode = new ArrayList<>();
-		oneNode.add(nodeBad);
+		oneNode.add(nodeLeast);
 		// Setup so both nodes are valid moves but one gives more swapped nodes
-		Mockito.when(mockRules.isMoveValid(playerId, nodeGoodID)).thenReturn(true);
-		Mockito.when(mockRules.isMoveValid(playerId, nodeBadID)).thenReturn(true);
+		Mockito.when(mockRules.isMoveValid(playerId, nodeMostID)).thenReturn(true);
+		Mockito.when(mockRules.isMoveValid(playerId, nodeLeastID)).thenReturn(true);
 
-		Mockito.when(mockRules.getNodesToSwap(playerId, nodeBadID)).thenReturn(oneNode);
-		Mockito.when(mockRules.getNodesToSwap(playerId, nodeGoodID)).thenReturn(twoNodes);
+		Mockito.when(mockRules.getNodesToSwap(playerId, nodeLeastID)).thenReturn(oneNode);
+		Mockito.when(mockRules.getNodesToSwap(playerId, nodeMostID)).thenReturn(twoNodes);
 
 		// Perform the test
 		MasochistStrategy masochist = new MasochistStrategy();
 		Node chosenNode = masochist.move(playerId, mockRules, mockBoard);
-		assertEquals(nodeBad, chosenNode);
+		assertEquals(nodeLeast, chosenNode);
 	}
 }
