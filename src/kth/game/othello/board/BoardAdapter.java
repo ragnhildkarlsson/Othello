@@ -155,9 +155,9 @@ public class BoardAdapter implements Board {
 	 *            the node id of the node to fetch.
 	 * @return the Node with the given id.
 	 */
-	public Optional<Node> getNodeById(String nodeId) {
+	public Node getNodeById(String nodeId) {
 		Optional<NodeAdapter> maybeNode = nodeAPIViews.stream().filter(node -> node.getId().equals(nodeId)).findAny();
-		return Optional.ofNullable(maybeNode.orElse(null));
+		return maybeNode.orElseThrow(() -> new NoSuchElementException("Node id \"" + nodeId + "\" does not exist."));
 	}
 
 }
