@@ -24,7 +24,7 @@ public class TurnCalculatorTest {
 		playerIds.add(player2Id);
 		playerIds.add(player3Id);
 
-		Rules rules = Mockito.mock(Rules.class);
+		ModelRules rules = Mockito.mock(ModelRules.class);
 		Mockito.when(rules.hasValidMove(null, player1Id)).thenReturn(true);
 		Mockito.when(rules.hasValidMove(null, player2Id)).thenReturn(true);
 		Mockito.when(rules.hasValidMove(null, player3Id)).thenReturn(false);
@@ -49,7 +49,7 @@ public class TurnCalculatorTest {
 		playerIds.add(player2Id);
 		playerIds.add(player3Id);
 
-		Rules rules = Mockito.mock(Rules.class);
+		ModelRules rules = Mockito.mock(ModelRules.class);
 		Mockito.when(rules.hasValidMove(null, player1Id)).thenReturn(false);
 		Mockito.when(rules.hasValidMove(null, player2Id)).thenReturn(false);
 		Mockito.when(rules.hasValidMove(null, player3Id)).thenReturn(false);

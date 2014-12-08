@@ -33,7 +33,7 @@ public class TurnCalculator {
 	 *            the rules with which the players are playing.
 	 * 
 	 */
-	public String getPlayerInTurn(String previousPlayer, ImmutableBoard board, Rules rules) {
+	public String getPlayerInTurn(String previousPlayer, ImmutableBoard board, ModelRules rules) {
 		if (rules.isGameOver(board)) {
 			return null;
 		}

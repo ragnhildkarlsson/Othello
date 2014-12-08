@@ -2,21 +2,32 @@ package kth.game.othello;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import kth.game.othello.Othello;
-import kth.game.othello.SimpleOthello;
-import kth.game.othello.board.Node;
-import kth.game.othello.player.Player;
-import kth.game.othello.player.movestrategy.MoveStrategy;
-import kth.game.othello.score.Score;
+import kth.game.othello.board.Board;
 import kth.game.othello.board.BoardAdapter;
-import kth.game.othello.model.*;
+import kth.game.othello.board.Node;
+import kth.game.othello.model.Coordinates;
+import kth.game.othello.model.GameModel;
+import kth.game.othello.model.GameModelFactory;
+import kth.game.othello.model.GameState;
+import kth.game.othello.model.ImmutableBoard;
+import kth.game.othello.player.Player;
 import kth.game.othello.player.SimplePlayer;
+import kth.game.othello.player.movestrategy.MoveStrategy;
+import kth.game.othello.rules.Rules;
+import kth.game.othello.rules.RulesAdapter;
+import kth.game.othello.score.Score;
 
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -45,7 +56,7 @@ public class SimpleOthelloTest {
 
 		Node nodeToPlatAt = mockNodeWithId(nodeToPlayAtID);
 		MoveStrategy strategy = Mockito.mock(MoveStrategy.class);
-		when(strategy.move(anyString(), any(Othello.class))).thenReturn(nodeToPlatAt);
+		when(strategy.move(anyString(), any(Rules.class), any(Board.class))).thenReturn(nodeToPlatAt);
 
 		when(player.getMoveStrategy()).thenReturn(strategy);
 
@@ -66,7 +77,9 @@ public class SimpleOthelloTest {
 
 		Score mockScore = Mockito.mock(Score.class);
 
-		return new SimpleOthello(players, mockBoard, mockFactory, mockScore);
+		RulesAdapter mockRulesAdapter = Mockito.mock(RulesAdapter.class);
+
+		return new SimpleOthello(players, mockBoard, mockFactory, mockScore, mockRulesAdapter);
 	}
 
 	private GameModel mockGameModel() {
@@ -138,7 +151,7 @@ public class SimpleOthelloTest {
 		GameModelFactory gameModelFactory = Mockito.mock(GameModelFactory.class);
 		when(gameModelFactory.getNewGameModel(anyString())).thenReturn(mockModel);
 
-		SimpleOthello othello = new SimpleOthello(mockPlayers(), boardAdapter, gameModelFactory, null);
+		SimpleOthello othello = new SimpleOthello(mockPlayers(), boardAdapter, gameModelFactory, null, null);
 
 		// Test valid move without arguments
 		othello.start();
@@ -175,7 +188,7 @@ public class SimpleOthelloTest {
 
 		BoardAdapter mockBoard = Mockito.mock(BoardAdapter.class);
 
-		SimpleOthello othello = new SimpleOthello(mockPlayers(), mockBoard, gameModelFactory, null);
+		SimpleOthello othello = new SimpleOthello(mockPlayers(), mockBoard, gameModelFactory, null, null);
 
 		verify(gameModelFactory).getNewGameModel(anyString());
 		reset(gameModelFactory);
