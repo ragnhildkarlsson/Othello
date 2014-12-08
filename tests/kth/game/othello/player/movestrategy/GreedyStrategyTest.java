@@ -5,11 +5,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import kth.game.othello.Othello;
 import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
-import kth.game.othello.player.movestrategy.GreedyStrategy;
-import kth.game.othello.player.movestrategy.SimpleStrategy;
+import kth.game.othello.rules.Rules;
 
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -22,11 +20,14 @@ public class GreedyStrategyTest {
 	 */
 	@Test
 	public void testMoveReturnNullWhenNoValidMoveExist() {
-		Othello mockOthello = Mockito.mock(Othello.class);
 		String playerId = "player";
-		Mockito.when(mockOthello.hasValidMove(playerId)).thenReturn(false);
-		SimpleStrategy strategy = new SimpleStrategy();
-		assertEquals(null, strategy.move(playerId, mockOthello));
+
+		GreedyStrategy strategy = new GreedyStrategy();
+		Rules rules = Mockito.mock(Rules.class);
+		Board board = Mockito.mock(Board.class);
+
+		Mockito.when(rules.hasValidMove(playerId)).thenReturn(false);
+		assertEquals(null, strategy.move(playerId, rules, board));
 	}
 
 	/**
@@ -36,12 +37,11 @@ public class GreedyStrategyTest {
 	 */
 	@Test
 	public void testMoveIsGreedy() {
-		// Mock the Othello
-		Othello mockOthello = Mockito.mock(Othello.class);
+		// Mock the rules and the board
+		Rules mockRules = Mockito.mock(Rules.class);
 		String playerId = "id";
-		Mockito.when(mockOthello.hasValidMove(playerId)).thenReturn(true);
+		Mockito.when(mockRules.hasValidMove(playerId)).thenReturn(true);
 		Board mockBoard = Mockito.mock(Board.class);
-		Mockito.when(mockOthello.getBoard()).thenReturn(mockBoard);
 
 		// Mock the nodes of the board
 		String nodeBadID = "nodeBadID";
@@ -59,15 +59,15 @@ public class GreedyStrategyTest {
 		List<Node> oneNode = new ArrayList<>();
 		oneNode.add(nodeBad);
 		// Setup so both nodes are valid moves but one gives more swapped nodes
-		Mockito.when(mockOthello.isMoveValid(playerId, nodeGoodID)).thenReturn(true);
-		Mockito.when(mockOthello.isMoveValid(playerId, nodeBadID)).thenReturn(true);
+		Mockito.when(mockRules.isMoveValid(playerId, nodeGoodID)).thenReturn(true);
+		Mockito.when(mockRules.isMoveValid(playerId, nodeBadID)).thenReturn(true);
 
-		Mockito.when(mockOthello.getNodesToSwap(playerId, nodeBadID)).thenReturn(oneNode);
-		Mockito.when(mockOthello.getNodesToSwap(playerId, nodeGoodID)).thenReturn(twoNodes);
+		Mockito.when(mockRules.getNodesToSwap(playerId, nodeBadID)).thenReturn(oneNode);
+		Mockito.when(mockRules.getNodesToSwap(playerId, nodeGoodID)).thenReturn(twoNodes);
 
 		// Perform the test
 		GreedyStrategy greedy = new GreedyStrategy();
-		Node chosenNode = greedy.move(playerId, mockOthello);
+		Node chosenNode = greedy.move(playerId, mockRules, mockBoard);
 		assertEquals(nodeGood, chosenNode);
 	}
 }

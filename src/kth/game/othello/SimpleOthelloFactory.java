@@ -121,7 +121,7 @@ public class SimpleOthelloFactory implements OthelloFactory {
 		SimpleScore score = new SimpleScore(nodeAdapterSet);
 
 		BoardAdapter boardAdapter = new BoardAdapter(immutableBoard, nodeAdapters);
-		RulesAdapter rulesAdapter = new RulesAdapter();
+		RulesAdapter rulesAdapter = new RulesAdapter(rules, boardAdapter);
 		return new SimpleOthello(players, boardAdapter, gameModelFactory, score, rulesAdapter);
 	}
 
