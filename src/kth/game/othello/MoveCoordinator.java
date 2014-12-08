@@ -10,7 +10,7 @@ import kth.game.othello.player.Player;
 import kth.game.othello.rules.RulesAdapter;
 
 /**
- * A MoveHandler is responsible for making moves such that they are reflected in all relevant components.
+ * A MoveCoordinator is responsible for making moves such that they are reflected in all relevant components.
  */
 public class MoveCoordinator {
 
