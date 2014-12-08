@@ -47,10 +47,7 @@ public class RulesAdapter implements Rules {
 	public List<Node> getNodesToSwap(String playerId, String nodeId) {
 
 		Optional<Node> node = boardAdapter.getNodeById(nodeId);
-		Coordinates nodeCoordinates = null;
-		if (node.isPresent()) {
-			nodeCoordinates = new Coordinates(node.get().getXCoordinate(), node.get().getYCoordinate());
-		}
+		Coordinates nodeCoordinates = possiblyGetCoordinates(node);
 
 		Set<ImmutableNode> nodeSet = this.modelRules.getNodesToSwap(boardAdapter.getImmutableBoard(), nodeCoordinates,
 				playerId);
@@ -60,6 +57,14 @@ public class RulesAdapter implements Rules {
 			nodeAdapters.add(boardAdapter.getNode(immutableNode.getCoordinates()));
 		}
 		return nodeAdapters;
+	}
+
+	private Coordinates possiblyGetCoordinates(Optional<Node> node) {
+		Coordinates nodeCoordinates = null;
+		if (node.isPresent()) {
+			nodeCoordinates = new Coordinates(node.get().getXCoordinate(), node.get().getYCoordinate());
+		}
+		return nodeCoordinates;
 	}
 
 	/**
@@ -74,10 +79,7 @@ public class RulesAdapter implements Rules {
 	@Override
 	public boolean isMoveValid(String playerId, String nodeId) {
 		Optional<Node> node = boardAdapter.getNodeById(nodeId);
-		Coordinates nodeCoordinates = null;
-		if (node.isPresent()) {
-			nodeCoordinates = new Coordinates(node.get().getXCoordinate(), node.get().getYCoordinate());
-		}
+		Coordinates nodeCoordinates = possiblyGetCoordinates(node);
 		return this.modelRules.validMove(boardAdapter.getImmutableBoard(), nodeCoordinates, playerId);
 	}
 
