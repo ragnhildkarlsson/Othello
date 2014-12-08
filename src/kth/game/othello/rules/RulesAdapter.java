@@ -62,6 +62,9 @@ public class RulesAdapter implements Rules {
 
 	}
 
+	/**
+	 * @return the coordinates of the node or null if no node is present.
+	 */
 	private Coordinates possiblyGetCoordinates(Optional<Node> node) {
 		Coordinates nodeCoordinates = null;
 		if (node.isPresent()) {
