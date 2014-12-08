@@ -1,15 +1,27 @@
 package kth.game.othello;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import kth.game.othello.Othello;
 import kth.game.othello.board.Board;
-import kth.game.othello.board.Node;
-import kth.game.othello.player.Player;
-import kth.game.othello.score.Score;
 import kth.game.othello.board.BoardAdapter;
-import kth.game.othello.model.*;
+import kth.game.othello.board.Node;
+import kth.game.othello.model.Coordinates;
+import kth.game.othello.model.GameModel;
+import kth.game.othello.model.GameModelFactory;
+import kth.game.othello.model.GameState;
+import kth.game.othello.model.ImmutableBoard;
+import kth.game.othello.player.Player;
+import kth.game.othello.rules.RulesAdapter;
+import kth.game.othello.score.Score;
 
 /**
  * This class provides a facade that implements the
@@ -18,6 +30,7 @@ import kth.game.othello.model.*;
 public class SimpleOthello implements Othello {
 
 	private final BoardAdapter boardAdapter;
+	private final RulesAdapter rulesAdapter;
 	private final GameModelFactory gameModelFactory;
 	private GameModel gameModel;
 	private final Score score;
@@ -39,9 +52,10 @@ public class SimpleOthello implements Othello {
 	 *            the score object that should keep track of the score.
 	 */
 	protected SimpleOthello(Collection<Player> players, BoardAdapter board, GameModelFactory gameModelFactory,
-			Score score) {
+			Score score, RulesAdapter rules) {
 		players.stream().forEach(player -> playerMap.put(player.getId(), player));
 		this.boardAdapter = board;
+		this.rulesAdapter = rules;
 		this.gameModelFactory = gameModelFactory;
 		this.score = score;
 		Player anyPlayer = players.stream().findAny().get();
@@ -183,7 +197,8 @@ public class SimpleOthello implements Othello {
 		case HUMAN:
 			throw new IllegalStateException("Tried to do a Computer move using a human player: " + currentPlayer);
 		case COMPUTER:
-			Coordinates coordinatesToPlayAt = toCoordinates(currentPlayer.getMoveStrategy().move(playerIdInTurn, this));
+			Coordinates coordinatesToPlayAt = toCoordinates(currentPlayer.getMoveStrategy().move(playerIdInTurn,
+					this.rulesAdapter, this.boardAdapter));
 			return synchronizedMove(playerIdInTurn, coordinatesToPlayAt);
 		}
 		throw new IllegalStateException("This should never be reached. There is a bug in move() of SimpleOthello.");

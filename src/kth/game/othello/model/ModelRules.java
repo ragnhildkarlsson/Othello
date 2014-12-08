@@ -14,13 +14,13 @@ import kth.game.othello.model.ImmutableBoard.Direction;
  * 
  */
 
-public class Rules {
+public class ModelRules {
 
 	/**
 	 * Creates an object with the responsibility of telling the rules of
 	 * Othello.
 	 */
-	public Rules() {
+	public ModelRules() {
 
 	}
 

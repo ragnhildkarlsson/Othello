@@ -10,7 +10,7 @@ import java.util.List;
 public class GameModelFactory {
 	private ImmutableBoard startBoard;
 	private List<String> playerIds;
-	private Rules rules;
+	private ModelRules rules;
 
 	/**
 	 * Generate a new GameModelFactory given its designated starting board, the
@@ -24,7 +24,7 @@ public class GameModelFactory {
 	 * @param rules
 	 *            the rules of the game
 	 */
-	public GameModelFactory(ImmutableBoard startBoard, List<String> playerIds, Rules rules) {
+	public GameModelFactory(ImmutableBoard startBoard, List<String> playerIds, ModelRules rules) {
 		this.startBoard = startBoard;
 		this.playerIds = playerIds;
 		this.rules = rules;

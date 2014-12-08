@@ -6,8 +6,8 @@ import java.util.List;
 import kth.game.othello.board.factory.Diamond;
 import kth.game.othello.player.Player;
 import kth.game.othello.player.Player.Type;
-import kth.game.othello.player.movestrategy.MoveStrategy;
 import kth.game.othello.player.SimplePlayer;
+import kth.game.othello.player.movestrategy.MoveStrategy;
 import kth.game.othello.player.movestrategy.SimpleStrategy;
 
 import org.junit.Assert;
@@ -29,6 +29,7 @@ public class OthelloLab2IT {
 
 	}
 
+	@SuppressWarnings("unused")
 	private Player createHuman(String name) {
 
 		return new SimplePlayer(name, name);

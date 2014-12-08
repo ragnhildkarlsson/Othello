@@ -6,16 +6,21 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import kth.game.othello.board.BoardAdapter;
 import kth.game.othello.board.Node;
+import kth.game.othello.board.NodeAdapter;
 import kth.game.othello.board.factory.NodeData;
 import kth.game.othello.board.factory.Square;
+import kth.game.othello.model.Coordinates;
+import kth.game.othello.model.GameModelFactory;
+import kth.game.othello.model.ImmutableBoard;
+import kth.game.othello.model.ImmutableNode;
+import kth.game.othello.model.ModelRules;
 import kth.game.othello.player.Player;
-import kth.game.othello.player.movestrategy.MoveStrategy;
-import kth.game.othello.board.BoardAdapter;
-import kth.game.othello.board.NodeAdapter;
-import kth.game.othello.model.*;
 import kth.game.othello.player.SimplePlayer;
+import kth.game.othello.player.movestrategy.MoveStrategy;
 import kth.game.othello.player.movestrategy.SimpleStrategy;
+import kth.game.othello.rules.RulesAdapter;
 
 /**
  * A factory for producing simple Othello games.
@@ -105,18 +110,19 @@ public class SimpleOthelloFactory implements OthelloFactory {
 		ImmutableBoard immutableBoard = new ImmutableBoard(immutableNodes);
 
 		List<String> playerIds = players.stream().map(Player::getId).collect(Collectors.toList());
-        Rules rules = new Rules();
+		ModelRules rules = new ModelRules();
 
 		GameModelFactory gameModelFactory = new GameModelFactory(immutableBoard, playerIds, rules);
 
 		// Create adapters
 		List<NodeAdapter> nodeAdapters = immutableNodes.stream().map(NodeAdapter::new).collect(Collectors.toList());
 
-        Set<Node> nodeAdapterSet = new HashSet<>(nodeAdapters);
+		Set<Node> nodeAdapterSet = new HashSet<>(nodeAdapters);
 		SimpleScore score = new SimpleScore(nodeAdapterSet);
 
 		BoardAdapter boardAdapter = new BoardAdapter(immutableBoard, nodeAdapters);
-        return new SimpleOthello(players, boardAdapter, gameModelFactory, score);
+		RulesAdapter rulesAdapter = new RulesAdapter();
+		return new SimpleOthello(players, boardAdapter, gameModelFactory, score, rulesAdapter);
 	}
 
 	private ImmutableNode getImmutableNodeFromNodeData(NodeData nodeData) {

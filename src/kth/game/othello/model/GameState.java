@@ -6,7 +6,7 @@ import java.util.Set;
 public class GameState {
 
 	private TurnCalculator turnCalculator;
-	private Rules rules;
+	private ModelRules rules;
 	private ImmutableBoard board;
 	private String playerInTurn;
 
@@ -26,7 +26,7 @@ public class GameState {
 	 * @param startPlayerId
 	 *            the id of the wanted player in turn in this game state.
 	 */
-	public GameState(ImmutableBoard board, TurnCalculator turnCalculator, Rules rules, String startPlayerId) {
+	public GameState(ImmutableBoard board, TurnCalculator turnCalculator, ModelRules rules, String startPlayerId) {
 		this.board = board;
 		this.turnCalculator = turnCalculator;
 		this.rules = rules;

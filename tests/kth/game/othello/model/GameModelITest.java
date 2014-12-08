@@ -105,7 +105,7 @@ public class GameModelITest {
 		playerIds.add(player1Id);
 		playerIds.add(player2Id);
 		playerIds.add(player3Id);
-		Rules rules = new Rules();
+		ModelRules rules = new ModelRules();
 		GameModelFactory gameModelFactory = new GameModelFactory(startingBoard, playerIds, rules);
 		GameModel gameModel = gameModelFactory.getNewGameModel(player1Id);
 
@@ -156,7 +156,7 @@ public class GameModelITest {
 		List<String> playerIds = new ArrayList<>();
 		playerIds.add(player1Id);
 		playerIds.add(player2Id);
-		Rules rules = new Rules();
+		ModelRules rules = new ModelRules();
 		GameModelFactory gameModelFactory = new GameModelFactory(startingBoard, playerIds, rules);
 		GameModel gameModel = gameModelFactory.getNewGameModel(player1Id);
 

@@ -21,7 +21,7 @@ public class RulesTest {
 		Coordinates playAtCoordinates = new Coordinates(0, 0);
 		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
 		Mockito.when(mockBoard.hasCoordinates(playAtCoordinates)).thenReturn(false);
-		Rules rules = new Rules();
+		ModelRules rules = new ModelRules();
 		assertEquals(false, rules.validMove(mockBoard, playAtCoordinates, null));
 	}
 
@@ -49,7 +49,7 @@ public class RulesTest {
 			}
 		}
 
-		Rules rules = new Rules();
+		ModelRules rules = new ModelRules();
 		boolean res = rules.validMove(mockBoard, playAtNode.getCoordinates(), player1Id);
 		for (Direction dir : Direction.values()) {
 			Mockito.verify(mockBoard).getNextNodeInDirection(playAtNode, dir);
@@ -145,7 +145,7 @@ public class RulesTest {
 		Mockito.when(mockBoard.hasCoordinates(playAtNode.getCoordinates())).thenReturn(true);
 		// Check that the right nodes (and no other nodes) where listed as nodes
 		// to swap
-		Rules rules = new Rules();
+		ModelRules rules = new ModelRules();
 		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode.getCoordinates(), xPlayerID)
 				.contains(boardNode41));
 		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode.getCoordinates(), xPlayerID)
@@ -183,7 +183,7 @@ public class RulesTest {
 		String player2Id = "2";
 		Coordinates coordinates = new Coordinates(0, 0);
 		ImmutableNode boardNode = new ImmutableNode(coordinates, player1Id);
-		Rules rules = new Rules();
+		ModelRules rules = new ModelRules();
 		// Mock ImmutableBoard
 		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
 		Mockito.when(mockBoard.hasCoordinates(coordinates)).thenReturn(true);
@@ -209,7 +209,7 @@ public class RulesTest {
 		String player1Id = "1";
 		String player2Id = "2";
 		ImmutableBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
-		Rules rules = new Rules();
+		ModelRules rules = new ModelRules();
 		boolean res = rules.hasValidMove(mockBoard, player1Id);
 		assertEquals(true, res);
 	}
@@ -231,7 +231,7 @@ public class RulesTest {
 		String player1Id = "1";
 		String player2Id = "2";
 		ImmutableBoard mockBoard = getMinimalMockedBoard(player1Id, player2Id);
-		Rules rules = new Rules();
+		ModelRules rules = new ModelRules();
 		boolean res = rules.hasValidMove(mockBoard, player2Id);
 		assertEquals(false, res);
 	}
@@ -249,7 +249,7 @@ public class RulesTest {
 		playerIDs.add(player1Id);
 		playerIDs.add(player2Id);
 		Mockito.when(mockBoard.getPlayerIDs()).thenReturn(playerIDs);
-		Rules rules = new Rules();
+		ModelRules rules = new ModelRules();
 		boolean res = rules.isGameOver(mockBoard);
 		assertEquals(false, res);
 
@@ -296,7 +296,7 @@ public class RulesTest {
 		playerIDs.add(player1Id);
 		playerIDs.add(player2Id);
 		Mockito.when(mockBoard.getPlayerIDs()).thenReturn(playerIDs);
-		Rules rules = new Rules();
+		ModelRules rules = new ModelRules();
 		boolean res = rules.isGameOver(mockBoard);
 		assertEquals(true, res);
 	}

@@ -1,8 +1,9 @@
 package kth.game.othello.player.movestrategy;
 
 import kth.game.othello.Othello;
+import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
-import kth.game.othello.player.movestrategy.MoveStrategy;
+import kth.game.othello.rules.Rules;
 
 /**
  * A simple strategy to perform a move for a computer player, choosing the move
@@ -32,7 +33,7 @@ public class GreedyStrategy implements MoveStrategy {
 	 * @return the node where the player wants to move. If the player is not
 	 *         able to move then null is returned.
 	 */
-	@Override
+	// TODO REMOVE
 	public Node move(String playerId, Othello othello) {
 		// Check if there is any valid move for this player.
 		if (!othello.hasValidMove(playerId)) {
@@ -52,6 +53,12 @@ public class GreedyStrategy implements MoveStrategy {
 			}
 		}
 		return bestNode;
+	}
+
+	@Override
+	public Node move(String playerId, Rules rules, Board board) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
