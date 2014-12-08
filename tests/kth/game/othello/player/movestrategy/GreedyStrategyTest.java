@@ -1,4 +1,4 @@
-package kth.game.othello.simple;
+package kth.game.othello.player.movestrategy;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,8 +8,8 @@ import java.util.List;
 import kth.game.othello.Othello;
 import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
-import kth.game.othello.simple.player.movestrategy.GreedyStrategy;
-import kth.game.othello.simple.player.movestrategy.SimpleStrategy;
+import kth.game.othello.player.movestrategy.GreedyStrategy;
+import kth.game.othello.player.movestrategy.SimpleStrategy;
 
 import org.junit.Test;
 import org.mockito.Mockito;

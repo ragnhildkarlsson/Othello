@@ -3,7 +3,6 @@ package kth.game.othello;
 import kth.game.othello.board.Node;
 import kth.game.othello.player.Player;
 import kth.game.othello.player.Player.Type;
-import kth.game.othello.simple.SimpleOthelloFactory;
 
 import org.junit.Assert;
 import org.junit.Test;

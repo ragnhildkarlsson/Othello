@@ -7,9 +7,8 @@ import kth.game.othello.board.factory.Diamond;
 import kth.game.othello.player.Player;
 import kth.game.othello.player.Player.Type;
 import kth.game.othello.player.movestrategy.MoveStrategy;
-import kth.game.othello.simple.SimpleOthelloFactory;
-import kth.game.othello.simple.player.SimplePlayer;
-import kth.game.othello.simple.player.movestrategy.SimpleStrategy;
+import kth.game.othello.player.SimplePlayer;
+import kth.game.othello.player.movestrategy.SimpleStrategy;
 
 import org.junit.Assert;
 import org.junit.Test;

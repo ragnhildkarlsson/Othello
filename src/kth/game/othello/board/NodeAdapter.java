@@ -1,4 +1,4 @@
-package kth.game.othello.simple.adapter;
+package kth.game.othello.board;
 
 import java.util.Observable;
 

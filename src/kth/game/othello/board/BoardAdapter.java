@@ -1,10 +1,8 @@
-package kth.game.othello.simple.adapter;
+package kth.game.othello.board;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import kth.game.othello.board.Board;
-import kth.game.othello.board.Node;
 import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.ImmutableBoard;
 import kth.game.othello.model.ImmutableNode;

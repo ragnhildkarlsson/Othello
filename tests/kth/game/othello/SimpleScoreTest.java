@@ -1,12 +1,13 @@
-package kth.game.othello.simple;
+package kth.game.othello;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.*;
 
+import kth.game.othello.SimpleScore;
 import kth.game.othello.board.Node;
 import kth.game.othello.score.ScoreItem;
-import kth.game.othello.simple.adapter.NodeAdapter;
+import kth.game.othello.board.NodeAdapter;
 
 import org.junit.Test;
 import org.mockito.Mockito;

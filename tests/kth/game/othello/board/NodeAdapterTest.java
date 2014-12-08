@@ -1,4 +1,4 @@
-package kth.game.othello.simple;
+package kth.game.othello.board;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Observer;
 import java.util.Set;
 
-import kth.game.othello.simple.adapter.NodeAdapter;
+import kth.game.othello.board.NodeAdapter;
 import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.ImmutableNode;
 
