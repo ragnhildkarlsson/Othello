@@ -5,12 +5,12 @@ import java.util.stream.Collectors;
 
 import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
-import kth.game.othello.simple.model.Coordinates;
-import kth.game.othello.simple.model.ImmutableBoard;
-import kth.game.othello.simple.model.ImmutableNode;
+import kth.game.othello.model.Coordinates;
+import kth.game.othello.model.ImmutableBoard;
+import kth.game.othello.model.ImmutableNode;
 
 /**
- * This class adapts the {@link kth.game.othello.simple.model.ImmutableBoard}
+ * This class adapts the {@link kth.game.othello.model.ImmutableBoard}
  * class to the {@link kth.game.othello.board.Board} API.
  */
 public class BoardAdapter implements Board {

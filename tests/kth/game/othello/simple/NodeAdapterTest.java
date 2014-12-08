@@ -7,8 +7,8 @@ import java.util.Observer;
 import java.util.Set;
 
 import kth.game.othello.simple.adapter.NodeAdapter;
-import kth.game.othello.simple.model.Coordinates;
-import kth.game.othello.simple.model.ImmutableNode;
+import kth.game.othello.model.Coordinates;
+import kth.game.othello.model.ImmutableNode;
 
 import org.junit.Test;
 import org.mockito.Mockito;

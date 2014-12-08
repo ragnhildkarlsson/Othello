@@ -1,4 +1,4 @@
-package kth.game.othello.simple.model;
+package kth.game.othello.model;
 
 /**
  * Holds information about the position and occupant player of a node on a

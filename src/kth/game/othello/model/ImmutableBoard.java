@@ -1,6 +1,4 @@
-package kth.game.othello.simple.model;
-
-import kth.game.othello.board.Node;
+package kth.game.othello.model;
 
 import java.util.HashMap;
 import java.util.HashSet;

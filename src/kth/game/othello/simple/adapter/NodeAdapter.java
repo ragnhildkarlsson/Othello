@@ -3,10 +3,10 @@ package kth.game.othello.simple.adapter;
 import java.util.Observable;
 
 import kth.game.othello.board.Node;
-import kth.game.othello.simple.model.ImmutableNode;
+import kth.game.othello.model.ImmutableNode;
 
 /**
- * This class adapts the {@link kth.game.othello.simple.model.ImmutableNode} to
+ * This class adapts the {@link kth.game.othello.model.ImmutableNode} to
  * the {@link kth.game.othello.board.Node} API.
  */
 public class NodeAdapter extends Observable implements Node {

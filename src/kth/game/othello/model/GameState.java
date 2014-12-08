@@ -1,4 +1,4 @@
-package kth.game.othello.simple.model;
+package kth.game.othello.model;
 
 import java.util.Optional;
 import java.util.Set;

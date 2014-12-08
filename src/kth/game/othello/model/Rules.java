@@ -1,9 +1,9 @@
-package kth.game.othello.simple.model;
+package kth.game.othello.model;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import kth.game.othello.simple.model.ImmutableBoard.Direction;
+import kth.game.othello.model.ImmutableBoard.Direction;
 
 //import kth.game.othello.board.Node;
 

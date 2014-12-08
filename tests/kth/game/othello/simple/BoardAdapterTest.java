@@ -8,9 +8,9 @@ import java.util.*;
 import kth.game.othello.board.Node;
 import kth.game.othello.simple.adapter.BoardAdapter;
 import kth.game.othello.simple.adapter.NodeAdapter;
-import kth.game.othello.simple.model.Coordinates;
-import kth.game.othello.simple.model.ImmutableBoard;
-import kth.game.othello.simple.model.ImmutableNode;
+import kth.game.othello.model.Coordinates;
+import kth.game.othello.model.ImmutableBoard;
+import kth.game.othello.model.ImmutableNode;
 
 import org.junit.Test;
 import org.mockito.Mockito;
