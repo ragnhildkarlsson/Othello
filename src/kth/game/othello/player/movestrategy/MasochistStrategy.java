@@ -30,8 +30,8 @@ public class MasochistStrategy implements MoveStrategy {
 	 * 
 	 * @param playerId
 	 *            the id of the player that will make a move
-	 * @param othello
-	 *            the othello game on which to make the move
+	 * @param rules
+	 *            the rules of this game.
 	 * @return the node where the player wants to move. If the player is not
 	 *         able to move then null is returned.
 	 */
