@@ -1,4 +1,4 @@
-package kth.game.othello.notification;
+package kth.game.othello;
 
 import java.util.Observer;
 
@@ -9,7 +9,7 @@ import java.util.Observer;
  * of its implementation, existing only to get around the incorrect use of the
  * Observer type in the API.
  */
-public class GameFinishedNotifier extends Notifier {
+public class GameFinishedNotifier extends SimpleOthelloNotifier {
 
 	/**
 	 * Adds an observer. The observer will be called when the game has finished.
@@ -37,7 +37,7 @@ public class GameFinishedNotifier extends Notifier {
 		super.getUnderlyingOthello().addMoveObserver(observer);
 	}
 
-    public void gameHasFinished() {
+    public void gameDidFinish() {
         setChanged();
         notifyObservers();
     }

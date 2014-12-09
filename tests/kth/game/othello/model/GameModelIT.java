@@ -19,7 +19,7 @@ import org.mockito.Mockito;
  * @author mikael
  *
  */
-public class GameModelITest {
+public class GameModelIT {
 
 	private final String player1Id = "a";
 	private final String player2Id = "b";

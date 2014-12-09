@@ -1,4 +1,4 @@
-package kth.game.othello.notification;
+package kth.game.othello;
 
 import java.util.List;
 import java.util.Observable;
@@ -16,7 +16,7 @@ import kth.game.othello.score.Score;
  * of its implementation, existing only to get around the incorrect use of the
  * Observer type in the API.
  */
-public abstract class Notifier extends Observable implements Othello {
+public abstract class SimpleOthelloNotifier extends Observable implements Othello {
 	private Othello underlyingOthello;
 
 	protected Othello getUnderlyingOthello() {

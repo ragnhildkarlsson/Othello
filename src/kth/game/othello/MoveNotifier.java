@@ -1,4 +1,4 @@
-package kth.game.othello.notification;
+package kth.game.othello;
 
 import java.util.List;
 import java.util.Observer;
@@ -11,7 +11,7 @@ import kth.game.othello.board.Node;
  * may therefore be considered a part of its implementation, existing only to
  * get around the incorrect use of the Observer type in the API.
  */
-public class MoveNotifier extends Notifier {
+public class MoveNotifier extends SimpleOthelloNotifier {
 
 	/**
 	 * Adds an observer. The observer will be called when the game has finished.
