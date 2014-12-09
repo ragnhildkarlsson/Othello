@@ -38,14 +38,23 @@ public class BoardAdapter implements Board {
 
 	@Override
 	public int getMaxX() {
-		Node maxNode = nodeAdapters.get(nodeAdapters.size() - 1);
-		return maxNode.getXCoordinate();
+		Optional<NodeAdapter> node = nodeAdapters.stream().reduce(
+				(n1, n2) -> n1.getXCoordinate() > n2.getXCoordinate() ? n1 : n2);
+		if (!node.isPresent()) {
+			throw new IllegalStateException();
+		}
+		return node.get().getXCoordinate();
 	}
 
 	@Override
 	public int getMaxY() {
-		Node maxNode = nodeAdapters.get(nodeAdapters.size() - 1);
-		return maxNode.getYCoordinate();
+		Optional<NodeAdapter> node = nodeAdapters.stream().reduce(
+				(n1, n2) -> n1.getYCoordinate() > n2.getYCoordinate() ? n1 : n2);
+		if (!node.isPresent()) {
+			throw new IllegalStateException();
+		}
+		return node.get().getYCoordinate();
+
 	}
 
 	@Override
