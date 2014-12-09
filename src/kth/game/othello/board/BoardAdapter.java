@@ -1,6 +1,11 @@
 package kth.game.othello.board;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import kth.game.othello.model.Coordinates;
@@ -187,6 +192,13 @@ public class BoardAdapter implements Board {
 	public Node getNodeById(String nodeId) {
 		Optional<NodeAdapter> maybeNode = nodeAdapters.stream().filter(node -> node.getId().equals(nodeId)).findAny();
 		return maybeNode.orElseThrow(() -> new NoSuchElementException("Node id \"" + nodeId + "\" does not exist."));
+	}
+
+	/**
+	 * @return an immutable version of the current board.
+	 */
+	public ImmutableBoard getImmutableBoard() {
+		return this.boardState;
 	}
 
 }

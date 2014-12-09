@@ -1,7 +1,5 @@
 package kth.game.othello.model;
 
-import com.sun.istack.internal.NotNull;
-
 import java.util.Optional;
 import java.util.Set;
 
@@ -34,16 +32,14 @@ public class GameState {
 		this.rules = rules;
 		if (startPlayerId == null) {
 			playerInTurn = null;
-        } else {
-            if (rules.hasValidMove(board, startPlayerId)) {
-                playerInTurn = startPlayerId;
-            } else {
-                playerInTurn = turnCalculator.getPlayerInTurn(startPlayerId, board, rules);
-            }
-        }
-    }
-
-
+		} else {
+			if (rules.hasValidMove(board, startPlayerId)) {
+				playerInTurn = startPlayerId;
+			} else {
+				playerInTurn = turnCalculator.getPlayerInTurn(startPlayerId, board, rules);
+			}
+		}
+	}
 
 	/**
 	 * Return the board of the gameState

@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package kth.game.othello.player.movestrategy;
 
 import kth.game.othello.board.Board;
@@ -6,23 +9,23 @@ import kth.game.othello.rules.Rules;
 
 /**
  * A simple strategy to perform a move for a computer player, choosing the move
- * which generates the most swapped nodes for the given player.
+ * which generates the least swapped nodes for the given player.
  * 
  * @author mikael
  *
  */
-public class GreedyStrategy implements MoveStrategy {
+public class MasochistStrategy implements MoveStrategy {
 
 	/**
 	 * @return the name of the strategy
 	 */
 	@Override
 	public String getName() {
-		return "greedy-strategy";
+		return "Masochist";
 	}
 
 	/**
-	 * Returns the node that would generate the most swaps for this player, or
+	 * Returns the node that would generate the least swaps for this player, or
 	 * null if no move is possible.
 	 * 
 	 * @param playerId
@@ -41,19 +44,19 @@ public class GreedyStrategy implements MoveStrategy {
 			return null;
 		}
 
-		int maxSwaps = 0;
-		Node bestNode = null;
-		// Find the move which grants the player the most swapped nodes
+		int minSwaps = Integer.MAX_VALUE;
+		Node worstNode = null;
+		// Find the move which grants the player the least swapped nodes
 		for (Node node : board.getNodes()) {
 			if (rules.isMoveValid(playerId, node.getId())) {
 				int numberOfNodesSwapped = rules.getNodesToSwap(playerId, node.getId()).size();
-				if (numberOfNodesSwapped > maxSwaps) {
-					maxSwaps = numberOfNodesSwapped;
-					bestNode = node;
+				if (numberOfNodesSwapped < minSwaps) {
+					minSwaps = numberOfNodesSwapped;
+					worstNode = node;
 				}
 			}
 		}
-		return bestNode;
+		return worstNode;
 	}
 
 }
