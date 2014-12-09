@@ -101,4 +101,8 @@ public class RulesAdapter implements Rules {
 		return this.modelRules.hasValidMove(boardAdapter.getImmutableBoard(), playerId);
 	}
 
+    public boolean isGameOver() {
+        // TODO
+        return false;
+    }
 }

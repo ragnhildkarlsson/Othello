@@ -165,7 +165,6 @@ public class BoardAdapter implements Board {
 
 		this.boardState = newBoardState;
 
-		System.out.println(newBoardState);
 		return changedNodeAdapters;
 	}
 
