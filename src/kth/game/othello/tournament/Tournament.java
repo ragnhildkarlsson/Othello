@@ -50,6 +50,18 @@ public class Tournament {
 	}
 
 	private void printResult(List<Match> completedMatches) {
+		// Get all score items:
+		List<ScoreItem> scoreItems = new ArrayList<>();
+		for (Match match : completedMatches) {
+			scoreItems.addAll(match.getResults());
+		}
+		for (Player player : players) {
+
+			int sum = scoreItems.stream().filter(e -> e.getPlayerId() == player.getId()).map(p -> p.getScore())
+					.reduce(0, (soFar, score) -> score + soFar);
+			System.out.println("Player " + player.getName() + " got a total score of " + sum);
+
+		}
 
 	}
 

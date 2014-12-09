@@ -38,4 +38,14 @@ class Match {
 		}
 	}
 
+	public List<ScoreItem> getResults() {
+		if (matchResults.isPresent()) {
+			List<ScoreItem> results = matchResults.get();
+			List<ScoreItem> resultCopy = new ArrayList<ScoreItem>();
+			resultCopy.addAll(results);
+			return resultCopy;
+		}
+		return null;
+	}
+
 }
