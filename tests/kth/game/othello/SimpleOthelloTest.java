@@ -86,7 +86,7 @@ public class SimpleOthelloTest {
 		when(mockModel.getGameState()).thenReturn(gameState);
 
 		GameModelFactory gameModelFactory = Mockito.mock(GameModelFactory.class);
-		when(gameModelFactory.getNewGameModel(anyString())).thenReturn(mockModel);
+		when(gameModelFactory.newGameModel(anyString())).thenReturn(mockModel);
 
 		return gameModelFactory;
 	}
@@ -136,19 +136,19 @@ public class SimpleOthelloTest {
 		when(gameModel.getGameState()).thenReturn(gameState);
 
 		GameModelFactory gameModelFactory = Mockito.mock(GameModelFactory.class);
-		when(gameModelFactory.getNewGameModel(anyString())).thenReturn(gameModel);
+		when(gameModelFactory.newGameModel(anyString())).thenReturn(gameModel);
 
 		BoardAdapter mockBoard = Mockito.mock(BoardAdapter.class);
 
 		SimpleOthello othello = new SimpleOthello(mockPlayers(), mockBoard, gameModelFactory, null, null, null);
 
-		verify(gameModelFactory).getNewGameModel(anyString());
+		verify(gameModelFactory).newGameModel(anyString());
 		reset(gameModelFactory);
-		when(gameModelFactory.getNewGameModel(anyString())).thenReturn(gameModel);
+		when(gameModelFactory.newGameModel(anyString())).thenReturn(gameModel);
 
 		othello.start(player1ID);
 
-		verify(gameModelFactory).getNewGameModel(player1ID);
+		verify(gameModelFactory).newGameModel(player1ID);
 
 	}
 }

@@ -112,7 +112,7 @@ public class GameModelITest {
 		playerIds.add(player3Id);
 		ModelRules rules = new ModelRules();
 		GameModelFactory gameModelFactory = new GameModelFactory(startingBoard, playerIds, rules);
-		GameModel gameModel = gameModelFactory.getNewGameModel(player1Id);
+		GameModel gameModel = gameModelFactory.newGameModel(player1Id);
 
 		// Get the first GameState and check that its correct and immutable
 		GameState firstGameState = gameModel.getGameState();
@@ -163,7 +163,7 @@ public class GameModelITest {
 		playerIds.add(player2Id);
 		ModelRules rules = new ModelRules();
 		GameModelFactory gameModelFactory = new GameModelFactory(startingBoard, playerIds, rules);
-		GameModel gameModel = gameModelFactory.getNewGameModel(player1Id);
+		GameModel gameModel = gameModelFactory.newGameModel(player1Id);
 
 		// Get the first GameState and perform the only valid move for player 1
 		GameState firstGameState = gameModel.getGameState();
@@ -203,7 +203,7 @@ public class GameModelITest {
 		playerIds.add(playerB);
 		ModelRules rules = new ModelRules();
 		GameModelFactory gameModelFactory = new GameModelFactory(startingBoard, playerIds, rules);
-		GameModel gameModel = gameModelFactory.getNewGameModel(playerA);
+		GameModel gameModel = gameModelFactory.newGameModel(playerA);
 		gameModel.move(playerA, new Coordinates(1, 0));
 		gameModel.move(playerB, new Coordinates(4, 0));
 
