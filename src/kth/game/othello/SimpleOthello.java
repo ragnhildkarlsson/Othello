@@ -32,6 +32,7 @@ public class SimpleOthello implements Othello {
 	private final BoardAdapter boardAdapter;
 	private final RulesAdapter rulesAdapter;
 	private final GameModelFactory gameModelFactory;
+    private final MoveCoordinator moveCoordinator;
 	private GameModel gameModel;
 	private final Score score;
 	private final Map<String, Player> playerMap = new HashMap<>();
@@ -52,10 +53,11 @@ public class SimpleOthello implements Othello {
 	 *            the score object that should keep track of the score.
 	 */
 	protected SimpleOthello(Collection<Player> players, BoardAdapter board, GameModelFactory gameModelFactory,
-			Score score, RulesAdapter rules) {
+			Score score, RulesAdapter rules, MoveCoordinator moveCoordinator) {
 		players.stream().forEach(player -> playerMap.put(player.getId(), player));
 		this.boardAdapter = board;
 		this.rulesAdapter = rules;
+        this.moveCoordinator = moveCoordinator;
 		this.gameModelFactory = gameModelFactory;
 		this.score = score;
 		Player anyPlayer = players.stream().findAny().get();
@@ -85,10 +87,9 @@ public class SimpleOthello implements Othello {
 	@Override
 	public List<Node> getNodesToSwap(String playerId, String nodeId) {
 		checkPlayerId(playerId);
-		checkNodeId(nodeId);
 		List<Node> nodesToSwap = new ArrayList<>();
 
-		Node node = boardAdapter.getNodeById(nodeId).get();
+		Node node = boardAdapter.getNodeById(nodeId);
 		Coordinates nodeCoordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 
 		GameState oldState = gameModel.getGameState();
@@ -172,10 +173,8 @@ public class SimpleOthello implements Othello {
 	public boolean isMoveValid(String playerId, String nodeId) {
 		checkPlayerId(playerId);
 
-		checkNodeId(nodeId);
-		Node node = boardAdapter.getNodeById(nodeId).get();
-
-		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
+        Node node = boardAdapter.getNodeById(nodeId);
+        Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 
 		return gameModel.isMoveValid(playerId, coordinates);
 	}
@@ -191,17 +190,8 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move() {
-		String playerIdInTurn = gameModel.getPlayerInTurn();
-		Player currentPlayer = playerMap.get(playerIdInTurn);
-		switch (currentPlayer.getType()) {
-		case HUMAN:
-			throw new IllegalStateException("Tried to do a Computer move using a human player: " + currentPlayer);
-		case COMPUTER:
-			Coordinates coordinatesToPlayAt = toCoordinates(currentPlayer.getMoveStrategy().move(playerIdInTurn,
-					this.rulesAdapter, this.boardAdapter));
-			return synchronizedMove(playerIdInTurn, coordinatesToPlayAt);
-		}
-		throw new IllegalStateException("This should never be reached. There is a bug in move() of SimpleOthello.");
+        String playerIdInTurn = gameModel.getPlayerInTurn();
+		return moveCoordinator.move(playerMap.get(playerIdInTurn), gameModel, boardAdapter);
 	}
 
 	/**
@@ -219,25 +209,8 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
-		checkPlayerId(playerId);
-		checkNodeId(nodeId);
-		Node node = boardAdapter.getNodeById(nodeId).get();
-
-		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
-		if (!gameModel.isMoveValid(playerId, coordinates)) {
-			throw new IllegalArgumentException("The player was not allowed to make a move at the given node.");
-		} else {
-			return synchronizedMove(playerId, coordinates);
-		}
-	}
-
-	/**
-	 * Performs a move that is assured to be reflected both in the game model
-	 * and the board adapter.
-	 */
-	private List<Node> synchronizedMove(String playerId, Coordinates nodeCoordinates) {
-		gameModel.move(playerId, nodeCoordinates);
-		return boardAdapter.setBoardState(gameModel.getGameState().getBoard());
+        Node nodeToPlayAt = boardAdapter.getNodeById(nodeId);
+		return moveCoordinator.move(playerId, nodeToPlayAt, gameModel, boardAdapter);
 	}
 
 	/**
@@ -264,19 +237,11 @@ public class SimpleOthello implements Othello {
 		boardAdapter.setBoardState(gameModel.getGameState().getBoard());
 	}
 
-	private void checkNodeId(String nodeId) {
-		if (!boardAdapter.getNodeById(nodeId).isPresent()) {
-			throw new NoSuchElementException("Node id \"" + nodeId + "\" does not exist.");
-		}
-	}
-
 	private void checkPlayerId(String playerId) {
 		if (!playerMap.containsKey(playerId)) {
 			throw new NoSuchElementException("Player id \"" + playerId + "\" does not exist.");
 		}
 	}
 
-	private Coordinates toCoordinates(Node node) {
-		return new Coordinates(node.getXCoordinate(), node.getYCoordinate());
-	}
+
 }
