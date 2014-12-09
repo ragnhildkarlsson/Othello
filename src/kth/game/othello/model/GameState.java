@@ -111,7 +111,7 @@ public class GameState {
 		// That the player is the player in turn implies that this player has a
 		// valid move therefore no need to check that.
 		Set<ImmutableNode> nodesToSwap = rules.getNodesToSwap(board, nodeCoordinates, playerId);
-		nodesToSwap.add(new ImmutableNode(nodeCoordinates, playerId));
+		nodesToSwap.add(new ImmutableNode(nodeCoordinates, Optional.of(playerId)));
 		// Add the node played at
 		ImmutableBoard newBoard = board.swapNodes(nodesToSwap, playerId);
 		String nextPlayerInTurn = turnCalculator.getPlayerInTurn(playerId, newBoard, rules);

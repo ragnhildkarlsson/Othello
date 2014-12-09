@@ -3,6 +3,7 @@ package kth.game.othello.model;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -95,19 +96,20 @@ public class ImmutableBoard {
 	}
 
 	/**
-	 * Return the next node in the given direction relative to the given node or
-	 * null if no such node exists.
+	 * Return an Optional with the next node in the given direction relative to
+	 * the given node or an empty optional if no such node exists.
 	 * 
 	 * @param originNode
 	 *            the node from which to get the next.
 	 * @param direction
 	 *            the direction in which the next node is to be fetched.
-	 * @return the next node in the given direction or null if no such node
+	 * @return Return an Optional with the next node in the given direction
+	 *         relative to the given node or an empty optional if no such node
 	 *         exists.
 	 * @throws IllegalArgumentException
 	 *             if the origin node is outside the board.
 	 */
-	public ImmutableNode getNextNodeInDirection(ImmutableNode originNode, Direction direction)
+	public Optional<ImmutableNode> getNextNodeInDirection(ImmutableNode originNode, Direction direction)
 			throws IllegalArgumentException {
 
 		Coordinates originCoordinates = originNode.getCoordinates();
@@ -150,9 +152,9 @@ public class ImmutableBoard {
 		Coordinates newCoordinates = new Coordinates(x, y);
 
 		if (!hasCoordinates(newCoordinates)) {
-			return null;
+			return Optional.empty();
 		} else {
-			return getNodeAtCoordinates(newCoordinates);
+			return Optional.of(getNodeAtCoordinates(newCoordinates));
 		}
 
 	}
@@ -171,9 +173,9 @@ public class ImmutableBoard {
 	public Set<String> getPlayerIDs() {
 		HashSet<String> playerIDs = new HashSet<>();
 		for (ImmutableNode node : this.nodes.values()) {
-			String playerID = node.getOccupantPlayerId();
-			if (playerID != null) {
-				playerIDs.add(playerID);
+			Optional<String> playerID = node.getOccupantPlayerId();
+			if (playerID.isPresent()) {
+				playerIDs.add(playerID.get());
 			}
 		}
 		return playerIDs;
@@ -181,53 +183,54 @@ public class ImmutableBoard {
 
 	@Override
 	public String toString() {
-        int minX = Integer.MAX_VALUE;
-        int maxX = Integer.MIN_VALUE;
-        int minY = Integer.MAX_VALUE;
-        int maxY = Integer.MIN_VALUE;
-        for (ImmutableNode node : nodes.values()) {
-            minX = Math.min(minX, node.getCoordinates().getX());
-            maxX = Math.max(maxX, node.getCoordinates().getX());
-            minY = Math.min(minY, node.getCoordinates().getY());
-            maxY = Math.max(maxY, node.getCoordinates().getY());
-        }
+		int minX = Integer.MAX_VALUE;
+		int maxX = Integer.MIN_VALUE;
+		int minY = Integer.MAX_VALUE;
+		int maxY = Integer.MIN_VALUE;
+		for (ImmutableNode node : nodes.values()) {
+			minX = Math.min(minX, node.getCoordinates().getX());
+			maxX = Math.max(maxX, node.getCoordinates().getX());
+			minY = Math.min(minY, node.getCoordinates().getY());
+			maxY = Math.max(maxY, node.getCoordinates().getY());
+		}
 
-        Map<String, Character> playerSymbols = new HashMap<>();
-        Set<String> players = getPlayerIDs();
-        int minLength = players.stream().map(player -> player.length()).reduce(Integer.MAX_VALUE, (min, current) -> Math.min(current, min));
-        for (int i = 0; i < minLength; i++) {
-            Set<Character> chars = new HashSet<>();
-            for (String player : players) {
-                chars.add(player.charAt(i));
-            }
-            if (chars.size() == players.size()) {
-                final int goodIndex = i;
-                players.stream().forEach(player -> playerSymbols.put(player, player.charAt(goodIndex)));
-                break;
-            }
-        }
-        if (playerSymbols.isEmpty()) {
-            int i = 1;
-            for (String player : players) {
-                playerSymbols.put(player, Integer.toString(i++).charAt(0));
-            }
-        }
+		Map<String, Character> playerSymbols = new HashMap<>();
+		Set<String> players = getPlayerIDs();
+		int minLength = players.stream().map(player -> player.length())
+				.reduce(Integer.MAX_VALUE, (min, current) -> Math.min(current, min));
+		for (int i = 0; i < minLength; i++) {
+			Set<Character> chars = new HashSet<>();
+			for (String player : players) {
+				chars.add(player.charAt(i));
+			}
+			if (chars.size() == players.size()) {
+				final int goodIndex = i;
+				players.stream().forEach(player -> playerSymbols.put(player, player.charAt(goodIndex)));
+				break;
+			}
+		}
+		if (playerSymbols.isEmpty()) {
+			int i = 1;
+			for (String player : players) {
+				playerSymbols.put(player, Integer.toString(i++).charAt(0));
+			}
+		}
 
 		StringBuilder sb = new StringBuilder();
 
-        for (int y = minY; y <= maxY; y++) {
-            for (int x = minX; x <= maxX; x++) {
-                Coordinates coordinates = new Coordinates(x,y);
-                if (nodes.containsKey(coordinates)) {
-                    String occupantPlayerId = nodes.get(coordinates).getOccupantPlayerId();
-                    sb.append(occupantPlayerId == null ? '•' : playerSymbols.get(occupantPlayerId));
-                } else {
-                    sb.append(' ');
-                }
-                sb.append(' ');
-            }
-            sb.append('\n');
-        }
+		for (int y = minY; y <= maxY; y++) {
+			for (int x = minX; x <= maxX; x++) {
+				Coordinates coordinates = new Coordinates(x, y);
+				if (nodes.containsKey(coordinates)) {
+					Optional<String> occupantPlayerId = nodes.get(coordinates).getOccupantPlayerId();
+					sb.append(occupantPlayerId.isPresent() ? playerSymbols.get(occupantPlayerId) : '•');
+				} else {
+					sb.append(' ');
+				}
+				sb.append(' ');
+			}
+			sb.append('\n');
+		}
 		return sb.toString();
 	}
 
@@ -246,7 +249,7 @@ public class ImmutableBoard {
 	public ImmutableBoard swapNodes(Set<ImmutableNode> nodesToSwap, String playerId) {
 		Set<ImmutableNode> newNodes = new HashSet<>();
 		for (ImmutableNode node : nodesToSwap) {
-			ImmutableNode newNode = new ImmutableNode(node.getCoordinates(), playerId);
+			ImmutableNode newNode = new ImmutableNode(node.getCoordinates(), Optional.of(playerId));
 			newNodes.add(newNode);
 		}
 		Set<Coordinates> newNodeCoordinates = getCoordinateSet(newNodes);

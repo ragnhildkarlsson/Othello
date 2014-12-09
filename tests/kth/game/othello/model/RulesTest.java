@@ -3,6 +3,7 @@ package kth.game.othello.model;
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import kth.game.othello.model.ImmutableBoard.Direction;
@@ -79,26 +80,28 @@ public class RulesTest {
 	 */
 	@Test
 	public void testValidMoveShouldGiveCorrectNumberOfSwappedNodes() {
-		String oPlayerID = "o";
-		String xPlayerID = "x";
+		Optional<String> oPlayerID = Optional.of("o");
+		Optional<String> xPlayerID = Optional.of("x");
+		Optional<String> unoccupied = Optional.empty();
 		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
 
-		// mock nodes
-		ImmutableNode boardNode20 = new ImmutableNode(new Coordinates(2, 0), null);
-		ImmutableNode boardNode40 = new ImmutableNode(new Coordinates(4, 0), oPlayerID);
-		ImmutableNode boardNode01 = new ImmutableNode(new Coordinates(0, 1), xPlayerID);
-		ImmutableNode boardNode11 = new ImmutableNode(new Coordinates(1, 1), oPlayerID);
-		ImmutableNode boardNode21 = new ImmutableNode(new Coordinates(2, 1), oPlayerID);
-		ImmutableNode playAtNode = new ImmutableNode(new Coordinates(3, 1), null);
-		ImmutableNode boardNode41 = new ImmutableNode(new Coordinates(4, 1), oPlayerID);
-		ImmutableNode boardNode51 = new ImmutableNode(new Coordinates(5, 1), xPlayerID);
-		ImmutableNode boardNode22 = new ImmutableNode(new Coordinates(2, 2), oPlayerID);
-		ImmutableNode boardNode32 = new ImmutableNode(new Coordinates(3, 2), null);
-		ImmutableNode boardNode42 = new ImmutableNode(new Coordinates(4, 2), oPlayerID);
-		ImmutableNode boardNode13 = new ImmutableNode(new Coordinates(1, 3), oPlayerID);
-		ImmutableNode boardNode33 = new ImmutableNode(new Coordinates(3, 3), xPlayerID);
-		ImmutableNode boardNode53 = new ImmutableNode(new Coordinates(5, 3), null);
-		ImmutableNode boardNode64 = new ImmutableNode(new Coordinates(6, 4), xPlayerID);
+		// nodes
+		Optional<ImmutableNode> boardNode20 = Optional.of(new ImmutableNode(new Coordinates(2, 0), unoccupied));
+		Optional<ImmutableNode> boardNode40 = Optional.of(new ImmutableNode(new Coordinates(4, 0), oPlayerID));
+		Optional<ImmutableNode> boardNode01 = Optional.of(new ImmutableNode(new Coordinates(0, 1), xPlayerID));
+		Optional<ImmutableNode> boardNode11 = Optional.of(new ImmutableNode(new Coordinates(1, 1), oPlayerID));
+		Optional<ImmutableNode> boardNode21 = Optional.of(new ImmutableNode(new Coordinates(2, 1), oPlayerID));
+		Optional<ImmutableNode> boardNode41 = Optional.of(new ImmutableNode(new Coordinates(4, 1), oPlayerID));
+		Optional<ImmutableNode> boardNode51 = Optional.of(new ImmutableNode(new Coordinates(5, 1), xPlayerID));
+		Optional<ImmutableNode> boardNode22 = Optional.of(new ImmutableNode(new Coordinates(2, 2), oPlayerID));
+		Optional<ImmutableNode> boardNode32 = Optional.of(new ImmutableNode(new Coordinates(3, 2), unoccupied));
+		Optional<ImmutableNode> boardNode42 = Optional.of(new ImmutableNode(new Coordinates(4, 2), oPlayerID));
+		Optional<ImmutableNode> boardNode13 = Optional.of(new ImmutableNode(new Coordinates(1, 3), oPlayerID));
+		Optional<ImmutableNode> boardNode33 = Optional.of(new ImmutableNode(new Coordinates(3, 3), xPlayerID));
+		Optional<ImmutableNode> boardNode53 = Optional.of(new ImmutableNode(new Coordinates(5, 3), unoccupied));
+		Optional<ImmutableNode> boardNode64 = Optional.of(new ImmutableNode(new Coordinates(6, 4), xPlayerID));
+
+		ImmutableNode playAtNode = new ImmutableNode(new Coordinates(3, 1), unoccupied);
 
 		// set up behavior for getNextNodeInDirection;
 		for (Direction dir : Direction.values()) {
@@ -125,34 +128,42 @@ public class RulesTest {
 				Mockito.when(mockBoard.getNextNodeInDirection(playAtNode, dir)).thenReturn(boardNode42);
 				break;
 			default:
-				Mockito.when(mockBoard.getNextNodeInDirection(playAtNode, dir)).thenReturn(null);
+				Mockito.when(mockBoard.getNextNodeInDirection(playAtNode, dir)).thenReturn(Optional.empty());
 				break;
 
 			}
 		}
 
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode40, Direction.NORTHEAST)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode41, Direction.EAST)).thenReturn(boardNode51);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode21, Direction.WEST)).thenReturn(boardNode11);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode11, Direction.WEST)).thenReturn(boardNode01);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode22, Direction.SOUTHWEST)).thenReturn(boardNode13);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode13, Direction.SOUTHWEST)).thenReturn(null);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode32, Direction.SOUTH)).thenReturn(boardNode33);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode42, Direction.SOUTHEAST)).thenReturn(boardNode53);
-		Mockito.when(mockBoard.getNextNodeInDirection(boardNode53, Direction.SOUTHEAST)).thenReturn(boardNode64);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode40.get(), Direction.NORTHEAST)).thenReturn(
+				Optional.empty());
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode41.get(), Direction.EAST)).thenReturn(boardNode51);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode21.get(), Direction.WEST)).thenReturn(boardNode11);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode11.get(), Direction.WEST)).thenReturn(boardNode01);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode22.get(), Direction.SOUTHWEST)).thenReturn(boardNode13);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode13.get(), Direction.SOUTHWEST)).thenReturn(
+				Optional.empty());
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode32.get(), Direction.SOUTH)).thenReturn(boardNode33);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode42.get(), Direction.SOUTHEAST)).thenReturn(boardNode53);
+		Mockito.when(mockBoard.getNextNodeInDirection(boardNode53.get(), Direction.SOUTHEAST)).thenReturn(boardNode64);
 
 		Mockito.when(mockBoard.getNodeAtCoordinates(playAtNode.getCoordinates())).thenReturn(playAtNode);
 		Mockito.when(mockBoard.hasCoordinates(playAtNode.getCoordinates())).thenReturn(true);
 		// Check that the right nodes (and no other nodes) where listed as nodes
 		// to swap
 		ModelRules rules = new ModelRules();
-		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode.getCoordinates(), xPlayerID)
-				.contains(boardNode41));
-		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode.getCoordinates(), xPlayerID)
-				.contains(boardNode21));
-		assertEquals(true, rules.getNodesToSwap(mockBoard, playAtNode.getCoordinates(), xPlayerID)
-				.contains(boardNode11));
-		assertEquals(3, rules.getNodesToSwap(mockBoard, playAtNode.getCoordinates(), xPlayerID).size());
+		assertEquals(
+				true,
+				rules.getNodesToSwap(mockBoard, playAtNode.getCoordinates(), xPlayerID.get()).contains(
+						boardNode41.get()));
+		assertEquals(
+				true,
+				rules.getNodesToSwap(mockBoard, playAtNode.getCoordinates(), xPlayerID.get()).contains(
+						boardNode21.get()));
+		assertEquals(
+				true,
+				rules.getNodesToSwap(mockBoard, playAtNode.getCoordinates(), xPlayerID.get()).contains(
+						boardNode11.get()));
+		assertEquals(3, rules.getNodesToSwap(mockBoard, playAtNode.getCoordinates(), xPlayerID.get()).size());
 
 		final int callsToGetNodesToSwap = 4;
 
@@ -160,15 +171,15 @@ public class RulesTest {
 		for (Direction dir : Direction.values()) {
 			Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(playAtNode, dir);
 		}
-		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode40,
+		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode40.get(),
 				Direction.NORTHEAST);
-		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode41,
+		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode41.get(),
 				Direction.EAST);
-		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode21,
+		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode21.get(),
 				Direction.WEST);
-		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode11,
+		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode11.get(),
 				Direction.WEST);
-		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode42,
+		Mockito.verify(mockBoard, Mockito.times(callsToGetNodesToSwap)).getNextNodeInDirection(boardNode42.get(),
 				Direction.SOUTHEAST);
 
 	}
@@ -182,7 +193,7 @@ public class RulesTest {
 		String player1Id = "1";
 		String player2Id = "2";
 		Coordinates coordinates = new Coordinates(0, 0);
-		ImmutableNode boardNode = new ImmutableNode(coordinates, player1Id);
+		ImmutableNode boardNode = new ImmutableNode(coordinates, Optional.of(player1Id));
 		ModelRules rules = new ModelRules();
 		// Mock ImmutableBoard
 		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
@@ -196,11 +207,11 @@ public class RulesTest {
 	 * <pre>
 	 * Test that given a board with the following nodes
 	 * x o *
-	 *  where:
-	 *  x mark nodes occupied by player 1
-	 *  o mark nodes occupied by player 2
-	 *  * mark nodes not occupied by any player
-	 *  then player 1 should have a valid move
+	 * where:
+	 * x mark nodes occupied by player 1
+	 * o mark nodes occupied by player 2
+	 * * mark nodes not occupied by any player
+	 * then player 1 should have a valid move
 	 * </pre>
 	 */
 
@@ -218,11 +229,11 @@ public class RulesTest {
 	 * <pre>
 	 * Test that given a board with the following nodes
 	 * x o *
-	 *  where:
-	 *  x mark nodes occupied by player 1
-	 *  o mark nodes occupied by player 2
-	 *  * mark nodes not occupied by any player
-	 *  has player 2 no valid move
+	 * where:
+	 * x mark nodes occupied by player 1
+	 * o mark nodes occupied by player 2
+	 * * mark nodes not occupied by any player
+	 * has player 2 no valid move
 	 * </pre>
 	 */
 
@@ -265,29 +276,30 @@ public class RulesTest {
 		String player2Id = "2";
 		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
 		Set<ImmutableNode> nodesOnBoard = new HashSet<>();
-		ImmutableNode boardNode0 = new ImmutableNode(new Coordinates(0, 0), player1Id);
+		ImmutableNode boardNode0 = new ImmutableNode(new Coordinates(0, 0), Optional.of(player1Id));
 		nodesOnBoard.add(boardNode0);
-		ImmutableNode boardNode1 = new ImmutableNode(new Coordinates(1, 0), player1Id);
+		ImmutableNode boardNode1 = new ImmutableNode(new Coordinates(1, 0), Optional.of(player1Id));
 		nodesOnBoard.add(boardNode1);
-		ImmutableNode boardNode2 = new ImmutableNode(new Coordinates(2, 0), null);
+		ImmutableNode boardNode2 = new ImmutableNode(new Coordinates(2, 0), Optional.empty());
 		nodesOnBoard.add(boardNode2);
 
+		Optional<ImmutableNode> outsideBoard = Optional.empty();
 		for (Direction dir : Direction.values()) {
 			switch (dir) {
 			case EAST:
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(boardNode1);
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(boardNode2);
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(null);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(Optional.of(boardNode1));
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(Optional.of(boardNode2));
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(outsideBoard);
 				break;
 			case WEST:
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(null);
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(boardNode0);
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(boardNode1);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(outsideBoard);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(Optional.of(boardNode0));
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(Optional.of(boardNode1));
 				break;
 			default:
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(null);
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(null);
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(null);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(outsideBoard);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(outsideBoard);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(outsideBoard);
 				break;
 			}
 		}
@@ -302,7 +314,7 @@ public class RulesTest {
 	}
 
 	/**
-	 * 
+	 *
 	 * <pre>
 	 * Return a minimal mockedBoard as following
 	 * 
@@ -310,25 +322,24 @@ public class RulesTest {
 	 * x o *
 	 * where:
 	 * x mark node occupied by player 1,node number 0
-	 * o mark node occupied by player 2, node number 1 
+	 * o mark node occupied by player 2, node number 1
 	 * * mark node not occupied, node number 2.
 	 * 
 	 * The mocked board are able to answer the question
-	 * getNextNodeInDirection for all nodes and all directions. Calling getNodes
-	 * on the mockedBoard will return a a list of nodes sorted in increasing
-	 * node number order.
+	 * getNextNodeInDirection for all nodes and all directions. 
+	 * Calling getNodes on the mockedBoard will return a a list
+	 * of nodes sorted in increasing node number order.
 	 * 
 	 * <pre>
 	 */
 	private ImmutableBoard getMinimalMockedBoard(String player1Id, String player2Id) {
-
 		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
 		Set<ImmutableNode> nodesOnBoard = new HashSet<>();
-		ImmutableNode boardNode0 = new ImmutableNode(new Coordinates(0, 0), player1Id);
+		ImmutableNode boardNode0 = new ImmutableNode(new Coordinates(0, 0), Optional.of(player1Id));
 		nodesOnBoard.add(boardNode0);
-		ImmutableNode boardNode1 = new ImmutableNode(new Coordinates(1, 0), player2Id);
+		ImmutableNode boardNode1 = new ImmutableNode(new Coordinates(1, 0), Optional.of(player2Id));
 		nodesOnBoard.add(boardNode1);
-		ImmutableNode boardNode2 = new ImmutableNode(new Coordinates(2, 0), null);
+		ImmutableNode boardNode2 = new ImmutableNode(new Coordinates(2, 0), Optional.empty());
 		nodesOnBoard.add(boardNode2);
 
 		Mockito.when(mockBoard.hasCoordinates(new Coordinates(0, 0))).thenReturn(true);
@@ -339,27 +350,27 @@ public class RulesTest {
 		Mockito.when(mockBoard.getNodeAtCoordinates(new Coordinates(1, 0))).thenReturn(boardNode1);
 		Mockito.when(mockBoard.getNodeAtCoordinates(new Coordinates(0, 0))).thenReturn(boardNode0);
 
+		Optional<ImmutableNode> outSideBoard = Optional.empty();
 		for (Direction dir : Direction.values()) {
 			switch (dir) {
 			case EAST:
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(boardNode1);
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(boardNode2);
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(null);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(Optional.of(boardNode1));
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(Optional.of(boardNode2));
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(outSideBoard);
 				break;
 			case WEST:
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(null);
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(boardNode0);
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(boardNode1);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(outSideBoard);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(Optional.of(boardNode0));
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(Optional.of(boardNode1));
 				break;
 			default:
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(null);
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(null);
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(null);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(outSideBoard);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(outSideBoard);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(outSideBoard);
 				break;
 			}
 		}
 		Mockito.when(mockBoard.getNodes()).thenReturn(nodesOnBoard);
 		return mockBoard;
 	}
-
 }

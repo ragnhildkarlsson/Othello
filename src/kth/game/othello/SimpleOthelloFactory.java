@@ -3,6 +3,7 @@ package kth.game.othello;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -116,18 +117,24 @@ public class SimpleOthelloFactory implements OthelloFactory {
 
 		// Create adapters
 		List<NodeAdapter> nodeAdapters = immutableNodes.stream().map(NodeAdapter::new).collect(Collectors.toList());
-        Set<Node> nodeAdapterSet = new HashSet<>(nodeAdapters);
+		Set<Node> nodeAdapterSet = new HashSet<>(nodeAdapters);
 
 		SimpleScore score = new SimpleScore(nodeAdapterSet);
-        BoardAdapter boardAdapter = new BoardAdapter(immutableBoard, nodeAdapters);
+		BoardAdapter boardAdapter = new BoardAdapter(immutableBoard, nodeAdapters);
 
 		RulesAdapter rulesAdapter = new RulesAdapter();
-        MoveCoordinator moveCoordinator = new MoveCoordinator(rulesAdapter);
+		MoveCoordinator moveCoordinator = new MoveCoordinator(rulesAdapter);
 		return new SimpleOthello(players, boardAdapter, gameModelFactory, score, rulesAdapter, moveCoordinator);
 	}
 
 	private ImmutableNode getImmutableNodeFromNodeData(NodeData nodeData) {
+		Optional<String> occupantPlayerId;
+		if (nodeData.getOccupantPlayerId() == null) {
+			occupantPlayerId = Optional.empty();
+		} else {
+			occupantPlayerId = Optional.of(nodeData.getOccupantPlayerId());
+		}
 		return new ImmutableNode(new Coordinates(nodeData.getXCoordinate(), nodeData.getYCoordinate()),
-				nodeData.getOccupantPlayerId());
+				occupantPlayerId);
 	}
 }
