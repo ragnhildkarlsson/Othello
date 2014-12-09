@@ -16,7 +16,7 @@ public class Tournament {
 
 	private List<Player> players;
 	private OthelloFactory othelloFactory;
-	private List<Match> matchupsLeft;
+	private List<Match> matchups;
 	private Square squareBoardFactory;
 	private GameRunner gameRunner;
 
@@ -36,14 +36,20 @@ public class Tournament {
 
 	public void startTournament() {
 		// prepare all matches to be played
-		matchupsLeft = generateMatchups();
+		matchups = generateMatchups();
 		// play each match
-		for (Match match : matchupsLeft) {
+		for (Match match : matchups) {
 			Set<NodeData> nodesData = squareBoardFactory.getNodes(8, match.getPlayers());
 			Othello othello = this.othelloFactory.createGame(nodesData, match.getPlayers());
 			List<ScoreItem> matchResult = gameRunner.runMatch(othello);
 			match.setScore(matchResult); // save the result of the match
 		}
+		// Print the results
+		printResult(matchups);
+
+	}
+
+	private void printResult(List<Match> completedMatches) {
 
 	}
 
@@ -53,6 +59,7 @@ public class Tournament {
 			for (Player playerTwo : players) {
 				if (playerOne != playerTwo) { // players cannot play against themselves
 					matchesToPlay.add(new Match(Arrays.asList(playerOne, playerTwo)));
+					matchesToPlay.add(new Match(Arrays.asList(playerTwo, playerOne)));
 				}
 			}
 		}
