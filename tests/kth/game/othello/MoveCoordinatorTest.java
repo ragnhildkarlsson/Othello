@@ -46,7 +46,6 @@ public class MoveCoordinatorTest {
         when(mockMoveStrategy.move(anyString(),anyObject(),anyObject())).thenReturn(mock(Node.class));
         when(mockBoardAdapter.getNodeById(anyString())).thenReturn(mock(Node.class));
         when(mockGameModel.getGameState()).thenReturn(mock(GameState.class));
-        when(mockGameModel.isMoveValid(anyString(), anyObject())).thenReturn(true);
         when(mockRules.isMoveValid(anyString(), anyString())).thenReturn(true);
 
         MoveCoordinator moveCoordinator = new MoveCoordinator(mockRules);

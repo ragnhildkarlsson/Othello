@@ -147,7 +147,7 @@ public class SimpleOthello implements Othello {
 	@Override
 	public boolean hasValidMove(String playerId) {
 		checkPlayerId(playerId);
-		return gameModel.hasValidMove(playerId);
+		return rulesAdapter.hasValidMove(playerId);
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean isActive() {
-		return !gameModel.isGameOver();
+		return !rulesAdapter.isGameOver();
 	}
 
 	/**
@@ -172,11 +172,7 @@ public class SimpleOthello implements Othello {
 	@Override
 	public boolean isMoveValid(String playerId, String nodeId) {
 		checkPlayerId(playerId);
-
-        Node node = boardAdapter.getNodeById(nodeId);
-        Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
-
-		return gameModel.isMoveValid(playerId, coordinates);
+		return rulesAdapter.isMoveValid(playerId, nodeId);
 	}
 
 	/**

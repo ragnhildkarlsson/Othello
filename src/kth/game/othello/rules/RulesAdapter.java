@@ -24,4 +24,8 @@ public class RulesAdapter implements Rules {
 		return false;
 	}
 
+    public boolean isGameOver() {
+        // TODO
+        return false;
+    }
 }
