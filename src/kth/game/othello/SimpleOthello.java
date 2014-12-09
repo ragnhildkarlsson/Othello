@@ -49,7 +49,6 @@ public class SimpleOthello implements Othello {
 			Score score, RulesAdapter rules, MoveCoordinator moveCoordinator) {
 
 		this.id = id;
-
 		this.score = score;
 		this.rulesAdapter = rules;
 		this.moveCoordinator = moveCoordinator;

@@ -8,19 +8,13 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import kth.game.othello.board.Board;
 import kth.game.othello.board.BoardAdapter;
-import kth.game.othello.board.Node;
 import kth.game.othello.model.GameModel;
 import kth.game.othello.model.GameModelFactory;
 import kth.game.othello.model.GameState;
 import kth.game.othello.model.ImmutableBoard;
 import kth.game.othello.player.Player;
 import kth.game.othello.player.SimplePlayer;
-import kth.game.othello.player.movestrategy.MoveStrategy;
-import kth.game.othello.rules.Rules;
-import kth.game.othello.rules.RulesAdapter;
-import kth.game.othello.score.Score;
 
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -57,18 +51,18 @@ public class SimpleOthelloTest {
 
 	@Test
 	public void testGetPlayersShouldReturnCopy() throws Exception {
-        GameModel gameModel = mock(GameModel.class);
-        GameState gameState = mock(GameState.class);
-        when(gameModel.getGameState()).thenReturn(gameState);
+		GameModel gameModel = mock(GameModel.class);
+		GameState gameState = mock(GameState.class);
+		when(gameModel.getGameState()).thenReturn(gameState);
 
-        GameModelFactory gameModelFactory = Mockito.mock(GameModelFactory.class);
-        when(gameModelFactory.newEmptyGameModel()).thenReturn(gameModel);
-        when(gameModelFactory.newGameModel()).thenReturn(gameModel);
-        when(gameModelFactory.newGameModel(anyString())).thenReturn(gameModel);
+		GameModelFactory gameModelFactory = Mockito.mock(GameModelFactory.class);
+		when(gameModelFactory.newEmptyGameModel()).thenReturn(gameModel);
+		when(gameModelFactory.newGameModel()).thenReturn(gameModel);
+		when(gameModelFactory.newGameModel(anyString())).thenReturn(gameModel);
 
-        BoardAdapter mockBoard = Mockito.mock(BoardAdapter.class);
+		BoardAdapter mockBoard = Mockito.mock(BoardAdapter.class);
 
-        SimpleOthello othello = new SimpleOthello(null, mockPlayers(), mockBoard, gameModelFactory, null, null, null);
+		SimpleOthello othello = new SimpleOthello(null, mockPlayers(), mockBoard, gameModelFactory, null, null, null);
 
 		List<Player> fetchedPlayers = othello.getPlayers();
 
