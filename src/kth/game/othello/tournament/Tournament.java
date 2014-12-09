@@ -34,7 +34,7 @@ public class Tournament {
 
 	}
 
-	public void startTournament() {
+	public List<Match> startTournament() {
 		// prepare all matches to be played
 		matchups = generateMatchups();
 		// play each match
@@ -44,25 +44,7 @@ public class Tournament {
 			List<ScoreItem> matchResult = gameRunner.runMatch(othello);
 			match.setScore(matchResult); // save the result of the match
 		}
-		// Print the results
-		printResult(matchups);
-
-	}
-
-	private void printResult(List<Match> completedMatches) {
-		// Get all score items:
-		List<ScoreItem> scoreItems = new ArrayList<>();
-		for (Match match : completedMatches) {
-			scoreItems.addAll(match.getResults());
-		}
-		for (Player player : players) {
-
-			int sum = scoreItems.stream().filter(e -> e.getPlayerId() == player.getId()).map(p -> p.getScore())
-					.reduce(0, (soFar, score) -> score + soFar);
-			System.out.println("Player " + player.getName() + " got a total score of " + sum);
-
-		}
-
+		return matchups;
 	}
 
 	private List<Match> generateMatchups() {
