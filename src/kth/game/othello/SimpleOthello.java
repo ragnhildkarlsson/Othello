@@ -63,7 +63,18 @@ public class SimpleOthello implements Othello {
         this.boardAdapter = board;
         players.stream().forEach(player -> playerMap.put(player.getId(), player));
         board.setBoardState(this.gameModel.getGameState().getBoard());
+	}
 
+	/**
+	 * Adds an observer. The observers update will be called when a move has
+	 * finished including the nodes that have changed by the move.
+	 *
+	 * @param observer
+	 *            the observer
+	 */
+	@Override
+	public void addMoveObserver(Observer observer) {
+		// TODO
 	}
 
 	/**
@@ -74,6 +85,15 @@ public class SimpleOthello implements Othello {
 	@Override
 	public Board getBoard() {
 		return boardAdapter;
+	}
+
+	/**
+	 * @return a unique id in the context of all Othello games.
+	 */
+	@Override
+	public String getId() {
+		// TODO
+		return null;
 	}
 
 	/**
@@ -229,11 +249,19 @@ public class SimpleOthello implements Othello {
 		boardAdapter.setBoardState(gameModel.getGameState().getBoard());
 	}
 
+	/**
+	 * Undo the last move.
+	 */
+	@Override
+	public void undo() {
+		Optional<GameState> maybeGameState = gameModel.undo();
+        maybeGameState.ifPresent(gameState -> boardAdapter.setBoardState(gameState.getBoard()));
+	}
+
 	private void checkPlayerId(String playerId) {
 		if (!playerMap.containsKey(playerId)) {
 			throw new NoSuchElementException("Player id \"" + playerId + "\" does not exist.");
 		}
 	}
-
 
 }
