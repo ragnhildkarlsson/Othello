@@ -11,7 +11,7 @@ public class TurnCalculator {
 	private List<String> players;
 
 	/**
-	 * Create a new turnKeeper.
+	 * Create a new TurnCalculator.
 	 * 
 	 * @param playerIds
 	 *            the players that the turn keeper is to cycle between.
@@ -31,7 +31,7 @@ public class TurnCalculator {
 	 *            the board on which the players are playing.
 	 * @param rules
 	 *            the rules with which the players are playing.
-	 * 
+	 * @return //TODO Return optional instead
 	 */
 	public String getPlayerInTurn(String previousPlayer, ImmutableBoard board, ModelRules rules) {
 		if (rules.isGameOver(board)) {

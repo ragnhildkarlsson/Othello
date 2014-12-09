@@ -39,18 +39,23 @@ public class SimpleOthello implements Othello {
 	 *            models.
 	 * @param score
 	 *            the score object that should keep track of the score.
+	 * @param rules
+	 *            the rules to be used for the game.
+	 * @param moveCoordinator
+	 *            the moveCoordinator to be used for the game.
 	 */
 	protected SimpleOthello(Collection<Player> players, BoardAdapter board, GameModelFactory gameModelFactory,
 			Score score, RulesAdapter rules, MoveCoordinator moveCoordinator) {
-		players.stream().forEach(player -> playerMap.put(player.getId(), player));
-		this.boardAdapter = board;
+
+		this.score = score;
 		this.rulesAdapter = rules;
 		this.moveCoordinator = moveCoordinator;
 		this.gameModelFactory = gameModelFactory;
-		this.score = score;
-		Player anyPlayer = players.stream().findAny().get();
-		gameModel = gameModelFactory.getNewGameModel(anyPlayer.getId());
-		board.setBoardState(gameModel.getGameState().getBoard());
+		this.gameModel = gameModelFactory.newEmptyGameModel();
+		this.boardAdapter = board;
+		players.stream().forEach(player -> playerMap.put(player.getId(), player));
+		board.setBoardState(this.gameModel.getGameState().getBoard());
+
 	}
 
 	/**
@@ -61,7 +66,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void addGameFinishedObserver(Observer observer) {
-		// TODO
+
 	}
 
 	/**
@@ -131,8 +136,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public Player getPlayerInTurn() {
-		String playerIdInTurn = gameModel.getPlayerInTurn();
-		return playerMap.get(playerIdInTurn);
+		return playerMap.get(gameModel.getPlayerInTurn());
 	}
 
 	/**
@@ -142,9 +146,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Player> getPlayers() {
-		List<Player> playerList = new ArrayList<>();
-		playerList.addAll(playerMap.values());
-		return playerList;
+		return new ArrayList<>(playerMap.values());
 	}
 
 	/**
@@ -167,7 +169,7 @@ public class SimpleOthello implements Othello {
 	@Override
 	public boolean hasValidMove(String playerId) {
 		checkPlayerId(playerId);
-		return gameModel.hasValidMove(playerId);
+		return rulesAdapter.hasValidMove(playerId);
 	}
 
 	/**
@@ -177,7 +179,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean isActive() {
-		return !gameModel.isGameOver();
+		return !rulesAdapter.isGameOver();
 	}
 
 	/**
@@ -192,11 +194,7 @@ public class SimpleOthello implements Othello {
 	@Override
 	public boolean isMoveValid(String playerId, String nodeId) {
 		checkPlayerId(playerId);
-
-		Node node = boardAdapter.getNodeById(nodeId);
-		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
-
-		return gameModel.isMoveValid(playerId, coordinates);
+		return rulesAdapter.isMoveValid(playerId, nodeId);
 	}
 
 	/**
@@ -238,10 +236,8 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start() {
-		Random random = new Random();
-		int randomPlayerIndex = random.nextInt(playerMap.size());
-		Player randomPlayer = (new ArrayList<>(playerMap.values())).get(randomPlayerIndex);
-		start(randomPlayer.getId());
+		gameModel = gameModelFactory.newGameModel();
+		boardAdapter.setBoardState(gameModel.getGameState().getBoard());
 	}
 
 	/**
@@ -252,9 +248,8 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start(String playerId) {
-        //TODO BUGS!
 		checkPlayerId(playerId);
-		gameModel = gameModelFactory.getNewGameModel(playerId);
+		gameModel = gameModelFactory.newGameModel(playerId);
 		boardAdapter.setBoardState(gameModel.getGameState().getBoard());
 	}
 
@@ -264,7 +259,7 @@ public class SimpleOthello implements Othello {
 	@Override
 	public void undo() {
 		Optional<GameState> maybeGameState = gameModel.undo();
-        maybeGameState.ifPresent(gameState -> boardAdapter.setBoardState(gameState.getBoard()));
+		maybeGameState.ifPresent(gameState -> boardAdapter.setBoardState(gameState.getBoard()));
 	}
 
 	private void checkPlayerId(String playerId) {
