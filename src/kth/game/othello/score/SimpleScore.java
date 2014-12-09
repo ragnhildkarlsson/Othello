@@ -1,4 +1,4 @@
-package kth.game.othello;
+package kth.game.othello.score;
 
 import java.util.*;
 import java.util.stream.Collectors;
