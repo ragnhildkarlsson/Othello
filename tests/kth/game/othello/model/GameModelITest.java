@@ -3,9 +3,14 @@ package kth.game.othello.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
  * Integration test of the main class GameModel, including all classes in the
@@ -169,4 +174,51 @@ public class GameModelITest {
 		assertEquals(true, secondGameState.isGameOver());
 
 	}
+
+	/**
+	 * Given the following board
+	 * 
+	 * <pre>
+	 * b * b a *
+	 * where 
+	 * a indicate a node marked by player a
+	 * b indicate a node marked by player b
+	 * * indicate a unmarked node.
+	 * and the following moves are made
+	 * b a a a *
+	 * b b b b b
+	 * then a second call to undo() will return 
+	 * a game state with the following board  
+	 * b * b a *
+	 * </pre>
+	 */
+	@Test
+	public void testThatUndoTwiceReturnCorrectState() {
+		Set<ImmutableNode> nodes = getRowOfNodes("b - b a -", 0);
+		ImmutableBoard startingBoard = new ImmutableBoard(nodes);
+		List<String> playerIds = new ArrayList<>();
+		String playerA = player1Id;
+		String playerB = player2Id;
+		playerIds.add(playerA);
+		playerIds.add(playerB);
+		ModelRules rules = new ModelRules();
+		GameModelFactory gameModelFactory = new GameModelFactory(startingBoard, playerIds, rules);
+		GameModel gameModel = gameModelFactory.getNewGameModel(playerA);
+		gameModel.move(playerA, new Coordinates(1, 0));
+		gameModel.move(playerB, new Coordinates(4, 0));
+
+		gameModel.undo();
+		GameState stateAfterTwiceUndo = gameModel.undo().get();
+		ImmutableBoard boardAfterTwiceUndo = stateAfterTwiceUndo.getBoard();
+
+		assertEquals(startingBoard, boardAfterTwiceUndo);
+	}
+
+	@Test
+	public void testThatUndoOnStartStateReturnAnEmptyOptional() {
+		GameState mockStartState = Mockito.mock(GameState.class);
+		GameModel gameModel = new GameModel(mockStartState);
+		assertEquals(false, gameModel.undo().isPresent());
+	}
+
 }
