@@ -2,6 +2,7 @@ package kth.game.othello.model;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
@@ -11,7 +12,8 @@ import java.util.stream.Collectors;
  */
 public class GameModel {
 
-	private GameState gameState;
+	private GameState presentGameState;
+	private Stack<GameState> history;
 
 	/**
 	 * Create a new GameModel.
@@ -20,7 +22,8 @@ public class GameModel {
 	 *            the starting GameState of the game.
 	 */
 	protected GameModel(GameState startState) {
-		this.gameState = startState;
+		history = new Stack<GameState>();
+		this.presentGameState = startState;
 	}
 
 	/**
@@ -29,14 +32,14 @@ public class GameModel {
 	 * @return the id of the player in turn
 	 */
 	public String getPlayerInTurn() {
-		return gameState.getPlayerInTurn();
+		return presentGameState.getPlayerInTurn();
 	}
 
 	/**
 	 * Returns the present GameState in the model
 	 */
 	public GameState getGameState() {
-		return gameState;
+		return presentGameState;
 	}
 
 	/**
@@ -47,7 +50,7 @@ public class GameModel {
 	 * @return true if the player with the given id has a valid move.
 	 */
 	public boolean hasValidMove(String playerId) {
-		return gameState.hasValidMove(playerId);
+		return presentGameState.hasValidMove(playerId);
 	}
 
 	/**
@@ -56,7 +59,7 @@ public class GameModel {
 	 * @return false if the game is over.
 	 */
 	public boolean isGameOver() {
-		return gameState.isGameOver();
+		return presentGameState.isGameOver();
 	}
 
 	/**
@@ -69,7 +72,7 @@ public class GameModel {
 	 * @return true if the move is valid.
 	 */
 	public boolean isMoveValid(String playerId, Coordinates nodeCoordinates) {
-		return gameState.isMoveValid(playerId, nodeCoordinates);
+		return presentGameState.isMoveValid(playerId, nodeCoordinates);
 	}
 
 	/**
@@ -87,16 +90,35 @@ public class GameModel {
 	 */
 	public Set<Coordinates> move(String playerId, Coordinates nodeCoordinate) throws IllegalArgumentException {
 
-		Optional<GameState> maybeNewGameState = gameState.tryMove(playerId, nodeCoordinate);
+		Optional<GameState> maybeNewGameState = presentGameState.tryMove(playerId, nodeCoordinate);
 		if (!maybeNewGameState.isPresent()) {
 			throw new IllegalArgumentException();
 		}
+
 		GameState newGameState = maybeNewGameState.get();
-		gameState = newGameState;
+		history.push(presentGameState);
+		presentGameState = newGameState;
+
 		return getSetOfCoordinatesFromNodes(newGameState.getBoard().getNodes());
 	}
 
 	private Set<Coordinates> getSetOfCoordinatesFromNodes(Set<ImmutableNode> nodes) {
 		return nodes.stream().map(ImmutableNode::getCoordinates).collect(Collectors.toSet());
+	}
+
+	/**
+	 * Undo the last move and return the present game state after this action.
+	 * The start game state will be returned if no previous move have been made
+	 * 
+	 * @return return the present game state after this action. If no previous
+	 *         move have been made will the start game state be returned.
+	 */
+	public GameState undo() {
+		if (!history.isEmpty()) {
+			presentGameState = history.pop();
+		}
+
+		return presentGameState;
+
 	}
 }
