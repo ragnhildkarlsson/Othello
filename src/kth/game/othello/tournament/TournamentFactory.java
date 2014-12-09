@@ -9,5 +9,4 @@ public class TournamentFactory {
 	public Tournament generateComputerTournament(List<Player> computerPlayers) {
 		return null;
 	}
-
 }
