@@ -5,9 +5,6 @@ import static org.junit.Assert.assertNull;
 
 import java.util.*;
 
-import kth.game.othello.board.Node;
-import kth.game.othello.board.BoardAdapter;
-import kth.game.othello.board.NodeAdapter;
 import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.ImmutableBoard;
 import kth.game.othello.model.ImmutableNode;
@@ -121,4 +118,22 @@ public class BoardAdapterTest {
 		// Check that non existing id throws exception
 		boardAdapter.getNodeById("fdgdfgfdg");
 	}
+
+	@Test
+	public void testGetMaxXAndGetMaxY() {
+		NodeAdapter mockNodeAdapter1 = Mockito.mock(NodeAdapter.class);
+		Mockito.when(mockNodeAdapter1.getXCoordinate()).thenReturn(0);
+		Mockito.when(mockNodeAdapter1.getYCoordinate()).thenReturn(3);
+		NodeAdapter mockNodeAdapter2 = Mockito.mock(NodeAdapter.class);
+		Mockito.when(mockNodeAdapter2.getXCoordinate()).thenReturn(2);
+		Mockito.when(mockNodeAdapter2.getYCoordinate()).thenReturn(1);
+		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
+		List<NodeAdapter> nodeAdapters = new ArrayList<>();
+		nodeAdapters.add(mockNodeAdapter1);
+		nodeAdapters.add(mockNodeAdapter2);
+		BoardAdapter boardAdapter = new BoardAdapter(mockBoard, nodeAdapters);
+		assertEquals(2, boardAdapter.getMaxX());
+		assertEquals(3, boardAdapter.getMaxY());
+	}
+
 }
