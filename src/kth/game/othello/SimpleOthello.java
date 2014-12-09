@@ -1,14 +1,6 @@
 package kth.game.othello;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import kth.game.othello.board.Board;
@@ -65,7 +57,17 @@ public class SimpleOthello implements Othello {
         board.setBoardState(this.gameModel.getGameState().getBoard());
 	}
 
-	/**
+    /**
+     * Adds an observer. The observer will be called when the game has finished.
+     *
+     * @param observer the observer
+     */
+    @Override
+    public void addGameFinishedObserver(Observer observer) {
+        
+    }
+
+    /**
 	 * Adds an observer. The observers update will be called when a move has
 	 * finished including the nodes that have changed by the move.
 	 *

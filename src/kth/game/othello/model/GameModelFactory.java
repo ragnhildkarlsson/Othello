@@ -15,7 +15,7 @@ public class GameModelFactory {
 	private List<String> playerIds;
 	private ModelRules rules;
 
-	/**
+    /**
 	 * Generate a new GameModelFactory given its designated starting board, the
 	 * players and the rules of the game.
 	 * 
