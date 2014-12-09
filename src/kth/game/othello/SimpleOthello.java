@@ -6,11 +6,7 @@ import java.util.stream.Collectors;
 import kth.game.othello.board.Board;
 import kth.game.othello.board.BoardAdapter;
 import kth.game.othello.board.Node;
-import kth.game.othello.model.Coordinates;
-import kth.game.othello.model.GameModel;
-import kth.game.othello.model.GameModelFactory;
-import kth.game.othello.model.GameState;
-import kth.game.othello.model.ImmutableBoard;
+import kth.game.othello.model.*;
 import kth.game.othello.player.Player;
 import kth.game.othello.rules.RulesAdapter;
 import kth.game.othello.score.Score;
@@ -24,7 +20,7 @@ public class SimpleOthello implements Othello {
 	private final BoardAdapter boardAdapter;
 	private final RulesAdapter rulesAdapter;
 	private final GameModelFactory gameModelFactory;
-    private final MoveCoordinator moveCoordinator;
+	private final MoveCoordinator moveCoordinator;
 	private GameModel gameModel;
 	private final Score score;
 	private final Map<String, Player> playerMap = new HashMap<>();
@@ -43,31 +39,37 @@ public class SimpleOthello implements Othello {
 	 *            models.
 	 * @param score
 	 *            the score object that should keep track of the score.
+	 * @param rules
+	 *            the rules to be used for the game.
+	 * @param moveCoordinator
+	 *            the moveCoordinator to be used for the game.
 	 */
 	protected SimpleOthello(Collection<Player> players, BoardAdapter board, GameModelFactory gameModelFactory,
 			Score score, RulesAdapter rules, MoveCoordinator moveCoordinator) {
 
-        this.score = score;
-        this.rulesAdapter = rules;
-        this.moveCoordinator = moveCoordinator;
-        this.gameModelFactory = gameModelFactory;
-        this.gameModel = gameModelFactory.newEmptyGame();
-        this.boardAdapter = board;
-        players.stream().forEach(player -> playerMap.put(player.getId(), player));
-        board.setBoardState(this.gameModel.getGameState().getBoard());
+		this.score = score;
+		this.rulesAdapter = rules;
+		this.moveCoordinator = moveCoordinator;
+		this.gameModelFactory = gameModelFactory;
+		this.gameModel = gameModelFactory.newEmptyGameModel();
+		this.boardAdapter = board;
+		players.stream().forEach(player -> playerMap.put(player.getId(), player));
+		board.setBoardState(this.gameModel.getGameState().getBoard());
+
 	}
 
-    /**
-     * Adds an observer. The observer will be called when the game has finished.
-     *
-     * @param observer the observer
-     */
-    @Override
-    public void addGameFinishedObserver(Observer observer) {
-        
-    }
+	/**
+	 * Adds an observer. The observer will be called when the game has finished.
+	 *
+	 * @param observer
+	 *            the observer
+	 */
+	@Override
+	public void addGameFinishedObserver(Observer observer) {
 
-    /**
+	}
+
+	/**
 	 * Adds an observer. The observers update will be called when a move has
 	 * finished including the nodes that have changed by the move.
 	 *
@@ -206,7 +208,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move() {
-        String playerIdInTurn = gameModel.getPlayerInTurn();
+		String playerIdInTurn = gameModel.getPlayerInTurn();
 		return moveCoordinator.move(playerMap.get(playerIdInTurn), gameModel, boardAdapter);
 	}
 
@@ -225,7 +227,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
-        Node nodeToPlayAt = boardAdapter.getNodeById(nodeId);
+		Node nodeToPlayAt = boardAdapter.getNodeById(nodeId);
 		return moveCoordinator.move(playerId, nodeToPlayAt, gameModel, boardAdapter);
 	}
 
@@ -235,7 +237,7 @@ public class SimpleOthello implements Othello {
 	@Override
 	public void start() {
 		gameModel = gameModelFactory.newGameModel();
-        boardAdapter.setBoardState(gameModel.getGameState().getBoard());
+		boardAdapter.setBoardState(gameModel.getGameState().getBoard());
 	}
 
 	/**
@@ -257,7 +259,7 @@ public class SimpleOthello implements Othello {
 	@Override
 	public void undo() {
 		Optional<GameState> maybeGameState = gameModel.undo();
-        maybeGameState.ifPresent(gameState -> boardAdapter.setBoardState(gameState.getBoard()));
+		maybeGameState.ifPresent(gameState -> boardAdapter.setBoardState(gameState.getBoard()));
 	}
 
 	private void checkPlayerId(String playerId) {

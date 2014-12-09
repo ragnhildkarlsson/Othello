@@ -57,7 +57,7 @@ public class GameModelFactory {
         return newGameModel(randomPlayerID);
     }
 
-    public GameModel newEmptyGame() {
+    public GameModel newEmptyGameModel() {
         Set<ImmutableNode> emptyNodes = startBoard.getNodes().stream().map(node -> new ImmutableNode(node.getCoordinates(), null)).collect(Collectors.toSet());
         ImmutableBoard emptyBoard = new ImmutableBoard(emptyNodes);
         return newGameModel(null, emptyBoard);
