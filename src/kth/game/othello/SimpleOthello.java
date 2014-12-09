@@ -1,24 +1,12 @@
 package kth.game.othello;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import kth.game.othello.board.Board;
 import kth.game.othello.board.BoardAdapter;
 import kth.game.othello.board.Node;
-import kth.game.othello.model.Coordinates;
-import kth.game.othello.model.GameModel;
-import kth.game.othello.model.GameModelFactory;
-import kth.game.othello.model.GameState;
-import kth.game.othello.model.ImmutableBoard;
+import kth.game.othello.model.*;
 import kth.game.othello.player.Player;
 import kth.game.othello.rules.RulesAdapter;
 import kth.game.othello.score.Score;
@@ -32,7 +20,7 @@ public class SimpleOthello implements Othello {
 	private final BoardAdapter boardAdapter;
 	private final RulesAdapter rulesAdapter;
 	private final GameModelFactory gameModelFactory;
-    private final MoveCoordinator moveCoordinator;
+	private final MoveCoordinator moveCoordinator;
 	private GameModel gameModel;
 	private final Score score;
 	private final Map<String, Player> playerMap = new HashMap<>();
@@ -57,12 +45,35 @@ public class SimpleOthello implements Othello {
 		players.stream().forEach(player -> playerMap.put(player.getId(), player));
 		this.boardAdapter = board;
 		this.rulesAdapter = rules;
-        this.moveCoordinator = moveCoordinator;
+		this.moveCoordinator = moveCoordinator;
 		this.gameModelFactory = gameModelFactory;
 		this.score = score;
 		Player anyPlayer = players.stream().findAny().get();
 		gameModel = gameModelFactory.getNewGameModel(anyPlayer.getId());
 		board.setBoardState(gameModel.getGameState().getBoard());
+	}
+
+	/**
+	 * Adds an observer. The observer will be called when the game has finished.
+	 *
+	 * @param observer
+	 *            the observer
+	 */
+	@Override
+	public void addGameFinishedObserver(Observer observer) {
+		// TODO
+	}
+
+	/**
+	 * Adds an observer. The observers update will be called when a move has
+	 * finished including the nodes that have changed by the move.
+	 *
+	 * @param observer
+	 *            the observer
+	 */
+	@Override
+	public void addMoveObserver(Observer observer) {
+		// TODO
 	}
 
 	/**
@@ -73,6 +84,15 @@ public class SimpleOthello implements Othello {
 	@Override
 	public Board getBoard() {
 		return boardAdapter;
+	}
+
+	/**
+	 * @return a unique id in the context of all Othello games.
+	 */
+	@Override
+	public String getId() {
+		// TODO
+		return null;
 	}
 
 	/**
@@ -173,8 +193,8 @@ public class SimpleOthello implements Othello {
 	public boolean isMoveValid(String playerId, String nodeId) {
 		checkPlayerId(playerId);
 
-        Node node = boardAdapter.getNodeById(nodeId);
-        Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
+		Node node = boardAdapter.getNodeById(nodeId);
+		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 
 		return gameModel.isMoveValid(playerId, coordinates);
 	}
@@ -190,7 +210,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move() {
-        String playerIdInTurn = gameModel.getPlayerInTurn();
+		String playerIdInTurn = gameModel.getPlayerInTurn();
 		return moveCoordinator.move(playerMap.get(playerIdInTurn), gameModel, boardAdapter);
 	}
 
@@ -209,7 +229,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
-        Node nodeToPlayAt = boardAdapter.getNodeById(nodeId);
+		Node nodeToPlayAt = boardAdapter.getNodeById(nodeId);
 		return moveCoordinator.move(playerId, nodeToPlayAt, gameModel, boardAdapter);
 	}
 
@@ -232,9 +252,19 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start(String playerId) {
+        //TODO BUGS!
 		checkPlayerId(playerId);
 		gameModel = gameModelFactory.getNewGameModel(playerId);
 		boardAdapter.setBoardState(gameModel.getGameState().getBoard());
+	}
+
+	/**
+	 * Undo the last move.
+	 */
+	@Override
+	public void undo() {
+		Optional<GameState> maybeGameState = gameModel.undo();
+        maybeGameState.ifPresent(gameState -> boardAdapter.setBoardState(gameState.getBoard()));
 	}
 
 	private void checkPlayerId(String playerId) {
@@ -242,6 +272,5 @@ public class SimpleOthello implements Othello {
 			throw new NoSuchElementException("Player id \"" + playerId + "\" does not exist.");
 		}
 	}
-
 
 }
