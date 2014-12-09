@@ -10,7 +10,8 @@ import kth.game.othello.player.Player;
 import kth.game.othello.rules.Rules;
 
 /**
- * A MoveCoordinator is responsible for making moves such that they are reflected in all relevant components.
+ * A MoveCoordinator is responsible for making moves such that they are
+ * reflected in all relevant components.
  */
 public class MoveCoordinator {
 
@@ -37,11 +38,11 @@ public class MoveCoordinator {
 	 */
 	public List<Node> move(Player player, GameModel gameModel, BoardAdapter boardAdapter) {
 		switch (player.getType()) {
-            case HUMAN:
-                throw new IllegalStateException("Tried to do a Computer move using a human player: " + player);
-            case COMPUTER:
-                String playerIdInTurn = gameModel.getPlayerInTurn();
-                Coordinates coordinatesToPlayAt = toCoordinates(player.getMoveStrategy().move(player.getId(), rules,
+		case HUMAN:
+			throw new IllegalStateException("Tried to do a Computer move using a human player: " + player);
+		case COMPUTER:
+			String playerIdInTurn = gameModel.getPlayerInTurn();
+			Coordinates coordinatesToPlayAt = toCoordinates(player.getMoveStrategy().move(player.getId(), rules,
 					boardAdapter));
 			return synchronizedMove(playerIdInTurn, coordinatesToPlayAt, gameModel, boardAdapter);
 		}

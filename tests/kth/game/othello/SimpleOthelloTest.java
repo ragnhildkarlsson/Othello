@@ -1,6 +1,5 @@
 package kth.game.othello;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -12,7 +11,10 @@ import java.util.List;
 import kth.game.othello.board.Board;
 import kth.game.othello.board.BoardAdapter;
 import kth.game.othello.board.Node;
-import kth.game.othello.model.*;
+import kth.game.othello.model.GameModel;
+import kth.game.othello.model.GameModelFactory;
+import kth.game.othello.model.GameState;
+import kth.game.othello.model.ImmutableBoard;
 import kth.game.othello.player.Player;
 import kth.game.othello.player.SimplePlayer;
 import kth.game.othello.player.movestrategy.MoveStrategy;
@@ -34,13 +36,13 @@ public class SimpleOthelloTest {
 	final private String nodeToPlayAtID = "nodeToPlayAt";
 	final private String otherNodeID = "otherNode";
 
-    private Node mockNodeWithId(String id) {
-        Node node = Mockito.mock(Node.class);
-        when(node.getId()).thenReturn(id);
-        return node;
-    }
+	private Node mockNodeWithId(String id) {
+		Node node = Mockito.mock(Node.class);
+		when(node.getId()).thenReturn(id);
+		return node;
+	}
 
-    private SimplePlayer mockPlayerWithID(String playerID) {
+	private SimplePlayer mockPlayerWithID(String playerID) {
 		SimplePlayer player = Mockito.mock(SimplePlayer.class);
 		when(player.getType()).thenReturn(Player.Type.COMPUTER);
 		when(player.getId()).thenReturn(playerID);
@@ -64,13 +66,13 @@ public class SimpleOthelloTest {
 		when(mockBoard.getNodeById(nodeToPlayAtID)).thenReturn(nodeToPlayAt);
 		when(mockBoard.getNodeById(otherNodeID)).thenReturn(otherNode);
 
-        GameState mockGameState = mock(GameState.class);
+		GameState mockGameState = mock(GameState.class);
 
-        GameModel mockGameModel = mock(GameModel.class);
-        when(mockGameModel.getGameState()).thenReturn(mockGameState);
+		GameModel mockGameModel = mock(GameModel.class);
+		when(mockGameModel.getGameState()).thenReturn(mockGameState);
 
 		GameModelFactory mockFactory = mockFactory();
-        when(mockFactory.newEmptyGameModel()).thenReturn(mockGameModel);
+		when(mockFactory.newEmptyGameModel()).thenReturn(mockGameModel);
 
 		Score mockScore = Mockito.mock(Score.class);
 
@@ -130,23 +132,23 @@ public class SimpleOthelloTest {
 	@Test
 	public void testStartShouldBeSynchronized() throws Exception {
 
-        GameModel gameModel = mockGameModel();
-        GameState gameState = mock(GameState.class);
-        when(gameModel.getGameState()).thenReturn(gameState);
+		GameModel gameModel = mockGameModel();
+		GameState gameState = mock(GameState.class);
+		when(gameModel.getGameState()).thenReturn(gameState);
 
 		GameModelFactory gameModelFactory = Mockito.mock(GameModelFactory.class);
 		when(gameModelFactory.newEmptyGameModel()).thenReturn(gameModel);
-        when(gameModelFactory.newGameModel()).thenReturn(gameModel);
-        when(gameModelFactory.newGameModel(anyString())).thenReturn(gameModel);
+		when(gameModelFactory.newGameModel()).thenReturn(gameModel);
+		when(gameModelFactory.newGameModel(anyString())).thenReturn(gameModel);
 
-        BoardAdapter mockBoard = Mockito.mock(BoardAdapter.class);
+		BoardAdapter mockBoard = Mockito.mock(BoardAdapter.class);
 
-        SimpleOthello othello = new SimpleOthello(mockPlayers(), mockBoard, gameModelFactory, null, null, null);
+		SimpleOthello othello = new SimpleOthello(mockPlayers(), mockBoard, gameModelFactory, null, null, null);
 
 		othello.start(player1ID);
-        verify(mockBoard, times(2)).setBoardState(any(ImmutableBoard.class));
+		verify(mockBoard, times(2)).setBoardState(any(ImmutableBoard.class));
 
-        othello.start();
-        verify(mockBoard, times(3)).setBoardState(any(ImmutableBoard.class));
+		othello.start();
+		verify(mockBoard, times(3)).setBoardState(any(ImmutableBoard.class));
 	}
 }
