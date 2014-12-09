@@ -4,11 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
-import kth.game.othello.Othello;
-import kth.game.othello.board.Node;
-
 import kth.game.othello.board.BoardAdapter;
-import kth.game.othello.player.movestrategy.SimpleStrategy;
+import kth.game.othello.board.Node;
+import kth.game.othello.rules.Rules;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -26,14 +25,13 @@ public class SimpleStrategyTest {
 		ArrayList<Node> nodesOnBoard = new ArrayList<>();
 		nodesOnBoard.add(mockNode);
 		Mockito.when(mockBoard.getNodes()).thenReturn(nodesOnBoard);
-		Othello mockOthello = Mockito.mock(Othello.class);
+		Rules mockRules = Mockito.mock(Rules.class);
 		String playerId = "player";
-		Mockito.when(mockOthello.hasValidMove(playerId)).thenReturn(true);
-		Mockito.when(mockOthello.getBoard()).thenReturn(mockBoard);
-		Mockito.when(mockOthello.isMoveValid(playerId, nodeId)).thenReturn(true);
+		Mockito.when(mockRules.hasValidMove(playerId)).thenReturn(true);
+		Mockito.when(mockRules.isMoveValid(playerId, nodeId)).thenReturn(true);
 
 		SimpleStrategy strategy = new SimpleStrategy();
-		assertEquals(mockNode, strategy.move(playerId, mockOthello));
+		assertEquals(mockNode, strategy.move(playerId, mockRules, mockBoard));
 	}
 
 	/**
@@ -42,11 +40,11 @@ public class SimpleStrategyTest {
 	 */
 	@Test
 	public void testMoveReturnNullWhenNoValidMoveExist() {
-		Othello mockOthello = Mockito.mock(Othello.class);
+		Rules mockRules = Mockito.mock(Rules.class);
 		String playerId = "player";
-		Mockito.when(mockOthello.hasValidMove(playerId)).thenReturn(false);
+		Mockito.when(mockRules.hasValidMove(playerId)).thenReturn(false);
 		SimpleStrategy strategy = new SimpleStrategy();
-		assertEquals(null, strategy.move(playerId, mockOthello));
+		assertEquals(null, strategy.move(playerId, mockRules, null));
 	}
 
 }

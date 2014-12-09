@@ -32,11 +32,12 @@ public class GameState {
 		this.rules = rules;
 		if (startPlayerId == null) {
 			playerInTurn = null;
-		}
-		if (rules.hasValidMove(board, startPlayerId)) {
-			playerInTurn = startPlayerId;
 		} else {
-			playerInTurn = turnCalculator.getPlayerInTurn(startPlayerId, board, rules);
+			if (rules.hasValidMove(board, startPlayerId)) {
+				playerInTurn = startPlayerId;
+			} else {
+				playerInTurn = turnCalculator.getPlayerInTurn(startPlayerId, board, rules);
+			}
 		}
 	}
 

@@ -22,7 +22,7 @@ public class GameModel {
 	 *            the starting GameState of the game.
 	 */
 	protected GameModel(GameState startState) {
-		history = new Stack<GameState>();
+		history = new Stack<>();
 		this.presentGameState = startState;
 	}
 
@@ -40,39 +40,6 @@ public class GameModel {
 	 */
 	public GameState getGameState() {
 		return presentGameState;
-	}
-
-	/**
-	 * Determines if the player with given id has any valid move.
-	 * 
-	 * @param playerId
-	 *            the id of the player
-	 * @return true if the player with the given id has a valid move.
-	 */
-	public boolean hasValidMove(String playerId) {
-		return presentGameState.hasValidMove(playerId);
-	}
-
-	/**
-	 * Determines if the game is active or over.
-	 * 
-	 * @return false if the game is over.
-	 */
-	public boolean isGameOver() {
-		return presentGameState.isGameOver();
-	}
-
-	/**
-	 * Determines if a player is allowed to make a move at the given node.
-	 * 
-	 * @param playerId
-	 *            the id of the player making the move.
-	 * @param nodeCoordinates
-	 *            the coordinates of the node where the player wants to play.
-	 * @return true if the move is valid.
-	 */
-	public boolean isMoveValid(String playerId, Coordinates nodeCoordinates) {
-		return presentGameState.isMoveValid(playerId, nodeCoordinates);
 	}
 
 	/**
