@@ -7,16 +7,16 @@ import kth.game.othello.board.Node;
 import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.GameModel;
 import kth.game.othello.player.Player;
-import kth.game.othello.rules.RulesAdapter;
+import kth.game.othello.rules.Rules;
 
 /**
  * A MoveCoordinator is responsible for making moves such that they are reflected in all relevant components.
  */
 public class MoveCoordinator {
 
-	RulesAdapter rules;
+	Rules rules;
 
-	protected MoveCoordinator(RulesAdapter rules) {
+	protected MoveCoordinator(Rules rules) {
 		this.rules = rules;
 	}
 
@@ -36,12 +36,12 @@ public class MoveCoordinator {
 	 *             if there is not a computer in turn
 	 */
 	public List<Node> move(Player player, GameModel gameModel, BoardAdapter boardAdapter) {
-		String playerIdInTurn = gameModel.getPlayerInTurn();
 		switch (player.getType()) {
-		case HUMAN:
-			throw new IllegalStateException("Tried to do a Computer move using a human player: " + player);
-		case COMPUTER:
-			Coordinates coordinatesToPlayAt = toCoordinates(player.getMoveStrategy().move(player.getId(), rules,
+            case HUMAN:
+                throw new IllegalStateException("Tried to do a Computer move using a human player: " + player);
+            case COMPUTER:
+                String playerIdInTurn = gameModel.getPlayerInTurn();
+                Coordinates coordinatesToPlayAt = toCoordinates(player.getMoveStrategy().move(player.getId(), rules,
 					boardAdapter));
 			return synchronizedMove(playerIdInTurn, coordinatesToPlayAt, gameModel, boardAdapter);
 		}
@@ -68,7 +68,7 @@ public class MoveCoordinator {
 	public List<Node> move(String playerId, Node node, GameModel gameModel, BoardAdapter boardAdapter)
 			throws IllegalArgumentException {
 		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
-		if (!gameModel.isMoveValid(playerId, coordinates)) {
+		if (!rules.isMoveValid(playerId, node.getId())) {
 			throw new IllegalArgumentException("The player was not allowed to make a move at the given node.");
 		} else {
 			return synchronizedMove(playerId, coordinates, gameModel, boardAdapter);
