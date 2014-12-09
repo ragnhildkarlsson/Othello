@@ -53,7 +53,6 @@ public class Tournament {
 			for (Player playerTwo : players) {
 				if (playerOne != playerTwo) { // players cannot play against themselves
 					matchesToPlay.add(new Match(Arrays.asList(playerOne, playerTwo)));
-					matchesToPlay.add(new Match(Arrays.asList(playerTwo, playerOne)));
 				}
 			}
 		}
