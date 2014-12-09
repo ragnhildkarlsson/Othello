@@ -182,12 +182,13 @@ public class GameModelITest {
 	 * b * b a *
 	 * where 
 	 * a indicate a node marked by player a
-	 * b indicate a node marked by player a
+	 * b indicate a node marked by player b
 	 * * indicate a unmarked node.
 	 * and the following moves are made
 	 * b a a a *
 	 * b b b b b
-	 * will the undo functionality called return a gamestate with the following board  
+	 * then a second call to undo() will return 
+	 * a game state with the following board  
 	 * b * b a *
 	 * </pre>
 	 */
@@ -207,17 +208,17 @@ public class GameModelITest {
 		gameModel.move(playerB, new Coordinates(4, 0));
 
 		gameModel.undo();
-		GameState stateAfterTwiceUndo = gameModel.undo();
-		ImmutableBoard boardAfterTwiveUndo = stateAfterTwiceUndo.getBoard();
+		GameState stateAfterTwiceUndo = gameModel.undo().get();
+		ImmutableBoard boardAfterTwiceUndo = stateAfterTwiceUndo.getBoard();
 
-		assertEquals(startingBoard, boardAfterTwiveUndo);
+		assertEquals(startingBoard, boardAfterTwiceUndo);
 	}
 
 	@Test
-	public void testThatUndoOnStartStateReturnStartState() {
+	public void testThatUndoOnStartStateReturnAnEmptyOptional() {
 		GameState mockStartState = Mockito.mock(GameState.class);
 		GameModel gameModel = new GameModel(mockStartState);
-		assertEquals(mockStartState, gameModel.undo());
+		assertEquals(false, gameModel.undo().isPresent());
 	}
 
 }

@@ -107,18 +107,20 @@ public class GameModel {
 	}
 
 	/**
-	 * Undo the last move and return the present game state after this action.
-	 * The start game state will be returned if no previous move have been made
+	 * Undo the last move and returns an optional game state with the present
+	 * game state after this action or an empty optional id no previous state
+	 * exist.
 	 * 
-	 * @return return the present game state after this action. If no previous
-	 *         move have been made will the start game state be returned.
+	 * @return returns an optional game state with the present game state after
+	 *         this action or an empty optional id no previous state exist.
 	 */
-	public GameState undo() {
+	public Optional<GameState> undo() {
 		if (!history.isEmpty()) {
 			presentGameState = history.pop();
-		}
+			return Optional.of(presentGameState);
 
-		return presentGameState;
+		}
+		return Optional.empty();
 
 	}
 }
