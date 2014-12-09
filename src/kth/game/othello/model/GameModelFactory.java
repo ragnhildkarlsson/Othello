@@ -34,7 +34,7 @@ public class GameModelFactory {
 	}
 
 	/**
-	 * Generates a new game model with the gives starting player.
+	 * Generates a new game model with the given starting player.
      *
 	 * @param startPlayerId
 	 *            the player to start the game
