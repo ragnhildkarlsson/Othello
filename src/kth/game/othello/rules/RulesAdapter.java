@@ -2,7 +2,6 @@ package kth.game.othello.rules;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import kth.game.othello.board.BoardAdapter;
@@ -46,31 +45,17 @@ public class RulesAdapter implements Rules {
 	@Override
 	public List<Node> getNodesToSwap(String playerId, String nodeId) {
 
-		Optional<Node> node = boardAdapter.getNodeById(nodeId);
-		Coordinates nodeCoordinates = possiblyGetCoordinates(node);
+		Node node = boardAdapter.getNodeById(nodeId);
+		Coordinates nodeCoordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 		List<Node> nodeAdapters = new ArrayList<>();
 
-		if (node.isPresent()) {
-			Set<ImmutableNode> nodeSet = this.modelRules.getNodesToSwap(boardAdapter.getImmutableBoard(),
-					nodeCoordinates, playerId);
+		Set<ImmutableNode> nodeSet = this.modelRules.getNodesToSwap(boardAdapter.getImmutableBoard(), nodeCoordinates,
+				playerId);
 
-			for (ImmutableNode immutableNode : nodeSet) {
-				nodeAdapters.add(boardAdapter.getNode(immutableNode.getCoordinates()));
-			}
+		for (ImmutableNode immutableNode : nodeSet) {
+			nodeAdapters.add(boardAdapter.getNode(immutableNode.getCoordinates()));
 		}
 		return nodeAdapters;
-
-	}
-
-	/**
-	 * @return the coordinates of the node or null if no node is present.
-	 */
-	private Coordinates possiblyGetCoordinates(Optional<Node> node) {
-		Coordinates nodeCoordinates = null;
-		if (node.isPresent()) {
-			nodeCoordinates = new Coordinates(node.get().getXCoordinate(), node.get().getYCoordinate());
-		}
-		return nodeCoordinates;
 	}
 
 	/**
@@ -84,8 +69,8 @@ public class RulesAdapter implements Rules {
 	 */
 	@Override
 	public boolean isMoveValid(String playerId, String nodeId) {
-		Optional<Node> node = boardAdapter.getNodeById(nodeId);
-		Coordinates nodeCoordinates = possiblyGetCoordinates(node);
+		Node node = boardAdapter.getNodeById(nodeId);
+		Coordinates nodeCoordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 		return this.modelRules.validMove(boardAdapter.getImmutableBoard(), nodeCoordinates, playerId);
 	}
 
@@ -101,8 +86,8 @@ public class RulesAdapter implements Rules {
 		return this.modelRules.hasValidMove(boardAdapter.getImmutableBoard(), playerId);
 	}
 
-    public boolean isGameOver() {
-        // TODO
-        return false;
-    }
+	public boolean isGameOver() {
+		// TODO
+		return false;
+	}
 }

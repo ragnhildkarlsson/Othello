@@ -1,11 +1,9 @@
 package kth.game.othello.rules;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import kth.game.othello.board.BoardAdapter;
@@ -31,9 +29,8 @@ public class RulesAdapterTest {
 		ImmutableBoard mockImmutableBoard = Mockito.mock(ImmutableBoard.class);
 
 		Node mockNode = Mockito.mock(Node.class);
-		Optional<Node> optionalNode = Optional.of(mockNode);
 
-		Mockito.when(mockBoardAdapter.getNodeById(nodeToSwapId)).thenReturn(optionalNode);
+		Mockito.when(mockBoardAdapter.getNodeById(nodeToSwapId)).thenReturn(mockNode);
 		Mockito.when(mockNode.getXCoordinate()).thenReturn(0);
 		Mockito.when(mockNode.getYCoordinate()).thenReturn(0);
 
@@ -57,18 +54,6 @@ public class RulesAdapterTest {
 	}
 
 	@Test
-	public void testGetNodesToSwapWithBadInput() {
-
-		ModelRules mockRules = Mockito.mock(ModelRules.class);
-		BoardAdapter mockBoardAdapter = Mockito.mock(BoardAdapter.class);
-		Mockito.when(mockBoardAdapter.getNodeById(any(String.class))).thenReturn(Optional.empty());
-		RulesAdapter rulesAdapter = new RulesAdapter(mockRules, mockBoardAdapter);
-		List<Node> result = rulesAdapter.getNodesToSwap("sdfsdf", "rfgfg");
-		assertEquals(true, result.isEmpty());
-
-	}
-
-	@Test
 	public void testIsMoveValid() {
 		String nodeId = "44545";
 		String playerId = "playerId";
@@ -77,9 +62,8 @@ public class RulesAdapterTest {
 		BoardAdapter mockBoardAdapter = Mockito.mock(BoardAdapter.class);
 
 		Node mockNode = Mockito.mock(Node.class);
-		Optional<Node> optionalNode = Optional.of(mockNode);
 
-		Mockito.when(mockBoardAdapter.getNodeById(nodeId)).thenReturn(optionalNode);
+		Mockito.when(mockBoardAdapter.getNodeById(nodeId)).thenReturn(mockNode);
 		Mockito.when(mockNode.getXCoordinate()).thenReturn(0);
 		Mockito.when(mockNode.getYCoordinate()).thenReturn(0);
 
