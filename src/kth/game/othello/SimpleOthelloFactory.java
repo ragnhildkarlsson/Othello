@@ -10,13 +10,12 @@ import kth.game.othello.board.NodeAdapter;
 import kth.game.othello.board.factory.NodeData;
 import kth.game.othello.board.factory.Square;
 import kth.game.othello.model.*;
-import kth.game.othello.notification.GameFinishedNotifier;
-import kth.game.othello.notification.MoveNotifier;
 import kth.game.othello.player.Player;
 import kth.game.othello.player.SimplePlayer;
 import kth.game.othello.player.movestrategy.MoveStrategy;
 import kth.game.othello.player.movestrategy.SimpleStrategy;
 import kth.game.othello.rules.RulesAdapter;
+import kth.game.othello.score.SimpleScore;
 
 /**
  * A factory for producing simple Othello games.

@@ -33,70 +33,11 @@ public class SimpleOthelloTest {
 	final private String player2ID = "player2";
 	final private String playerInTurnId = "playerInTurn";
 
-	final private String nodeToPlayAtID = "nodeToPlayAt";
-	final private String otherNodeID = "otherNode";
-
-	private Node mockNodeWithId(String id) {
-		Node node = Mockito.mock(Node.class);
-		when(node.getId()).thenReturn(id);
-		return node;
-	}
-
 	private SimplePlayer mockPlayerWithID(String playerID) {
 		SimplePlayer player = Mockito.mock(SimplePlayer.class);
-		when(player.getType()).thenReturn(Player.Type.COMPUTER);
 		when(player.getId()).thenReturn(playerID);
 
-		Node nodeToPlatAt = mockNodeWithId(nodeToPlayAtID);
-		MoveStrategy strategy = Mockito.mock(MoveStrategy.class);
-		when(strategy.move(anyString(), any(Rules.class), any(Board.class))).thenReturn(nodeToPlatAt);
-
-		when(player.getMoveStrategy()).thenReturn(strategy);
-
 		return player;
-	}
-
-	private SimpleOthello othelloWithMockedDependencies() {
-		List<Player> players = mockPlayers();
-
-		Node nodeToPlayAt = mockNodeWithId(nodeToPlayAtID);
-		Node otherNode = mockNodeWithId(otherNodeID);
-
-		BoardAdapter mockBoard = Mockito.mock(BoardAdapter.class);
-		when(mockBoard.getNodeById(nodeToPlayAtID)).thenReturn(nodeToPlayAt);
-		when(mockBoard.getNodeById(otherNodeID)).thenReturn(otherNode);
-
-		GameState mockGameState = mock(GameState.class);
-
-		GameModel mockGameModel = mock(GameModel.class);
-		when(mockGameModel.getGameState()).thenReturn(mockGameState);
-
-		GameModelFactory mockFactory = mockFactory();
-		when(mockFactory.newEmptyGameModel()).thenReturn(mockGameModel);
-
-		Score mockScore = Mockito.mock(Score.class);
-
-		RulesAdapter mockRulesAdapter = Mockito.mock(RulesAdapter.class);
-		MoveCoordinator moveCoordinator = Mockito.mock(MoveCoordinator.class);
-
-		return new SimpleOthello(players, mockBoard, mockFactory, mockScore, mockRulesAdapter, moveCoordinator);
-	}
-
-	private GameModel mockGameModel() {
-		GameModel mockModel = Mockito.mock(GameModel.class);
-		when(mockModel.getPlayerInTurn()).thenReturn(playerInTurnId);
-		return mockModel;
-	}
-
-	private GameModelFactory mockFactory() {
-		GameModel mockModel = mockGameModel();
-		GameState gameState = mock(GameState.class);
-		when(mockModel.getGameState()).thenReturn(gameState);
-
-		GameModelFactory gameModelFactory = Mockito.mock(GameModelFactory.class);
-		when(gameModelFactory.newGameModel(anyString())).thenReturn(mockModel);
-
-		return gameModelFactory;
 	}
 
 	private List<Player> mockPlayers() {
@@ -116,7 +57,18 @@ public class SimpleOthelloTest {
 
 	@Test
 	public void testGetPlayersShouldReturnCopy() throws Exception {
-		SimpleOthello othello = othelloWithMockedDependencies();
+        GameModel gameModel = mock(GameModel.class);
+        GameState gameState = mock(GameState.class);
+        when(gameModel.getGameState()).thenReturn(gameState);
+
+        GameModelFactory gameModelFactory = Mockito.mock(GameModelFactory.class);
+        when(gameModelFactory.newEmptyGameModel()).thenReturn(gameModel);
+        when(gameModelFactory.newGameModel()).thenReturn(gameModel);
+        when(gameModelFactory.newGameModel(anyString())).thenReturn(gameModel);
+
+        BoardAdapter mockBoard = Mockito.mock(BoardAdapter.class);
+
+        SimpleOthello othello = new SimpleOthello(null, mockPlayers(), mockBoard, gameModelFactory, null, null, null);
 
 		List<Player> fetchedPlayers = othello.getPlayers();
 
@@ -132,7 +84,7 @@ public class SimpleOthelloTest {
 	@Test
 	public void testStartShouldBeSynchronized() throws Exception {
 
-		GameModel gameModel = mockGameModel();
+		GameModel gameModel = mock(GameModel.class);
 		GameState gameState = mock(GameState.class);
 		when(gameModel.getGameState()).thenReturn(gameState);
 
@@ -143,7 +95,7 @@ public class SimpleOthelloTest {
 
 		BoardAdapter mockBoard = Mockito.mock(BoardAdapter.class);
 
-		SimpleOthello othello = new SimpleOthello(mockPlayers(), mockBoard, gameModelFactory, null, null, null);
+		SimpleOthello othello = new SimpleOthello(null, mockPlayers(), mockBoard, gameModelFactory, null, null, null);
 
 		othello.start(player1ID);
 		verify(mockBoard, times(2)).setBoardState(any(ImmutableBoard.class));

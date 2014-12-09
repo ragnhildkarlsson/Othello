@@ -7,8 +7,6 @@ import kth.game.othello.board.BoardAdapter;
 import kth.game.othello.board.Node;
 import kth.game.othello.model.GameModel;
 import kth.game.othello.model.GameModelFactory;
-import kth.game.othello.notification.GameFinishedNotifier;
-import kth.game.othello.notification.MoveNotifier;
 import kth.game.othello.player.Player;
 import kth.game.othello.rules.RulesAdapter;
 import kth.game.othello.score.Score;

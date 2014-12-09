@@ -7,8 +7,6 @@ import kth.game.othello.board.BoardAdapter;
 import kth.game.othello.board.Node;
 import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.GameModel;
-import kth.game.othello.notification.GameFinishedNotifier;
-import kth.game.othello.notification.MoveNotifier;
 import kth.game.othello.player.Player;
 import kth.game.othello.rules.Rules;
 
@@ -103,7 +101,7 @@ public class MoveCoordinator {
 		List<Node> swapped = boardAdapter.setBoardState(gameModel.getGameState().getBoard());
 		moveNotifier.moveWasMade(swapped);
         if (gameModel.getPlayerInTurn() == null) {
-            gameFinishedNotifier.gameHasFinished();
+            gameFinishedNotifier.gameDidFinish();
         }
 		return swapped;
 	}
