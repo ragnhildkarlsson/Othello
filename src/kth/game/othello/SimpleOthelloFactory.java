@@ -116,13 +116,15 @@ public class SimpleOthelloFactory implements OthelloFactory {
 
 		// Create adapters
 		List<NodeAdapter> nodeAdapters = immutableNodes.stream().map(NodeAdapter::new).collect(Collectors.toList());
-
 		Set<Node> nodeAdapterSet = new HashSet<>(nodeAdapters);
-		SimpleScore score = new SimpleScore(nodeAdapterSet);
 
+		SimpleScore score = new SimpleScore(nodeAdapterSet);
 		BoardAdapter boardAdapter = new BoardAdapter(immutableBoard, nodeAdapters);
+
 		RulesAdapter rulesAdapter = new RulesAdapter(rules, boardAdapter);
-		return new SimpleOthello(players, boardAdapter, gameModelFactory, score, rulesAdapter);
+		MoveCoordinator moveCoordinator = new MoveCoordinator(rulesAdapter);
+		return new SimpleOthello(players, boardAdapter, gameModelFactory, score, rulesAdapter, moveCoordinator);
+
 	}
 
 	private ImmutableNode getImmutableNodeFromNodeData(NodeData nodeData) {

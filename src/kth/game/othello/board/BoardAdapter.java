@@ -18,7 +18,7 @@ import kth.game.othello.model.ImmutableNode;
 public class BoardAdapter implements Board {
 
 	private ImmutableBoard boardState;
-	private List<NodeAdapter> nodeAPIViews;
+	private List<NodeAdapter> nodeAdapters;
 
 	/**
 	 * Creates a new board adapter. The passed node adapters are assumed to be
@@ -32,8 +32,38 @@ public class BoardAdapter implements Board {
 	 */
 	public BoardAdapter(ImmutableBoard startingBoard, List<NodeAdapter> nodeAdapters) {
 		boardState = startingBoard;
-		this.nodeAPIViews = nodeAdapters;
-		this.nodeAPIViews.sort(new NodeComparator());
+		this.nodeAdapters = nodeAdapters;
+		this.nodeAdapters.sort(new NodeComparator());
+	}
+
+	@Override
+	public int getMaxX() {
+		Optional<NodeAdapter> node = nodeAdapters.stream().reduce(
+				(n1, n2) -> n1.getXCoordinate() > n2.getXCoordinate() ? n1 : n2);
+		if (!node.isPresent()) {
+			throw new IllegalStateException();
+		}
+		return node.get().getXCoordinate();
+	}
+
+	@Override
+	public int getMaxY() {
+		Optional<NodeAdapter> node = nodeAdapters.stream().reduce(
+				(n1, n2) -> n1.getYCoordinate() > n2.getYCoordinate() ? n1 : n2);
+		if (!node.isPresent()) {
+			throw new IllegalStateException();
+		}
+		return node.get().getYCoordinate();
+
+	}
+
+	@Override
+	public boolean hasNode(int x, int y) {
+		Optional<NodeAdapter> maybeNode = getNodeAdapter(new Coordinates(x, y));
+		if (maybeNode.isPresent()) {
+			return true;
+		}
+		return false;
 	}
 
 	private class NodeComparator implements Comparator<Node> {
@@ -104,7 +134,7 @@ public class BoardAdapter implements Board {
 	}
 
 	private Optional<NodeAdapter> getNodeAdapter(int x, int y) {
-		return nodeAPIViews.stream().filter(node -> (node.getXCoordinate() == x) && (node.getYCoordinate() == y))
+		return nodeAdapters.stream().filter(node -> (node.getXCoordinate() == x) && (node.getYCoordinate() == y))
 				.findAny();
 	}
 
@@ -148,7 +178,7 @@ public class BoardAdapter implements Board {
 	@Override
 	public List<Node> getNodes() {
 		List<Node> nodesCopy = new ArrayList<>();
-		nodesCopy.addAll(nodeAPIViews);
+		nodesCopy.addAll(nodeAdapters);
 		return nodesCopy;
 	}
 
@@ -159,9 +189,9 @@ public class BoardAdapter implements Board {
 	 *            the node id of the node to fetch.
 	 * @return the Node with the given id.
 	 */
-	public Optional<Node> getNodeById(String nodeId) {
-		Optional<NodeAdapter> maybeNode = nodeAPIViews.stream().filter(node -> node.getId().equals(nodeId)).findAny();
-		return Optional.ofNullable(maybeNode.orElse(null));
+	public Node getNodeById(String nodeId) {
+		Optional<NodeAdapter> maybeNode = nodeAdapters.stream().filter(node -> node.getId().equals(nodeId)).findAny();
+		return maybeNode.orElseThrow(() -> new NoSuchElementException("Node id \"" + nodeId + "\" does not exist."));
 	}
 
 	/**

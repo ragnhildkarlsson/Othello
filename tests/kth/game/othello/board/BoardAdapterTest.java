@@ -5,9 +5,6 @@ import static org.junit.Assert.assertNull;
 
 import java.util.*;
 
-import kth.game.othello.board.Node;
-import kth.game.othello.board.BoardAdapter;
-import kth.game.othello.board.NodeAdapter;
 import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.ImmutableBoard;
 import kth.game.othello.model.ImmutableNode;
@@ -104,7 +101,7 @@ public class BoardAdapterTest {
 
 	}
 
-	@Test
+	@Test(expected = NoSuchElementException.class)
 	public void testGetNodeById() throws Exception {
 		NodeAdapter mockNodeAdapter1 = Mockito.mock(NodeAdapter.class);
 		Mockito.when(mockNodeAdapter1.getId()).thenReturn("right");
@@ -116,12 +113,27 @@ public class BoardAdapterTest {
 		nodeAdapters.add(mockNodeAdapter2);
 		BoardAdapter boardAdapter = new BoardAdapter(mockBoard, nodeAdapters);
 		// Check that we can find a node by its id
-		Optional<Node> maybeNode1 = boardAdapter.getNodeById("right");
-		assertEquals(true, maybeNode1.isPresent());
-		assertEquals(mockNodeAdapter1, maybeNode1.get());
-		// Check that get empty Optional for non existing ids
-		Optional<Node> notPresent = boardAdapter.getNodeById("fdgdfgfdg");
-		assertEquals(false, notPresent.isPresent());
-
+		Node maybeNode1 = boardAdapter.getNodeById("right");
+		assertEquals(mockNodeAdapter1, maybeNode1);
+		// Check that non existing id throws exception
+		boardAdapter.getNodeById("fdgdfgfdg");
 	}
+
+	@Test
+	public void testGetMaxXAndGetMaxY() {
+		NodeAdapter mockNodeAdapter1 = Mockito.mock(NodeAdapter.class);
+		Mockito.when(mockNodeAdapter1.getXCoordinate()).thenReturn(0);
+		Mockito.when(mockNodeAdapter1.getYCoordinate()).thenReturn(3);
+		NodeAdapter mockNodeAdapter2 = Mockito.mock(NodeAdapter.class);
+		Mockito.when(mockNodeAdapter2.getXCoordinate()).thenReturn(2);
+		Mockito.when(mockNodeAdapter2.getYCoordinate()).thenReturn(1);
+		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
+		List<NodeAdapter> nodeAdapters = new ArrayList<>();
+		nodeAdapters.add(mockNodeAdapter1);
+		nodeAdapters.add(mockNodeAdapter2);
+		BoardAdapter boardAdapter = new BoardAdapter(mockBoard, nodeAdapters);
+		assertEquals(2, boardAdapter.getMaxX());
+		assertEquals(3, boardAdapter.getMaxY());
+	}
+
 }

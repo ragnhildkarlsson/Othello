@@ -1,24 +1,12 @@
 package kth.game.othello;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import kth.game.othello.board.Board;
 import kth.game.othello.board.BoardAdapter;
 import kth.game.othello.board.Node;
-import kth.game.othello.model.Coordinates;
-import kth.game.othello.model.GameModel;
-import kth.game.othello.model.GameModelFactory;
-import kth.game.othello.model.GameState;
-import kth.game.othello.model.ImmutableBoard;
+import kth.game.othello.model.*;
 import kth.game.othello.player.Player;
 import kth.game.othello.rules.RulesAdapter;
 import kth.game.othello.score.Score;
@@ -32,6 +20,7 @@ public class SimpleOthello implements Othello {
 	private final BoardAdapter boardAdapter;
 	private final RulesAdapter rulesAdapter;
 	private final GameModelFactory gameModelFactory;
+	private final MoveCoordinator moveCoordinator;
 	private GameModel gameModel;
 	private final Score score;
 	private final Map<String, Player> playerMap = new HashMap<>();
@@ -52,15 +41,39 @@ public class SimpleOthello implements Othello {
 	 *            the score object that should keep track of the score.
 	 */
 	protected SimpleOthello(Collection<Player> players, BoardAdapter board, GameModelFactory gameModelFactory,
-			Score score, RulesAdapter rules) {
+			Score score, RulesAdapter rules, MoveCoordinator moveCoordinator) {
 		players.stream().forEach(player -> playerMap.put(player.getId(), player));
 		this.boardAdapter = board;
 		this.rulesAdapter = rules;
+		this.moveCoordinator = moveCoordinator;
 		this.gameModelFactory = gameModelFactory;
 		this.score = score;
 		Player anyPlayer = players.stream().findAny().get();
 		gameModel = gameModelFactory.getNewGameModel(anyPlayer.getId());
 		board.setBoardState(gameModel.getGameState().getBoard());
+	}
+
+	/**
+	 * Adds an observer. The observer will be called when the game has finished.
+	 *
+	 * @param observer
+	 *            the observer
+	 */
+	@Override
+	public void addGameFinishedObserver(Observer observer) {
+		// TODO
+	}
+
+	/**
+	 * Adds an observer. The observers update will be called when a move has
+	 * finished including the nodes that have changed by the move.
+	 *
+	 * @param observer
+	 *            the observer
+	 */
+	@Override
+	public void addMoveObserver(Observer observer) {
+		// TODO
 	}
 
 	/**
@@ -71,6 +84,15 @@ public class SimpleOthello implements Othello {
 	@Override
 	public Board getBoard() {
 		return boardAdapter;
+	}
+
+	/**
+	 * @return a unique id in the context of all Othello games.
+	 */
+	@Override
+	public String getId() {
+		// TODO
+		return null;
 	}
 
 	/**
@@ -85,10 +107,9 @@ public class SimpleOthello implements Othello {
 	@Override
 	public List<Node> getNodesToSwap(String playerId, String nodeId) {
 		checkPlayerId(playerId);
-		checkNodeId(nodeId);
 		List<Node> nodesToSwap = new ArrayList<>();
 
-		Node node = boardAdapter.getNodeById(nodeId).get();
+		Node node = boardAdapter.getNodeById(nodeId);
 		Coordinates nodeCoordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 
 		GameState oldState = gameModel.getGameState();
@@ -172,9 +193,7 @@ public class SimpleOthello implements Othello {
 	public boolean isMoveValid(String playerId, String nodeId) {
 		checkPlayerId(playerId);
 
-		checkNodeId(nodeId);
-		Node node = boardAdapter.getNodeById(nodeId).get();
-
+		Node node = boardAdapter.getNodeById(nodeId);
 		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 
 		return gameModel.isMoveValid(playerId, coordinates);
@@ -192,16 +211,7 @@ public class SimpleOthello implements Othello {
 	@Override
 	public List<Node> move() {
 		String playerIdInTurn = gameModel.getPlayerInTurn();
-		Player currentPlayer = playerMap.get(playerIdInTurn);
-		switch (currentPlayer.getType()) {
-		case HUMAN:
-			throw new IllegalStateException("Tried to do a Computer move using a human player: " + currentPlayer);
-		case COMPUTER:
-			Coordinates coordinatesToPlayAt = toCoordinates(currentPlayer.getMoveStrategy().move(playerIdInTurn,
-					this.rulesAdapter, this.boardAdapter));
-			return synchronizedMove(playerIdInTurn, coordinatesToPlayAt);
-		}
-		throw new IllegalStateException("This should never be reached. There is a bug in move() of SimpleOthello.");
+		return moveCoordinator.move(playerMap.get(playerIdInTurn), gameModel, boardAdapter);
 	}
 
 	/**
@@ -219,25 +229,8 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
-		checkPlayerId(playerId);
-		checkNodeId(nodeId);
-		Node node = boardAdapter.getNodeById(nodeId).get();
-
-		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
-		if (!gameModel.isMoveValid(playerId, coordinates)) {
-			throw new IllegalArgumentException("The player was not allowed to make a move at the given node.");
-		} else {
-			return synchronizedMove(playerId, coordinates);
-		}
-	}
-
-	/**
-	 * Performs a move that is assured to be reflected both in the game model
-	 * and the board adapter.
-	 */
-	private List<Node> synchronizedMove(String playerId, Coordinates nodeCoordinates) {
-		gameModel.move(playerId, nodeCoordinates);
-		return boardAdapter.setBoardState(gameModel.getGameState().getBoard());
+		Node nodeToPlayAt = boardAdapter.getNodeById(nodeId);
+		return moveCoordinator.move(playerId, nodeToPlayAt, gameModel, boardAdapter);
 	}
 
 	/**
@@ -259,15 +252,19 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start(String playerId) {
+        //TODO BUGS!
 		checkPlayerId(playerId);
 		gameModel = gameModelFactory.getNewGameModel(playerId);
 		boardAdapter.setBoardState(gameModel.getGameState().getBoard());
 	}
 
-	private void checkNodeId(String nodeId) {
-		if (!boardAdapter.getNodeById(nodeId).isPresent()) {
-			throw new NoSuchElementException("Node id \"" + nodeId + "\" does not exist.");
-		}
+	/**
+	 * Undo the last move.
+	 */
+	@Override
+	public void undo() {
+		Optional<GameState> maybeGameState = gameModel.undo();
+        maybeGameState.ifPresent(gameState -> boardAdapter.setBoardState(gameState.getBoard()));
 	}
 
 	private void checkPlayerId(String playerId) {
@@ -276,7 +273,4 @@ public class SimpleOthello implements Othello {
 		}
 	}
 
-	private Coordinates toCoordinates(Node node) {
-		return new Coordinates(node.getXCoordinate(), node.getYCoordinate());
-	}
 }
