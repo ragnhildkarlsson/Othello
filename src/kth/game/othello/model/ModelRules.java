@@ -1,6 +1,7 @@
 package kth.game.othello.model;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import kth.game.othello.model.ImmutableBoard.Direction;
@@ -79,7 +80,8 @@ public class ModelRules {
 	/**
 	 * Returns false iff any of the players on the board can make a valid move.
 	 * 
-	 * @param board the board to be checked for game over.
+	 * @param board
+	 *            the board to be checked for game over.
 	 * @return Returns false iff any of the players on the board can make a
 	 *         valid move.
 	 */
@@ -144,14 +146,15 @@ public class ModelRules {
 		// never happens, return an empty list.
 		Set<ImmutableNode> result = new HashSet<>();
 		while (true) {
-			ImmutableNode nextNodeInDirection = board.getNextNodeInDirection(originNode, direction);
-			if (nextNodeInDirection == null || nextNodeInDirection.getOccupantPlayerId() == null) {
+			Optional<ImmutableNode> maybeNextNodeInDirection = board.getNextNodeInDirection(originNode, direction);
+			if (!maybeNextNodeInDirection.isPresent()
+					|| !maybeNextNodeInDirection.get().getOccupantPlayerId().isPresent()) {
 				// Reached edge or unmarked node - return empty list.
 				result.clear();
 				return result;
 			}
-
-			if (nextNodeInDirection.getOccupantPlayerId().equals(playerId)) {
+			ImmutableNode nextNodeInDirection = maybeNextNodeInDirection.get();
+			if (nextNodeInDirection.getOccupantPlayerId().get().equals(playerId)) {
 				// Found own node. Return nodes in between.
 				return result;
 			}

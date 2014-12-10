@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.HashSet;
 import java.util.Observer;
+import java.util.Optional;
 import java.util.Set;
 
-import kth.game.othello.board.NodeAdapter;
 import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.ImmutableNode;
 
@@ -17,7 +17,7 @@ public class NodeAdapterTest {
 
 	@Test
 	public void testSetNode() throws Exception {
-		ImmutableNode immutableNode = new ImmutableNode(new Coordinates(0, 0), "dummy");
+		ImmutableNode immutableNode = new ImmutableNode(new Coordinates(0, 0), Optional.of("dummy"));
 		NodeAdapter nodeAdapter = new NodeAdapter(immutableNode);
 		// Try changing into a node with the same ImmutableNode, should not
 		// cause notification.
@@ -27,7 +27,7 @@ public class NodeAdapterTest {
 
 		Mockito.verify(observer, Mockito.never()).update(nodeAdapter, "dummy");
 		// Try change to a new different node
-		ImmutableNode diffNode = new ImmutableNode(new Coordinates(0, 0), "changed");
+		ImmutableNode diffNode = new ImmutableNode(new Coordinates(0, 0), Optional.of("changed"));
 
 		nodeAdapter.setNode(diffNode);
 		Mockito.verify(observer).update(nodeAdapter, "dummy");
@@ -43,7 +43,7 @@ public class NodeAdapterTest {
 		for (int y = 0; y < maxIndex; y++) {
 			for (int x = 0; x < maxIndex; x++) {
 				String playerId = "x" + x + " y" + y;
-				ImmutableNode immutableNode = new ImmutableNode(new Coordinates(x, y), playerId);
+				ImmutableNode immutableNode = new ImmutableNode(new Coordinates(x, y), Optional.of(playerId));
 				NodeAdapter nodeAdapter = new NodeAdapter(immutableNode);
 				ids.add(nodeAdapter.getId());
 			}
