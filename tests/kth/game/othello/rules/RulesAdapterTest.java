@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import kth.game.othello.board.BoardAdapter;
@@ -37,7 +38,7 @@ public class RulesAdapterTest {
 		Mockito.when(mockBoardAdapter.getImmutableBoard()).thenReturn(mockImmutableBoard);
 		Mockito.when(mockBoardAdapter.getNode(coordinates00)).thenReturn(mockNode);
 
-		ImmutableNode nodeReturned = new ImmutableNode(coordinates00, playerId);
+		ImmutableNode nodeReturned = new ImmutableNode(coordinates00, Optional.of(playerId));
 		Set<ImmutableNode> mockNodeSet = new HashSet<ImmutableNode>();
 		mockNodeSet.add(nodeReturned);
 		Mockito.when(mockRules.getNodesToSwap(mockImmutableBoard, coordinates00, playerId)).thenReturn(mockNodeSet);

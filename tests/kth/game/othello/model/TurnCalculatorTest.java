@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -31,9 +32,9 @@ public class TurnCalculatorTest {
 
 		TurnCalculator turnCalculator = new TurnCalculator(playerIds);
 
-		String playerInTurn = turnCalculator.getPlayerInTurn(player2Id, null, rules);
+		Optional<String> playerInTurn = turnCalculator.getPlayerInTurn(player2Id, null, rules);
 		// Should return player1 since player2 was the previous player.
-		assertEquals(player1Id, playerInTurn);
+		assertEquals(player1Id, playerInTurn.get());
 	}
 
 	/**
@@ -56,9 +57,9 @@ public class TurnCalculatorTest {
 
 		TurnCalculator turnCalculator = new TurnCalculator(playerIds);
 
-		String playerInTurn = turnCalculator.getPlayerInTurn(player1Id, null, rules);
+		Optional<String> playerInTurn = turnCalculator.getPlayerInTurn(player1Id, null, rules);
 
-		assertEquals(null, playerInTurn);
+		assertEquals(false, playerInTurn.isPresent());
 
 	}
 

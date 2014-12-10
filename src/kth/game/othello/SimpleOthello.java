@@ -1,12 +1,24 @@
 package kth.game.othello;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Observer;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import kth.game.othello.board.Board;
 import kth.game.othello.board.BoardAdapter;
 import kth.game.othello.board.Node;
-import kth.game.othello.model.*;
+import kth.game.othello.model.Coordinates;
+import kth.game.othello.model.GameModel;
+import kth.game.othello.model.GameModelFactory;
+import kth.game.othello.model.GameState;
+import kth.game.othello.model.ImmutableBoard;
 import kth.game.othello.player.Player;
 import kth.game.othello.rules.RulesAdapter;
 import kth.game.othello.score.Score;
@@ -208,8 +220,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move() {
-		String playerIdInTurn = gameModel.getPlayerInTurn();
-		return moveCoordinator.move(playerMap.get(playerIdInTurn), gameModel, boardAdapter);
+		return moveCoordinator.move(playerMap, gameModel, boardAdapter);
 	}
 
 	/**

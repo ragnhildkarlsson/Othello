@@ -1,6 +1,7 @@
 package kth.game.othello.model;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class is responsible for calculate the next player in turn.
@@ -21,9 +22,9 @@ public class TurnCalculator {
 	}
 
 	/**
-	 * Return the player in turn given the previous player and the resulting
-	 * board of the previous players move. If no player can do any move return
-	 * null
+	 * Returns an Optional with the id of the player in turn. Given the previous
+	 * player and the resulting board of the previous players move. If no player
+	 * can do any move return an empty Optional
 	 * 
 	 * @param previousPlayer
 	 *            the id of the previous player.
@@ -31,15 +32,14 @@ public class TurnCalculator {
 	 *            the board on which the players are playing.
 	 * @param rules
 	 *            the rules with which the players are playing.
-	 * @return //TODO Return optional instead
 	 */
-	public String getPlayerInTurn(String previousPlayer, ImmutableBoard board, ModelRules rules) {
+	public Optional<String> getPlayerInTurn(String previousPlayer, ImmutableBoard board, ModelRules rules) {
 		if (rules.isGameOver(board)) {
-			return null;
+			return Optional.empty();
 		}
 		int playerIndex = players.indexOf(previousPlayer);
 		if (playerIndex < 0) {
-			return null;
+			return Optional.empty();
 		}
 		playerIndex = (playerIndex + 1) % players.size(); // jump to player
 															// after the
@@ -47,11 +47,11 @@ public class TurnCalculator {
 		for (int i = 0; i < players.size(); i++) {
 			String possiblePlayerInTurn = players.get(playerIndex);
 			if (rules.hasValidMove(board, possiblePlayerInTurn)) {
-				return possiblePlayerInTurn;
+				return Optional.of(possiblePlayerInTurn);
 			}
 			playerIndex = (playerIndex + 1) % players.size();
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	/**
