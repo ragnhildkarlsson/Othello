@@ -20,7 +20,7 @@ public class GameStateTest {
 		String playerInTurn = "1";
 		ModelRules mockRules = Mockito.mock(ModelRules.class);
 		Mockito.when(mockRules.hasValidMove(null, playerInTurn)).thenReturn(true);
-		GameState gameState = new GameState(null, null, mockRules, playerInTurn);
+		GameState gameState = new GameState(null, null, mockRules, Optional.of(playerInTurn));
 		Optional<GameState> res = gameState.tryMove("2", null);
 		assertFalse(res.isPresent());
 	}
@@ -56,8 +56,9 @@ public class GameStateTest {
 		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
 		ModelRules mockRules = Mockito.mock(ModelRules.class);
 		TurnCalculator mockTurnCalculator = Mockito.mock(TurnCalculator.class);
+		Mockito.when(mockTurnCalculator.getPlayerInTurn(player1, mockBoard, mockRules)).thenReturn(Optional.empty());
 		Mockito.when(mockRules.hasValidMove(mockBoard, player1)).thenReturn(true);
-		GameState gameState = new GameState(mockBoard, mockTurnCalculator, mockRules, player1);
+		GameState gameState = new GameState(mockBoard, mockTurnCalculator, mockRules, Optional.of(player1));
 		Mockito.verify(mockRules).hasValidMove(mockBoard, player1);
 
 		Mockito.when(mockRules.getNodesToSwap(mockBoard, playAtCoordinates, player1)).thenReturn(nodesToSwap);

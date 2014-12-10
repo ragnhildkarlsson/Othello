@@ -1,10 +1,6 @@
 package kth.game.othello.model;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -220,7 +216,7 @@ public class ImmutableBoard {
 				Coordinates coordinates = new Coordinates(x, y);
 				if (nodes.containsKey(coordinates)) {
 					Optional<String> occupantPlayerId = nodes.get(coordinates).getOccupantPlayerId();
-					sb.append(occupantPlayerId.isPresent() ? playerSymbols.get(occupantPlayerId) : '•');
+					sb.append(occupantPlayerId.isPresent() ? playerSymbols.get(occupantPlayerId.get()) : "•");
 				} else {
 					sb.append(' ');
 				}
