@@ -350,23 +350,23 @@ public class RulesTest {
 		Mockito.when(mockBoard.getNodeAtCoordinates(new Coordinates(1, 0))).thenReturn(boardNode1);
 		Mockito.when(mockBoard.getNodeAtCoordinates(new Coordinates(0, 0))).thenReturn(boardNode0);
 
-		Optional<ImmutableNode> outSideBoard = Optional.empty();
+		Optional<ImmutableNode> outsideBoard = Optional.empty();
 		for (Direction dir : Direction.values()) {
 			switch (dir) {
 			case EAST:
 				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(Optional.of(boardNode1));
 				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(Optional.of(boardNode2));
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(outSideBoard);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(outsideBoard);
 				break;
 			case WEST:
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(outSideBoard);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(outsideBoard);
 				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(Optional.of(boardNode0));
 				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(Optional.of(boardNode1));
 				break;
 			default:
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(outSideBoard);
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(outSideBoard);
-				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(outSideBoard);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode0, dir)).thenReturn(outsideBoard);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode1, dir)).thenReturn(outsideBoard);
+				Mockito.when(mockBoard.getNextNodeInDirection(boardNode2, dir)).thenReturn(outsideBoard);
 				break;
 			}
 		}

@@ -129,12 +129,7 @@ public class SimpleOthelloFactory implements OthelloFactory {
 	}
 
 	private ImmutableNode getImmutableNodeFromNodeData(NodeData nodeData) {
-		Optional<String> occupantPlayerId;
-		if (nodeData.getOccupantPlayerId() == null) {
-			occupantPlayerId = Optional.empty();
-		} else {
-			occupantPlayerId = Optional.of(nodeData.getOccupantPlayerId());
-		}
+		Optional<String> occupantPlayerId = Optional.ofNullable(nodeData.getOccupantPlayerId());
 		return new ImmutableNode(new Coordinates(nodeData.getXCoordinate(), nodeData.getYCoordinate()),
 				occupantPlayerId);
 	}

@@ -173,10 +173,7 @@ public class ImmutableBoard {
 	public Set<String> getPlayerIDs() {
 		HashSet<String> playerIDs = new HashSet<>();
 		for (ImmutableNode node : this.nodes.values()) {
-			Optional<String> playerID = node.getOccupantPlayerId();
-			if (playerID.isPresent()) {
-				playerIDs.add(playerID.get());
-			}
+			node.getOccupantPlayerId().ifPresent(playerID -> playerIDs.add(playerID));
 		}
 		return playerIDs;
 	}

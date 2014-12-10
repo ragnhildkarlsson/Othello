@@ -58,10 +58,7 @@ public class NodeAdapter extends Observable implements Node {
 	 */
 	@Override
 	public String getOccupantPlayerId() {
-		if (nodeData.getOccupantPlayerId().isPresent()) {
-			return nodeData.getOccupantPlayerId().get();
-		}
-		return null;
+		return nodeData.getOccupantPlayerId().orElse(null);
 	}
 
 	/**
