@@ -10,7 +10,6 @@ import java.util.Set;
 import kth.game.othello.Othello;
 import kth.game.othello.OthelloFactory;
 import kth.game.othello.board.factory.NodeData;
-import kth.game.othello.board.factory.Square;
 import kth.game.othello.player.Player;
 import kth.game.othello.score.ScoreItem;
 
@@ -46,13 +45,11 @@ public class TournamentTest {
 		Mockito.when(player2.getName()).thenReturn(player2Id);
 
 		OthelloFactory othelloFactory = Mockito.mock(OthelloFactory.class);
-		Square squareBoardFactory = Mockito.mock(Square.class);
 		GameRunner gameRunner = Mockito.mock(GameRunner.class);
 		Othello match1 = Mockito.mock(Othello.class);
 		Othello match2 = Mockito.mock(Othello.class);
 
 		Set<NodeData> nodeDatas = new HashSet<NodeData>();
-		Mockito.when(squareBoardFactory.getNodes(8, players)).thenReturn(nodeDatas);
 		Mockito.when(othelloFactory.createGame(Mockito.anySetOf(NodeData.class), Mockito.anyListOf(Player.class)))
 				.thenReturn(match1, match2);
 
@@ -67,7 +64,7 @@ public class TournamentTest {
 		Mockito.when(gameRunner.runMatch(match1)).thenReturn(match1Scores);
 		Mockito.when(gameRunner.runMatch(match2)).thenReturn(match2Scores);
 
-		Tournament tournament = new Tournament(players, othelloFactory, squareBoardFactory, gameRunner);
+		Tournament tournament = new Tournament(players, othelloFactory, nodeDatas, gameRunner);
 
 		List<Match> result = tournament.startTournament();
 		// should been two matches

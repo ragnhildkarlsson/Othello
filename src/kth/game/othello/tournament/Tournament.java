@@ -8,38 +8,49 @@ import java.util.Set;
 import kth.game.othello.Othello;
 import kth.game.othello.OthelloFactory;
 import kth.game.othello.board.factory.NodeData;
-import kth.game.othello.board.factory.Square;
 import kth.game.othello.player.Player;
 import kth.game.othello.score.ScoreItem;
 
+/**
+ * A Tournament between computer players, each pair of player plays two games.
+ * 
+ */
 public class Tournament {
 
 	private List<Player> players;
 	private OthelloFactory othelloFactory;
 	private List<Match> matchups;
-	private Square squareBoardFactory;
+	private Set<NodeData> nodesData;
 	private GameRunner gameRunner;
 
-	public Tournament(List<Player> players, OthelloFactory othelloFactory, Square squareBoardFactory,
+	public Tournament(List<Player> players, OthelloFactory othelloFactory, Set<NodeData> nodesData,
 			GameRunner gameRunner) {
 		this.players = players;
 		this.othelloFactory = othelloFactory;
-		this.squareBoardFactory = squareBoardFactory;
+		this.nodesData = nodesData;
 		this.gameRunner = gameRunner;
 	}
 
+	/**
+	 * Run this Tournament with a view to display the games played.
+	 * 
+	 */
 	public void startViewableTournament() {
 
 		// TODO
 
 	}
 
+	/**
+	 * Run this Tournament without a view, returning matches that has been played.
+	 * 
+	 * @return the matches after they have been played.
+	 */
 	public List<Match> startTournament() {
 		// prepare all matches to be played
 		matchups = generateMatchups();
 		// play each match
 		for (Match match : matchups) {
-			Set<NodeData> nodesData = squareBoardFactory.getNodes(8, match.getPlayers());
 			Othello othello = this.othelloFactory.createGame(nodesData, match.getPlayers());
 			List<ScoreItem> matchResult = gameRunner.runMatch(othello);
 			match.setScore(matchResult); // save the result of the match
