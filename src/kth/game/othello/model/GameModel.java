@@ -6,9 +6,9 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
- * This class represents a model of an Othello game. It is responsible for all
- * interaction with the model.
- * 
+ * This class represents a model of an Othello game. It is responsible for
+ * updating the present game state of the model, and keeping the history of the
+ * game.
  */
 public class GameModel {
 
@@ -59,7 +59,8 @@ public class GameModel {
 	public Set<Coordinates> move(String playerId, Coordinates nodeCoordinate) throws IllegalArgumentException {
 
 		Optional<GameState> maybeNewGameState = presentGameState.tryMove(playerId, nodeCoordinate);
-		GameState newGameState = maybeNewGameState.orElseThrow(() -> new IllegalArgumentException());
+		GameState newGameState = maybeNewGameState.orElseThrow(() -> new IllegalArgumentException(
+				"Try to do an illegal move in the game model"));
 		history.push(presentGameState);
 		presentGameState = newGameState;
 		return getSetOfCoordinatesFromNodes(newGameState.getBoard().getNodes());

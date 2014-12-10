@@ -17,7 +17,8 @@ public class GameModelFactory {
 	private ModelRules rules;
 
 	/**
-	 * Generate a new GameModelFactory given its designated starting board, the players and the rules of the game.
+	 * Generate a new GameModelFactory given its designated starting board, the
+	 * players and the rules of the game.
 	 * 
 	 * 
 	 * @param startBoard
@@ -38,7 +39,8 @@ public class GameModelFactory {
 	 *
 	 * @param startPlayerId
 	 *            the player to start the game
-	 * @return a game state with the set starting board and with the given player ID first in turn.
+	 * @return a game state with the set starting board and with the given
+	 *         player ID first in turn.
 	 */
 	public GameModel newGameModel(String startPlayerId) {
 		return newGameModel(Optional.of(startPlayerId), startBoard);
@@ -55,6 +57,13 @@ public class GameModelFactory {
 		String randomPlayerID = playerIds.get(randomPlayerIndex);
 		return newGameModel(randomPlayerID);
 	}
+
+	/**
+	 * Generates a new game model with were the initial gameState that have an
+	 * empty board and the start player set to an empty optional
+	 *
+	 * @return a new game model with a random starting player.
+	 */
 
 	public GameModel newEmptyGameModel() {
 		Set<ImmutableNode> emptyNodes = startBoard.getNodes().stream()
