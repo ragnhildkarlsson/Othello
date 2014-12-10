@@ -1,7 +1,6 @@
 package kth.game.othello;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Observer;
 import java.util.Optional;
 
@@ -53,13 +52,12 @@ public class MoveCoordinator {
 	 * @throws IllegalStateException
 	 *             if there is not a computer in turn
 	 */
-	public List<Node> move(Map<String, Player> players, GameModel gameModel, BoardAdapter boardAdapter) {
+	public List<Node> move(Player player, GameModel gameModel, BoardAdapter boardAdapter) {
 		Optional<String> playerIdInTurn = gameModel.getPlayerInTurn();
 		if (!playerIdInTurn.isPresent()) {
 			// game is over - no player in turn
 			throw new IllegalStateException("Game is over - no move can be made");
 		}
-		Player player = players.get(playerIdInTurn.get());
 		switch (player.getType()) {
 		case HUMAN:
 			throw new IllegalStateException("Tried to do a Computer move using a human player: " + player);
@@ -91,7 +89,8 @@ public class MoveCoordinator {
 	public List<Node> move(String playerId, Node node, GameModel gameModel, BoardAdapter boardAdapter)
 			throws IllegalArgumentException {
 		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
-		if (!rules.isMoveValid(playerId, node.getId()) || gameModel.getPlayerInTurn() == Optional.of(playerId)) {
+
+		if (gameModel.getPlayerInTurn() == Optional.of(playerId) || !rules.isMoveValid(playerId, node.getId())) {
 			throw new IllegalArgumentException("The player was not allowed to make a move at the given node.");
 		} else {
 			return synchronizedMove(playerId, coordinates, gameModel, boardAdapter);

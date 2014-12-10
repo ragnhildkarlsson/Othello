@@ -200,7 +200,9 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move() {
-		return moveCoordinator.move(playerMap, gameModel, boardAdapter);
+		// TODO clean up temporary solution to do not get compile errors
+		Player player = playerMap.get(gameModel.getPlayerInTurn().get());
+		return moveCoordinator.move(player, gameModel, boardAdapter);
 	}
 
 	/**
