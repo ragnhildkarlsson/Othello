@@ -1,7 +1,6 @@
 package kth.game.othello.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -116,7 +115,7 @@ public class GameModelIT {
 
 		// Get the first GameState and check that its correct and immutable
 		GameState firstGameState = gameModel.getGameState();
-		assertEquals("Player1 should be first in turn", player1Id, firstGameState.getPlayerInTurn());
+		assertEquals("Player1 should be first in turn", Optional.of(player1Id), firstGameState.getPlayerInTurn());
 		assertEquals("There should be 21 nodes on the board", 21, firstGameState.getBoard().getNodes().size());
 
 		// Check that the move at (1,4) is valid for player1 then perform it
@@ -126,7 +125,7 @@ public class GameModelIT {
 		GameState secondGameState = optionalSecondGameState.get();
 
 		// Check that the second game state is in order
-		assertEquals("Player2 should be second in turn", player2Id, secondGameState.getPlayerInTurn());
+		assertEquals("Player2 should be second in turn", Optional.of(player2Id), secondGameState.getPlayerInTurn());
 		assertEquals("Node at (1,4) should be occupied", true,
 				secondGameState.getBoard().getNodeAtCoordinates(new Coordinates(1, 4)).isMarked());
 		assertEquals("Player2 should not be able to play at an occupied node", false,
@@ -138,7 +137,7 @@ public class GameModelIT {
 		GameState thirdGameState = optionalThirdGameState.get();
 
 		// Check that player3 is now in turn
-		assertEquals("Player 3 should be in turn", player3Id, thirdGameState.getPlayerInTurn());
+		assertEquals("Player 3 should be in turn", Optional.of(player3Id), thirdGameState.getPlayerInTurn());
 		assertEquals("Should not be able to play at non existing node", false,
 				thirdGameState.isMoveValid(player3Id, new Coordinates(0, 0)));
 		Optional<GameState> optionalFourthGameState = thirdGameState.tryMove(player3Id, new Coordinates(0, 3));
@@ -170,7 +169,7 @@ public class GameModelIT {
 		Optional<GameState> optionalSecondGameState = firstGameState.tryMove(player1Id, new Coordinates(2, 0));
 		// Check that the new gameState has no player in turn and is game over
 		GameState secondGameState = optionalSecondGameState.get();
-		assertNull(secondGameState.getPlayerInTurn());
+		assertEquals(false, secondGameState.getPlayerInTurn().isPresent());
 		assertEquals(true, secondGameState.isGameOver());
 
 	}
