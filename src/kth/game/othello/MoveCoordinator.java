@@ -116,7 +116,7 @@ public class MoveCoordinator {
 	private List<Node> updateBoardState() {
 		List<Node> swapped = boardAdapter.setBoardState(gameModel.getGameState().getBoard());
 		moveNotifier.moveWasMade(swapped);
-		if (gameModel.getPlayerInTurn() == null) {
+		if (!gameModel.getPlayerInTurn().isPresent()) {
 			gameFinishedNotifier.gameDidFinish();
 		}
 		return swapped;
