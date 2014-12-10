@@ -14,12 +14,12 @@ import kth.game.othello.player.PlayerHandler;
 import kth.game.othello.rules.Rules;
 
 /**
- * A MoveCoordinator is responsible for making moves such that they are
+ * A GameController is responsible for making moves such that they are
  * reflected in all relevant components.
  */
-public class MoveCoordinator {
+public class GameController {
 
-	// MoveCoordinator OWNS the game model and may change model as it pleases.
+	// GameController OWNS the game model and may change model as it pleases.
 	private GameModel gameModel;
 
 	private final BoardAdapter boardAdapter;
@@ -30,7 +30,7 @@ public class MoveCoordinator {
 	private final GameModelFactory gameModelFactory;
 
 	/**
-	 * Create a new MoveCoordinator instance.
+	 * Create a new GameController instance.
 	 * 
 	 * @param rules
 	 *            the rules the moves have to follow.
@@ -39,9 +39,9 @@ public class MoveCoordinator {
 	 * @param moveNotifier
 	 *            the notifier of move events.
 	 */
-	protected MoveCoordinator(GameModel initGameModel, BoardAdapter boardAdapter, PlayerHandler playerHandler,
-			Rules rules, GameFinishedNotifier gameFinishedNotifier, MoveNotifier moveNotifier,
-			GameModelFactory gameModelFactory) {
+	protected GameController(GameModel initGameModel, BoardAdapter boardAdapter, PlayerHandler playerHandler,
+                             Rules rules, GameFinishedNotifier gameFinishedNotifier, MoveNotifier moveNotifier,
+                             GameModelFactory gameModelFactory) {
 		this.boardAdapter = boardAdapter;
 		this.playerHandler = playerHandler;
 		this.rules = rules;
@@ -77,7 +77,7 @@ public class MoveCoordinator {
 					boardAdapter));
 			return synchronizedMove(playerIdInTurn, coordinatesToPlayAt);
 		}
-		throw new IllegalStateException("This should never be reached. There is a bug in move() of SimpleOthello.");
+		throw new IllegalStateException("This should never be reached. There is a bug in move() of OthelloFacade.");
 	}
 
 	/**

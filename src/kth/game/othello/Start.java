@@ -9,7 +9,7 @@ import kth.game.othello.view.swing.OthelloViewFactory;
 public class Start {
 
     public static void main(String[] args) {
-        OthelloFactory othelloFactory = new SimpleOthelloFactory();
+        OthelloFactory othelloFactory = new OthelloFacadeFactory();
         Othello othello = othelloFactory.createHumanVersusComputerGame();
 
         OthelloView othelloView = OthelloViewFactory.create(othello, 0, 0);

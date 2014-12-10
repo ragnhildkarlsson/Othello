@@ -169,7 +169,7 @@ public class ImmutableBoard {
 	public Set<String> getPlayerIDs() {
 		HashSet<String> playerIDs = new HashSet<>();
 		for (ImmutableNode node : this.nodes.values()) {
-			node.getOccupantPlayerId().ifPresent(playerID -> playerIDs.add(playerID));
+			node.getOccupantPlayerId().ifPresent(playerIDs::add);
 		}
 		return playerIDs;
 	}
@@ -189,7 +189,7 @@ public class ImmutableBoard {
 
 		Map<String, Character> playerSymbols = new HashMap<>();
 		Set<String> players = getPlayerIDs();
-		int minLength = players.stream().map(player -> player.length())
+		int minLength = players.stream().map(String::length)
 				.reduce(Integer.MAX_VALUE, (min, current) -> Math.min(current, min));
 		for (int i = 0; i < minLength; i++) {
 			Set<Character> chars = new HashSet<>();

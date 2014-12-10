@@ -20,7 +20,7 @@ public class OthelloLab2IT {
 	}
 
 	private OthelloFactory getOthelloFactory() {
-		return new SimpleOthelloFactory();
+		return new OthelloFacadeFactory();
 	}
 
 	private Player createComputer(String name) {

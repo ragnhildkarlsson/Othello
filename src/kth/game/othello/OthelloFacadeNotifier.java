@@ -3,7 +3,6 @@ package kth.game.othello;
 import java.util.List;
 import java.util.Observable;
 
-import kth.game.othello.Othello;
 import kth.game.othello.board.Board;
 import kth.game.othello.board.Node;
 import kth.game.othello.player.Player;
@@ -12,11 +11,11 @@ import kth.game.othello.score.Score;
 /**
  * Stub delegation of all Othello functionality but observation. This class and
  * any of its children will have circular dependency with
- * {@link kth.game.othello.SimpleOthello} and may therefore be considered a part
+ * {@link OthelloFacade} and may therefore be considered a part
  * of its implementation, existing only to get around the incorrect use of the
  * Observer type in the API.
  */
-public abstract class SimpleOthelloNotifier extends Observable implements Othello {
+public abstract class OthelloFacadeNotifier extends Observable implements Othello {
 	private Othello underlyingOthello;
 
 	protected Othello getUnderlyingOthello() {

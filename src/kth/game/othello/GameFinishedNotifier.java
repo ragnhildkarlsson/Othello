@@ -5,11 +5,11 @@ import java.util.Observer;
 /**
  * Responsible for keeping track of and notifying observers of game finished
  * events. This class has circular dependency with
- * {@link kth.game.othello.SimpleOthello} and may therefore be considered a part
+ * {@link OthelloFacade} and may therefore be considered a part
  * of its implementation, existing only to get around the incorrect use of the
  * Observer type in the API.
  */
-public class GameFinishedNotifier extends SimpleOthelloNotifier {
+public class GameFinishedNotifier extends OthelloFacadeNotifier {
 
 	/**
 	 * Adds an observer. The observer will be called when the game has finished.
