@@ -10,11 +10,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import kth.game.othello.board.BoardAdapter;
+import kth.game.othello.board.Coordinates;
 import kth.game.othello.board.Node;
 import kth.game.othello.board.NodeAdapter;
 import kth.game.othello.board.factory.NodeData;
 import kth.game.othello.board.factory.Square;
-import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.GameModel;
 import kth.game.othello.model.GameModelFactory;
 import kth.game.othello.model.ImmutableBoard;

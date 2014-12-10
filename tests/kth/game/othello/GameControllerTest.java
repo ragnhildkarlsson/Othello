@@ -11,8 +11,8 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 
 import kth.game.othello.board.BoardAdapter;
+import kth.game.othello.board.Coordinates;
 import kth.game.othello.board.Node;
-import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.GameModel;
 import kth.game.othello.model.GameState;
 import kth.game.othello.model.ImmutableBoard;

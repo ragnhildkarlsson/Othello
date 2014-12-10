@@ -5,8 +5,8 @@ import java.util.Observer;
 import java.util.Optional;
 
 import kth.game.othello.board.BoardAdapter;
+import kth.game.othello.board.Coordinates;
 import kth.game.othello.board.Node;
-import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.GameModel;
 import kth.game.othello.model.GameModelFactory;
 import kth.game.othello.player.Player;

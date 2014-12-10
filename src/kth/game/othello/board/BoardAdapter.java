@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.ImmutableBoard;
 import kth.game.othello.model.ImmutableNode;
 
