@@ -53,11 +53,4 @@ public class TurnCalculator {
 		}
 		return Optional.empty();
 	}
-
-	/**
-	 * @return The number of players.
-	 */
-	public int getNumberOfPlayers() {
-		return this.players.size();
-	}
 }
