@@ -43,7 +43,8 @@ public class MoveCoordinatorTest {
 		when(mockGameModel.getGameState()).thenReturn(mock(GameState.class));
 		when(mockRules.isMoveValid(anyString(), anyString())).thenReturn(true);
 
-		MoveCoordinator moveCoordinator = new MoveCoordinator(mockRules);
+		MoveCoordinator moveCoordinator = new MoveCoordinator(mockRules, mock(GameFinishedNotifier.class),
+				mock(MoveNotifier.class));
 
 		// Test valid move without arguments
 		moveCoordinator.move(mockPlayer, mockGameModel, mockBoardAdapter);
@@ -66,7 +67,8 @@ public class MoveCoordinatorTest {
 		Rules mockRules = mock(Rules.class);
 		when(mockRules.isMoveValid(anyString(), anyString())).thenReturn(false);
 
-		MoveCoordinator moveCoordinator = new MoveCoordinator(mockRules);
+		MoveCoordinator moveCoordinator = new MoveCoordinator(mockRules, mock(GameFinishedNotifier.class),
+            mock(MoveNotifier.class));
 
 		// Test invalid move with arguments
 		moveCoordinator.move(null, mock(Node.class), null, null);
@@ -77,7 +79,8 @@ public class MoveCoordinatorTest {
 		Player mockHumanPlayer = mock(Player.class);
 		when(mockHumanPlayer.getType()).thenReturn(Player.Type.HUMAN);
 
-		MoveCoordinator moveCoordinator = new MoveCoordinator(null);
+		MoveCoordinator moveCoordinator = new MoveCoordinator(null, mock(GameFinishedNotifier.class),
+            mock(MoveNotifier.class));
 
 		moveCoordinator.move(mockHumanPlayer, null, null);
 	}

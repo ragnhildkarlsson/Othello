@@ -1,9 +1,7 @@
 package kth.game.othello;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.Instant;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import kth.game.othello.board.BoardAdapter;
@@ -11,16 +9,13 @@ import kth.game.othello.board.Node;
 import kth.game.othello.board.NodeAdapter;
 import kth.game.othello.board.factory.NodeData;
 import kth.game.othello.board.factory.Square;
-import kth.game.othello.model.Coordinates;
-import kth.game.othello.model.GameModelFactory;
-import kth.game.othello.model.ImmutableBoard;
-import kth.game.othello.model.ImmutableNode;
-import kth.game.othello.model.ModelRules;
+import kth.game.othello.model.*;
 import kth.game.othello.player.Player;
 import kth.game.othello.player.SimplePlayer;
 import kth.game.othello.player.movestrategy.MoveStrategy;
 import kth.game.othello.player.movestrategy.SimpleStrategy;
 import kth.game.othello.rules.RulesAdapter;
+import kth.game.othello.score.SimpleScore;
 
 /**
  * A factory for producing simple Othello games.
@@ -120,10 +115,19 @@ public class SimpleOthelloFactory implements OthelloFactory {
 
 		SimpleScore score = new SimpleScore(nodeAdapterSet);
 		BoardAdapter boardAdapter = new BoardAdapter(immutableBoard, nodeAdapters);
+        String othelloId = Instant.now().toString() + Long.toString((new Random()).nextLong());
 
-		RulesAdapter rulesAdapter = new RulesAdapter(rules, boardAdapter);
-		MoveCoordinator moveCoordinator = new MoveCoordinator(rulesAdapter);
-		return new SimpleOthello(players, boardAdapter, gameModelFactory, score, rulesAdapter, moveCoordinator);
+        RulesAdapter rulesAdapter = new RulesAdapter(rules, boardAdapter);
+        MoveNotifier moveNotifier = new MoveNotifier();
+        GameFinishedNotifier gameFinishedNotifier = new GameFinishedNotifier();
+        MoveCoordinator moveCoordinator = new MoveCoordinator(rulesAdapter, gameFinishedNotifier, moveNotifier);
+
+        SimpleOthello simpleOthello = new SimpleOthello(othelloId, players, boardAdapter, gameModelFactory, score, rulesAdapter,
+            moveCoordinator);
+        moveNotifier.initiateUnderlyingOthello(simpleOthello);
+        gameFinishedNotifier.initiateUnderlyingOthello(simpleOthello);
+
+		return simpleOthello;
 
 	}
 
