@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import kth.game.othello.Othello;
@@ -24,8 +25,8 @@ public class TournamentTest {
 	}
 
 	/**
-	 * ScoreItem and Match considered friendly, test that with 2 players 2 matches are played and the correct score is
-	 * saved.
+	 * Test that with two players then two matches are played and the correct score is saved, ScoreItem considered
+	 * friendly.
 	 * 
 	 */
 	@Test
@@ -45,13 +46,19 @@ public class TournamentTest {
 		Mockito.when(player2.getName()).thenReturn(player2Id);
 
 		OthelloFactory othelloFactory = Mockito.mock(OthelloFactory.class);
-		GameRunner gameRunner = Mockito.mock(GameRunner.class);
-		Othello match1 = Mockito.mock(Othello.class);
-		Othello match2 = Mockito.mock(Othello.class);
+		SilentRunner gameRunner = Mockito.mock(SilentRunner.class);
+		MatchFactory matchFactory = Mockito.mock(MatchFactory.class);
+		Match match1 = Mockito.mock(Match.class);
+		Match match2 = Mockito.mock(Match.class);
+		Mockito.when(matchFactory.generateMatch(Mockito.anyListOf(Player.class), Mockito.any(Othello.class)))
+				.thenReturn(match1, match2);
+
+		Othello othello1 = Mockito.mock(Othello.class);
+		Othello othello2 = Mockito.mock(Othello.class);
 
 		Set<NodeData> nodeDatas = new HashSet<NodeData>();
 		Mockito.when(othelloFactory.createGame(Mockito.anySetOf(NodeData.class), Mockito.anyListOf(Player.class)))
-				.thenReturn(match1, match2);
+				.thenReturn(othello1, othello2);
 
 		List<ScoreItem> match1Scores = new ArrayList<ScoreItem>();
 		match1Scores.add(new ScoreItem(player1Id, 2));
@@ -61,18 +68,22 @@ public class TournamentTest {
 		match2Scores.add(new ScoreItem(player1Id, 3));
 		match2Scores.add(new ScoreItem(player2Id, 2));
 
-		Mockito.when(gameRunner.runMatch(match1)).thenReturn(match1Scores);
-		Mockito.when(gameRunner.runMatch(match2)).thenReturn(match2Scores);
+		Mockito.when(match1.getResults()).thenReturn(Optional.of(match1Scores));
+		Mockito.when(match2.getResults()).thenReturn(Optional.of(match2Scores));
 
-		Tournament tournament = new Tournament(players, othelloFactory, nodeDatas, gameRunner);
+		Tournament tournament = new Tournament(players, othelloFactory, nodeDatas, gameRunner, matchFactory);
 
 		List<Match> result = tournament.startTournament();
 		// should been two matches
 		assertEquals(2, result.size());
+		// should have results
+		assertEquals(true, result.get(0).getResults().isPresent());
+		assertEquals(true, result.get(1).getResults().isPresent());
+
 		// check scores:
 		List<ScoreItem> scoreItems = new ArrayList<>();
 		for (Match match : result) {
-			scoreItems.addAll(match.getResults());
+			scoreItems.addAll(match.getResults().get());
 		}
 
 		int sumPlayer1 = scoreItems.stream().filter(e -> e.getPlayerId() == player1Id).map(p -> p.getScore())
@@ -90,7 +101,7 @@ public class TournamentTest {
 		// Get all score items:
 		List<ScoreItem> scoreItems = new ArrayList<>();
 		for (Match match : completedMatches) {
-			scoreItems.addAll(match.getResults());
+			scoreItems.addAll(match.getResults().get());
 		}
 		for (Player player : players) {
 

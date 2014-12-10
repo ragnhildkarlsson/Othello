@@ -4,21 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import kth.game.othello.Othello;
 import kth.game.othello.player.Player;
 import kth.game.othello.score.ScoreItem;
 
+/**
+ * A Match is responsible for keeping track of an Othello match, the match can be run and then scores will be available.
+ */
 class Match {
 
-	List<Player> players;
-	Optional<List<ScoreItem>> matchResults;
+	private Optional<List<ScoreItem>> matchResults;
+	private Othello othello;
 
-	public Match(List<Player> players) {
+	public Match(List<Player> players, Othello othello) {
 		this.matchResults = Optional.empty();
-		this.players = new ArrayList<Player>();
-		this.players.addAll(players);
+		this.othello = othello;
 	}
 
-	public void setScore(List<ScoreItem> playerScores) {
+	private void setScore(List<ScoreItem> playerScores) {
 		List<ScoreItem> results = new ArrayList<ScoreItem>();
 		results.addAll(playerScores);
 		this.matchResults = Optional.of(results);
@@ -26,26 +29,25 @@ class Match {
 
 	public List<Player> getPlayers() {
 		List<Player> playersCopy = new ArrayList<Player>();
-		playersCopy.addAll(players);
+		playersCopy.addAll(othello.getPlayers());
 		return playersCopy;
 	}
 
-	public boolean hasResults() {
-		if (matchResults.isPresent()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public List<ScoreItem> getResults() {
+	/**
+	 * @return the results of this match or null if no result is
+	 */
+	public Optional<List<ScoreItem>> getResults() {
 		if (matchResults.isPresent()) {
 			List<ScoreItem> results = matchResults.get();
-			List<ScoreItem> resultCopy = new ArrayList<ScoreItem>();
-			resultCopy.addAll(results);
-			return resultCopy;
+			return Optional.of(new ArrayList<ScoreItem>(results));
 		}
-		return null;
+		return Optional.empty();
+	}
+
+	public void runMatch(RunMatchStrategy runMatchStrategy) {
+		List<ScoreItem> result = runMatchStrategy.runMatch(othello);
+		this.setScore(result);
+
 	}
 
 }

@@ -9,7 +9,6 @@ import kth.game.othello.Othello;
 import kth.game.othello.OthelloFactory;
 import kth.game.othello.board.factory.NodeData;
 import kth.game.othello.player.Player;
-import kth.game.othello.score.ScoreItem;
 
 /**
  * A Tournament between computer players, each pair of player plays two games.
@@ -18,42 +17,32 @@ import kth.game.othello.score.ScoreItem;
 public class Tournament {
 
 	private List<Player> players;
-	private OthelloFactory othelloFactory;
+	private final OthelloFactory othelloFactory;
 	private List<Match> matchups;
-	private Set<NodeData> nodesData;
-	private GameRunner gameRunner;
+	private final Set<NodeData> nodesData;
+	private final RunMatchStrategy runMatchStrategy;
+	private final MatchFactory matchFactory;
 
 	public Tournament(List<Player> players, OthelloFactory othelloFactory, Set<NodeData> nodesData,
-			GameRunner gameRunner) {
+			RunMatchStrategy runMatchStrategy, MatchFactory matchFactory) {
 		this.players = players;
 		this.othelloFactory = othelloFactory;
 		this.nodesData = nodesData;
-		this.gameRunner = gameRunner;
+		this.runMatchStrategy = runMatchStrategy;
+		this.matchFactory = matchFactory;
 	}
 
 	/**
-	 * Run this Tournament with a view to display the games played.
-	 * 
-	 */
-	public void startViewableTournament() {
-
-		// TODO
-
-	}
-
-	/**
-	 * Run this Tournament without a view, returning matches that has been played.
+	 * Run this Tournament, returning matches that has been played.
 	 * 
 	 * @return the matches after they have been played.
 	 */
 	public List<Match> startTournament() {
 		// prepare all matches to be played
 		matchups = generateMatchups();
-		// play each match
+		// play each match with the given runMatchStrategy
 		for (Match match : matchups) {
-			Othello othello = this.othelloFactory.createGame(nodesData, match.getPlayers());
-			List<ScoreItem> matchResult = gameRunner.runMatch(othello);
-			match.setScore(matchResult); // save the result of the match
+			match.runMatch(runMatchStrategy);
 		}
 		return matchups;
 	}
@@ -63,7 +52,8 @@ public class Tournament {
 		for (Player playerOne : players) {
 			for (Player playerTwo : players) {
 				if (playerOne != playerTwo) { // players cannot play against themselves
-					matchesToPlay.add(new Match(Arrays.asList(playerOne, playerTwo)));
+					Othello othello = this.othelloFactory.createGame(nodesData, Arrays.asList(playerOne, playerTwo));
+					matchesToPlay.add(matchFactory.generateMatch(Arrays.asList(playerOne, playerTwo), othello));
 				}
 			}
 		}

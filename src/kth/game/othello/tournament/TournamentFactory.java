@@ -15,9 +15,11 @@ public class TournamentFactory {
 
 		OthelloFactory othelloFactory = new SimpleOthelloFactory();
 		Set<NodeData> nodesData = new Square().getNodes(8, computerPlayers);
-		GameRunner gameRunner = new GameRunner();
+		SilentRunner runMatchStrategy = new SilentRunner();
+		MatchFactory matchFactory = new MatchFactory();
 
-		Tournament tournament = new Tournament(computerPlayers, othelloFactory, nodesData, gameRunner);
+		Tournament tournament = new Tournament(computerPlayers, othelloFactory, nodesData, runMatchStrategy,
+				matchFactory);
 		return tournament;
 	}
 }

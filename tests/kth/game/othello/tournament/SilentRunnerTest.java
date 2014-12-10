@@ -12,7 +12,7 @@ import kth.game.othello.score.ScoreItem;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class GameRunnerTest {
+public class SilentRunnerTest {
 
 	@Test
 	public void testRunMatch() {
@@ -22,7 +22,7 @@ public class GameRunnerTest {
 		Mockito.when(othello.getScore()).thenReturn(Score);
 		List<ScoreItem> scores = new ArrayList<ScoreItem>();
 		Mockito.when(Score.getPlayersScore()).thenReturn(scores);
-		GameRunner gameRunner = new GameRunner();
+		SilentRunner gameRunner = new SilentRunner();
 
 		List<ScoreItem> result = gameRunner.runMatch(othello);
 		// move should have been called twice.

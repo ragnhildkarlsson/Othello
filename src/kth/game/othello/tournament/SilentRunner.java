@@ -6,11 +6,11 @@ import kth.game.othello.Othello;
 import kth.game.othello.score.ScoreItem;
 
 /**
- * A GameRunner is responsible for running one game between computer players, and then returning the result of the
- * match.
+ * A SilentRunner is responsible for running one game between computer players, and then returning the result of the
+ * match, without producing any output regarding the games running.
  *
  */
-public class GameRunner {
+public class SilentRunner implements RunMatchStrategy {
 
 	/**
 	 * Run the given Othello game where all players are assumed to be computers, until there are no more valid moves,
