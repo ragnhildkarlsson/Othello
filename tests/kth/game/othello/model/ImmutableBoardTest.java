@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import kth.game.othello.board.Coordinates;
 import org.junit.Test;
 
 /**

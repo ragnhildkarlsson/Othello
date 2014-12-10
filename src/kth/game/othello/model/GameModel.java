@@ -1,5 +1,7 @@
 package kth.game.othello.model;
 
+import kth.game.othello.board.Coordinates;
+
 import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;

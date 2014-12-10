@@ -10,10 +10,10 @@ import kth.game.othello.model.ImmutableNode;
  */
 public class NodeAdapter extends Observable implements Node {
 
-	private ImmutableNode nodeData;
+	private ImmutableNode immutableNode;
 
 	public NodeAdapter(ImmutableNode node) {
-		this.nodeData = node;
+		this.immutableNode = node;
 	}
 
 	/**
@@ -23,11 +23,11 @@ public class NodeAdapter extends Observable implements Node {
 	 *            the node to act as the underlying data.
 	 */
 	public void setNode(ImmutableNode nodeData) {
-		if (!this.nodeData.getOccupantPlayerId().equals(nodeData.getOccupantPlayerId())) {
+		if (!this.immutableNode.getOccupantPlayerId().equals(nodeData.getOccupantPlayerId())) {
 			this.setChanged();
 		}
 		String oldPlayerId = this.getOccupantPlayerId();
-		this.nodeData = nodeData;
+		this.immutableNode = nodeData;
 		this.notifyObservers(oldPlayerId);
 	}
 
@@ -58,7 +58,7 @@ public class NodeAdapter extends Observable implements Node {
 	 */
 	@Override
 	public String getOccupantPlayerId() {
-		return nodeData.getOccupantPlayerId().orElse(null);
+		return immutableNode.getOccupantPlayerId().orElse(null);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class NodeAdapter extends Observable implements Node {
 	 */
 	@Override
 	public int getXCoordinate() {
-		return nodeData.getCoordinates().getX();
+		return immutableNode.getCoordinates().getX();
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class NodeAdapter extends Observable implements Node {
 	 */
 	@Override
 	public int getYCoordinate() {
-		return nodeData.getCoordinates().getY();
+		return immutableNode.getCoordinates().getY();
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class NodeAdapter extends Observable implements Node {
 	 */
 	@Override
 	public boolean isMarked() {
-		return nodeData.isMarked();
+		return immutableNode.isMarked();
 	}
 
 }

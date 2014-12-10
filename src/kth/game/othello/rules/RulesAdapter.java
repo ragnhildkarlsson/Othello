@@ -6,7 +6,7 @@ import java.util.Set;
 
 import kth.game.othello.board.BoardAdapter;
 import kth.game.othello.board.Node;
-import kth.game.othello.model.Coordinates;
+import kth.game.othello.board.Coordinates;
 import kth.game.othello.model.ImmutableNode;
 import kth.game.othello.model.ModelRules;
 

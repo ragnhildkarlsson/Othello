@@ -9,7 +9,7 @@ public class OthelloLab3IT {
 
 	@Test
 	public void testViewWithTwoComputers() throws Exception {
-		OthelloFactory othelloFactory = new SimpleOthelloFactory();
+		OthelloFactory othelloFactory = new OthelloFacadeFactory();
 		Othello othello = othelloFactory.createComputerGame();
 
 		OthelloView othelloView = OthelloViewFactory.create(othello);

@@ -15,11 +15,6 @@ import org.mockito.Mockito;
 
 public class TournamentTest {
 
-	@Test
-	public void testStartTournamentWithView() {
-		// TODO with working view
-	}
-
 	/**
 	 * Test that with two players then two matches are played and the correct score is saved, ScoreItem considered
 	 * friendly.

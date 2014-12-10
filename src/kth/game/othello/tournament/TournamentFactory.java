@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import kth.game.othello.Othello;
+import kth.game.othello.OthelloFacadeFactory;
 import kth.game.othello.OthelloFactory;
-import kth.game.othello.SimpleOthelloFactory;
 import kth.game.othello.board.factory.NodeData;
 import kth.game.othello.board.factory.Square;
 import kth.game.othello.player.Player;
@@ -16,7 +16,7 @@ public class TournamentFactory {
 
 	public Tournament generateTournament(List<Player> computerPlayers, RunMatchStrategy runMatchStrategy) {
 
-		OthelloFactory othelloFactory = new SimpleOthelloFactory();
+		OthelloFactory othelloFactory = new OthelloFacadeFactory();
 		List<Match> matches = generateMatchups(computerPlayers, othelloFactory);
 
 		Tournament tournament = new Tournament(computerPlayers, matches, runMatchStrategy);

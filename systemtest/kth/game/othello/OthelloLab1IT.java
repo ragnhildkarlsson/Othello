@@ -20,7 +20,7 @@ public class OthelloLab1IT {
 	}
 
 	private OthelloFactory getOthelloFactory() {
-		return new SimpleOthelloFactory();
+		return new OthelloFacadeFactory();
 	}
 
 	private void makeAHumanMove(Othello othello, Player human) {

@@ -10,7 +10,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
-import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.ImmutableBoard;
 import kth.game.othello.model.ImmutableNode;
 

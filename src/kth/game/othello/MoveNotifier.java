@@ -7,11 +7,11 @@ import kth.game.othello.board.Node;
 
 /**
  * Responsible for keeping track of and notifying observers of move events. This
- * class has circular dependency with {@link kth.game.othello.SimpleOthello} and
+ * class has circular dependency with {@link OthelloFacade} and
  * may therefore be considered a part of its implementation, existing only to
  * get around the incorrect use of the Observer type in the API.
  */
-public class MoveNotifier extends SimpleOthelloNotifier {
+public class MoveNotifier extends OthelloFacadeNotifier {
 
 	/**
 	 * Adds an observer. The observer will be called when the game has finished.

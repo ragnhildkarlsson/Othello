@@ -11,8 +11,8 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 
 import kth.game.othello.board.BoardAdapter;
+import kth.game.othello.board.Coordinates;
 import kth.game.othello.board.Node;
-import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.GameModel;
 import kth.game.othello.model.GameState;
 import kth.game.othello.model.ImmutableBoard;
@@ -30,7 +30,7 @@ import org.mockito.Mockito;
  *
  * move() move(params)
  */
-public class MoveCoordinatorTest {
+public class GameControllerTest {
 
 	@Test
 	public void testMoveShouldSynchronizeMove() throws Exception {
@@ -56,10 +56,10 @@ public class MoveCoordinatorTest {
 		when(mockRules.isMoveValid(anyString(), anyString())).thenReturn(true);
 
 		int callsToSetBoardState = 0;
-		MoveCoordinator moveCoordinator = new MoveCoordinator(mockGameModel, mockBoardAdapter, mockPlayerHandler,
+		GameController gameController = new GameController(mockGameModel, mockBoardAdapter, mockPlayerHandler,
 				mockRules, mock(GameFinishedNotifier.class), mock(MoveNotifier.class), null);
 		// Test valid move without arguments
-		moveCoordinator.move();
+		gameController.move();
 		callsToSetBoardState++;
 		// Verify change was made on model
 		verify(mockGameModel, times(1)).move(anyString(), any(Coordinates.class));
@@ -67,7 +67,7 @@ public class MoveCoordinatorTest {
 		verify(mockBoardAdapter, times(callsToSetBoardState)).setBoardState(any(ImmutableBoard.class));
 
 		// Test valid move with arguments
-		moveCoordinator.move(movePlayerId, "node");
+		gameController.move(movePlayerId, "node");
 		callsToSetBoardState++;
 		// Verify change was made on model
 		verify(mockGameModel, times(2)).move(anyString(), any(Coordinates.class));
@@ -88,11 +88,11 @@ public class MoveCoordinatorTest {
 		when(mockRules.isMoveValid(anyString(), anyString())).thenReturn(false);
 		when(mockBoardAdapter.getNodeById(anyString())).thenReturn(mock(Node.class));
 
-		MoveCoordinator moveCoordinator = new MoveCoordinator(mockModel, mockBoardAdapter, null, mockRules,
+		GameController gameController = new GameController(mockModel, mockBoardAdapter, null, mockRules,
 				mock(GameFinishedNotifier.class), mock(MoveNotifier.class), null);
 
 		// Test invalid move with arguments
-		moveCoordinator.move(movePlayerId, "invalidMove");
+		gameController.move(movePlayerId, "invalidMove");
 	}
 
 	@Test(expected = IllegalStateException.class)
@@ -108,9 +108,9 @@ public class MoveCoordinatorTest {
 		when(mockGameModel.getPlayerInTurn()).thenReturn(Optional.of(playerId));
 		when(mockHumanPlayer.getType()).thenReturn(Player.Type.HUMAN);
 
-		MoveCoordinator moveCoordinator = new MoveCoordinator(mockGameModel, mockBoardAdapter, mockPlayerHandler,
+		GameController gameController = new GameController(mockGameModel, mockBoardAdapter, mockPlayerHandler,
 				mock(Rules.class), mock(GameFinishedNotifier.class), mock(MoveNotifier.class), null);
 
-		moveCoordinator.move();
+		gameController.move();
 	}
 }

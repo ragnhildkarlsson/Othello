@@ -15,17 +15,17 @@ import kth.game.othello.score.Score;
  * This class provides a facade that implements the
  * {@link kth.game.othello.Othello} API. Use it to play Othello.
  */
-public class SimpleOthello implements Othello {
+public class OthelloFacade implements Othello {
 
 	private final String id;
 	private final BoardAdapter boardAdapter;
 	private final RulesAdapter rulesAdapter;
-	private final MoveCoordinator moveCoordinator;
+	private final GameController gameController;
 	private final Score score;
 	private final PlayerHandler playerHandler;
 
 	/**
-	 * Creates a new SimpleOthello game. Assumes the GameModelFactory to always
+	 * Creates a new OthelloFacade game. Assumes the GameModelFactory to always
 	 * produce game models with the board that the given board adapter is
 	 * pre-configured with.
 	 *
@@ -35,15 +35,15 @@ public class SimpleOthello implements Othello {
 	 *            the score object that should keep track of the score.
 	 * @param rules
 	 *            the rules to be used for the game.
-	 * @param moveCoordinator
-	 *            the moveCoordinator to be used for the game.
+	 * @param gameController
+	 *            the gameController to be used for the game.
 	 */
-	protected SimpleOthello(String id, PlayerHandler playerHandler, BoardAdapter board, Score score,
-			RulesAdapter rules, MoveCoordinator moveCoordinator) {
+	protected OthelloFacade(String id, PlayerHandler playerHandler, BoardAdapter board, Score score,
+                            RulesAdapter rules, GameController gameController) {
 		this.id = id;
 		this.score = score;
 		this.rulesAdapter = rules;
-		this.moveCoordinator = moveCoordinator;
+		this.gameController = gameController;
 		this.boardAdapter = board;
 		this.playerHandler = playerHandler;
 
@@ -57,7 +57,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void addGameFinishedObserver(Observer observer) {
-		this.moveCoordinator.addGameFinishedObserver(observer);
+		this.gameController.addGameFinishedObserver(observer);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void addMoveObserver(Observer observer) {
-		this.moveCoordinator.addMoveObserver(observer);
+		this.gameController.addMoveObserver(observer);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public Player getPlayerInTurn() {
-		return moveCoordinator.getPlayerInTurn().orElse(null);
+		return gameController.getPlayerInTurn().orElse(null);
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move() {
-		return moveCoordinator.move();
+		return gameController.move();
 	}
 
 	/**
@@ -199,7 +199,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
-		return moveCoordinator.move(playerId, nodeId);
+		return gameController.move(playerId, nodeId);
 	}
 
 	/**
@@ -207,7 +207,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start() {
-		moveCoordinator.start();
+		gameController.start();
 	}
 
 	/**
@@ -218,7 +218,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start(String playerId) {
-		moveCoordinator.start(playerId);
+		gameController.start(playerId);
 	}
 
 	/**
@@ -226,7 +226,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void undo() {
-		moveCoordinator.undo();
+		gameController.undo();
 	}
 
 }

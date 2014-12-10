@@ -1,4 +1,4 @@
-package kth.game.othello.model;
+package kth.game.othello.board;
 
 /**
  * Holds a set of immutable x and y coordinates in a cartesian system.

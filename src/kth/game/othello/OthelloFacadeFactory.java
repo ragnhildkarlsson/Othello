@@ -10,11 +10,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import kth.game.othello.board.BoardAdapter;
+import kth.game.othello.board.Coordinates;
 import kth.game.othello.board.Node;
 import kth.game.othello.board.NodeAdapter;
 import kth.game.othello.board.factory.NodeData;
 import kth.game.othello.board.factory.Square;
-import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.GameModel;
 import kth.game.othello.model.GameModelFactory;
 import kth.game.othello.model.ImmutableBoard;
@@ -31,9 +31,9 @@ import kth.game.othello.score.SimpleScore;
 /**
  * A factory for producing simple Othello games.
  */
-public class SimpleOthelloFactory implements OthelloFactory {
+public class OthelloFacadeFactory implements OthelloFactory {
 
-	public SimpleOthelloFactory() {
+	public OthelloFacadeFactory() {
 	}
 
 	/**
@@ -128,21 +128,21 @@ public class SimpleOthelloFactory implements OthelloFactory {
 		// Create empty game model and init the boardAdapter
 		GameModel initGameModel = gameModelFactory.newEmptyGameModel();
 
-		// Create MoveCoordinator
+		// Create GameController
 		PlayerHandler playerHandler = new PlayerHandler(players);
 		MoveNotifier moveNotifier = new MoveNotifier();
 		GameFinishedNotifier gameFinishedNotifier = new GameFinishedNotifier();
-		MoveCoordinator moveCoordinator = new MoveCoordinator(initGameModel, boardAdapter, playerHandler, rulesAdapter,
+		GameController gameController = new GameController(initGameModel, boardAdapter, playerHandler, rulesAdapter,
 				gameFinishedNotifier, moveNotifier, gameModelFactory);
 
 		// Create OthelloFacade
 		String othelloId = Instant.now().toString() + Long.toString((new Random()).nextLong());
-		SimpleOthello simpleOthello = new SimpleOthello(othelloId, playerHandler, boardAdapter, score, rulesAdapter,
-				moveCoordinator);
-		moveNotifier.initiateUnderlyingOthello(simpleOthello);
-		gameFinishedNotifier.initiateUnderlyingOthello(simpleOthello);
+		OthelloFacade othelloFacade = new OthelloFacade(othelloId, playerHandler, boardAdapter, score, rulesAdapter,
+            gameController);
+		moveNotifier.initiateUnderlyingOthello(othelloFacade);
+		gameFinishedNotifier.initiateUnderlyingOthello(othelloFacade);
 
-		return simpleOthello;
+		return othelloFacade;
 
 	}
 
