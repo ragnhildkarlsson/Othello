@@ -65,16 +65,16 @@ public class GameModelIT {
 			Coordinates coord = new Coordinates(i, rowNumber);
 			switch (character) {
 			case "-":
-				nodeRow.add(new ImmutableNode(coord, null));
+				nodeRow.add(new ImmutableNode(coord, Optional.empty()));
 				break;
 			case "a":
-				nodeRow.add(new ImmutableNode(coord, player1Id));
+				nodeRow.add(new ImmutableNode(coord, Optional.of(player1Id)));
 				break;
 			case "b":
-				nodeRow.add(new ImmutableNode(coord, player2Id));
+				nodeRow.add(new ImmutableNode(coord, Optional.of(player2Id)));
 				break;
 			case "c":
-				nodeRow.add(new ImmutableNode(coord, player3Id));
+				nodeRow.add(new ImmutableNode(coord, Optional.of(player3Id)));
 				break;
 			default:
 				break;
