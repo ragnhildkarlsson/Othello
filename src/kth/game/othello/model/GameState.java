@@ -1,9 +1,9 @@
 package kth.game.othello.model;
 
-import kth.game.othello.board.Coordinates;
-
 import java.util.Optional;
 import java.util.Set;
+
+import kth.game.othello.board.Coordinates;
 
 public class GameState {
 
@@ -14,10 +14,11 @@ public class GameState {
 
 	/**
 	 * Creates a new game state with the given board and TurnCalculator. The
-	 * player in turn for the game state will be the startPlayer if this player
-	 * has a valid move, else the next player that has a valid move will be the
-	 * player in turn. If no player has a valid move the player in turn will be
-	 * an empty optional.
+	 * player in turn for the game state will be the player with the
+	 * startPlayerId if this player has a valid move, else the next player that
+	 * has a valid move will be the player in turn. If no player has a valid
+	 * move or startPlayerId is an empty optional the player in turn will be an
+	 * empty optional.
 	 * 
 	 * @param board
 	 *            the board of this game state
