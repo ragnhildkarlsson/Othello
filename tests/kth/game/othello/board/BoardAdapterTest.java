@@ -3,7 +3,12 @@ package kth.game.othello.board;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.Set;
 
 import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.ImmutableBoard;
@@ -43,9 +48,9 @@ public class BoardAdapterTest {
 	public void testSetBoardState() throws Exception {
 		ImmutableBoard oldBoard = Mockito.mock(ImmutableBoard.class);
 		ImmutableBoard newBoard = Mockito.mock(ImmutableBoard.class);
-		ImmutableNode node00 = new ImmutableNode(new Coordinates(0, 0), null);
-		ImmutableNode node10 = new ImmutableNode(new Coordinates(1, 0), null);
-		ImmutableNode node10New = new ImmutableNode(new Coordinates(1, 0), "swapped");
+		ImmutableNode node00 = new ImmutableNode(new Coordinates(0, 0), Optional.empty());
+		ImmutableNode node10 = new ImmutableNode(new Coordinates(1, 0), Optional.empty());
+		ImmutableNode node10New = new ImmutableNode(new Coordinates(1, 0), Optional.of("swapped"));
 
 		Set<ImmutableNode> oldNodes = new HashSet<>();
 		oldNodes.add(node00);

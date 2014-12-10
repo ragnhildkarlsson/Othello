@@ -19,7 +19,7 @@ import org.mockito.Mockito;
  * @author mikael
  *
  */
-public class GameModelITest {
+public class GameModelIT {
 
 	private final String player1Id = "a";
 	private final String player2Id = "b";
@@ -65,16 +65,16 @@ public class GameModelITest {
 			Coordinates coord = new Coordinates(i, rowNumber);
 			switch (character) {
 			case "-":
-				nodeRow.add(new ImmutableNode(coord, null));
+				nodeRow.add(new ImmutableNode(coord, Optional.empty()));
 				break;
 			case "a":
-				nodeRow.add(new ImmutableNode(coord, player1Id));
+				nodeRow.add(new ImmutableNode(coord, Optional.of(player1Id)));
 				break;
 			case "b":
-				nodeRow.add(new ImmutableNode(coord, player2Id));
+				nodeRow.add(new ImmutableNode(coord, Optional.of(player2Id)));
 				break;
 			case "c":
-				nodeRow.add(new ImmutableNode(coord, player3Id));
+				nodeRow.add(new ImmutableNode(coord, Optional.of(player3Id)));
 				break;
 			default:
 				break;

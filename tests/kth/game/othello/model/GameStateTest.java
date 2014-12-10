@@ -1,13 +1,13 @@
 package kth.game.othello.model;
 
-import org.junit.Test;
-import org.mockito.Mockito;
+import static org.junit.Assert.assertFalse;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.Assert.assertFalse;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 public class GameStateTest {
 
@@ -42,15 +42,15 @@ public class GameStateTest {
 	public void testTryMoveReturnNextGameStateWhenPlayerHasAValidMove() {
 		String player1 = "1";
 		String player2 = "2";
-        ImmutableNode node2 = new ImmutableNode(new Coordinates(1, 0), player2);
+		ImmutableNode node2 = new ImmutableNode(new Coordinates(1, 0), Optional.of(player2));
 		Coordinates playAtCoordinates = new Coordinates(2, 0);
 
-        Set<ImmutableNode> nodesToSwap = new HashSet<>();
+		Set<ImmutableNode> nodesToSwap = new HashSet<>();
 		nodesToSwap.add(node2);
 
 		Set<ImmutableNode> nodesActuallyChangedOfThisMove = new HashSet<>();
 		nodesActuallyChangedOfThisMove.add(node2);
-		ImmutableNode playedNode = new ImmutableNode(playAtCoordinates, player1);
+		ImmutableNode playedNode = new ImmutableNode(playAtCoordinates, Optional.of(player1));
 		nodesActuallyChangedOfThisMove.add(playedNode);
 
 		ImmutableBoard mockBoard = Mockito.mock(ImmutableBoard.class);
