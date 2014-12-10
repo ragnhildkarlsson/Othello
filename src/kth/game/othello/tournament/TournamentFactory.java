@@ -14,10 +14,9 @@ import kth.game.othello.player.Player;
 
 public class TournamentFactory {
 
-	public Tournament generateTournament(List<Player> computerPlayers) {
+	public Tournament generateTournament(List<Player> computerPlayers, RunMatchStrategy runMatchStrategy) {
 
 		OthelloFactory othelloFactory = new SimpleOthelloFactory();
-		SilentRunner runMatchStrategy = new SilentRunner();
 		List<Match> matches = generateMatchups(computerPlayers, othelloFactory);
 
 		Tournament tournament = new Tournament(computerPlayers, matches, runMatchStrategy);

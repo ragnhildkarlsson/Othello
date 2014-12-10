@@ -24,7 +24,7 @@ public class ViewRunner implements RunMatchStrategy {
 	 */
 	@Override
 	public List<ScoreItem> runMatch(Othello othello) {
-		OthelloView othelloView = OthelloViewFactory.create(othello);
+		OthelloView othelloView = OthelloViewFactory.create(othello, 0, 0);
 		othelloView.start();
 		return othello.getScore().getPlayersScore();
 	}

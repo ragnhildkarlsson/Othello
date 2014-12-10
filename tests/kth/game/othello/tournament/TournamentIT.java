@@ -31,8 +31,37 @@ public class TournamentIT {
 		Player random = new SimplePlayer("Random", "RandomID", new RandomStrategy(rand));
 
 		computerPlayers.addAll(Arrays.asList(simple, greedy, masochist, random));
+		RunMatchStrategy silentRunner = new SilentRunner();
 
-		Tournament tournament = tournamentFactory.generateTournament(computerPlayers);
+		Tournament tournament = tournamentFactory.generateTournament(computerPlayers, silentRunner);
+
+		List<Match> matchesPlayed = tournament.startTournament();
+
+		assertEquals(12, matchesPlayed.size());
+		// All matches should have results
+		for (Match match : matchesPlayed) {
+			assertEquals(true, match.getResults().isPresent());
+		}
+		// Print the results
+		printResults(matchesPlayed, computerPlayers);
+
+	}
+
+	@Test
+	public void testTournamentWithView() {
+		TournamentFactory tournamentFactory = new TournamentFactory();
+
+		Random rand = new Random();
+		List<Player> computerPlayers = new ArrayList<Player>();
+		Player simple = new SimplePlayer("Simple", "SimpleID", new SimpleStrategy());
+		Player greedy = new SimplePlayer("Greedy", "GreedyID", new GreedyStrategy());
+		Player masochist = new SimplePlayer("Masochist", "MasochistID", new MasochistStrategy());
+		Player random = new SimplePlayer("Random", "RandomID", new RandomStrategy(rand));
+
+		computerPlayers.addAll(Arrays.asList(simple, greedy, masochist, random));
+		RunMatchStrategy viewRunner = new ViewRunner();
+
+		Tournament tournament = tournamentFactory.generateTournament(computerPlayers, viewRunner);
 
 		List<Match> matchesPlayed = tournament.startTournament();
 
