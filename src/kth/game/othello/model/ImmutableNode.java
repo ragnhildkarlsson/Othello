@@ -3,8 +3,7 @@ package kth.game.othello.model;
 import java.util.Optional;
 
 /**
- * Holds information about the position and occupant player of a node on a
- * board.
+ * Holds information about the position and occupant player of a node on a board.
  */
 public final class ImmutableNode {
 
@@ -12,23 +11,21 @@ public final class ImmutableNode {
 	private final Coordinates coordinates;
 
 	/**
-	 * Construct an immutable node given its coordinates and occupying player
-	 * ID.
+	 * Construct an immutable node given its coordinates and occupying player ID.
 	 * 
 	 * @param playerId
-	 *            the player occupying the node. Empty optional if the node is
-	 *            unmarked.
+	 *            the player occupying the node. Empty optional if the node is unmarked.
 	 */
 	public ImmutableNode(Coordinates coordinates, Optional<String> playerId) {
 		this.coordinates = coordinates;
+		assert (playerId != null);
 		this.occupantPlayerId = playerId;
 	}
 
 	/**
 	 * Get the player id of the occupant player
 	 * 
-	 * @return An optional with the id of the occupant player or an empty
-	 *         optional if the node is not marked
+	 * @return An optional with the id of the occupant player or an empty optional if the node is not marked
 	 */
 	public Optional<String> getOccupantPlayerId() {
 		return this.occupantPlayerId;

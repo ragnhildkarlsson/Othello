@@ -1,8 +1,11 @@
 package kth.game.othello.tournament;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import kth.game.othello.Othello;
 import kth.game.othello.OthelloFactory;
 import kth.game.othello.SimpleOthelloFactory;
 import kth.game.othello.board.factory.NodeData;
@@ -14,12 +17,25 @@ public class TournamentFactory {
 	public Tournament generateTournament(List<Player> computerPlayers) {
 
 		OthelloFactory othelloFactory = new SimpleOthelloFactory();
-		Set<NodeData> nodesData = new Square().getNodes(8, computerPlayers);
 		SilentRunner runMatchStrategy = new SilentRunner();
-		MatchFactory matchFactory = new MatchFactory();
+		List<Match> matches = generateMatchups(computerPlayers, othelloFactory);
 
-		Tournament tournament = new Tournament(computerPlayers, othelloFactory, nodesData, runMatchStrategy,
-				matchFactory);
+		Tournament tournament = new Tournament(computerPlayers, matches, runMatchStrategy);
 		return tournament;
+	}
+
+	private List<Match> generateMatchups(List<Player> players, OthelloFactory othelloFactory) {
+		List<Match> matchesToPlay = new ArrayList<>();
+		for (Player playerOne : players) {
+			for (Player playerTwo : players) {
+				if (playerOne != playerTwo) { // players cannot play against themselves
+					List<Player> matchup = Arrays.asList(playerOne, playerTwo);
+					Set<NodeData> nodesData = new Square().getNodes(8, matchup);
+					Othello othello = othelloFactory.createGame(nodesData, matchup);
+					matchesToPlay.add(new Match(matchup, othello));
+				}
+			}
+		}
+		return matchesToPlay;
 	}
 }

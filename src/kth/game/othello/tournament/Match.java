@@ -64,6 +64,7 @@ class Match {
 	 */
 	public void runMatch(RunMatchStrategy runMatchStrategy) {
 		List<ScoreItem> result = runMatchStrategy.runMatch(othello);
+
 		this.setScore(result);
 
 	}

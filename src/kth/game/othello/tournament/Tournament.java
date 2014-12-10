@@ -1,13 +1,8 @@
 package kth.game.othello.tournament;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
-import kth.game.othello.Othello;
-import kth.game.othello.OthelloFactory;
-import kth.game.othello.board.factory.NodeData;
 import kth.game.othello.player.Player;
 
 /**
@@ -17,34 +12,23 @@ import kth.game.othello.player.Player;
 public class Tournament {
 
 	private List<Player> players;
-	private final OthelloFactory othelloFactory;
-	private List<Match> matchups;
-	private final Set<NodeData> nodesData;
+	private List<Match> matches;
 	private final RunMatchStrategy runMatchStrategy;
-	private final MatchFactory matchFactory;
 
 	/**
-	 * Create a new tournament, given its players, the nodes representing the board to play on, a strategy to run each
-	 * match with, and factories to create new Othelllo and Match instances.
+	 * Create a new tournament, given its players, matches and runStrategy.
 	 * 
 	 * @param players
 	 *            the players of this tournament.
-	 * @param othelloFactory
-	 *            a factory to generate Othello games.
-	 * @param nodesData
-	 *            nodes data representing to board to play the tournament on.
 	 * @param runMatchStrategy
 	 *            the strategy on how to run each match.
-	 * @param matchFactory
-	 *            a factory to generate new matches.
+	 * @param matchesToPlay
+	 *            the matches to play in this tournament.
 	 */
-	public Tournament(List<Player> players, OthelloFactory othelloFactory, Set<NodeData> nodesData,
-			RunMatchStrategy runMatchStrategy, MatchFactory matchFactory) {
+	public Tournament(List<Player> players, List<Match> matchesToPlay, RunMatchStrategy runMatchStrategy) {
 		this.players = players;
-		this.othelloFactory = othelloFactory;
-		this.nodesData = nodesData;
 		this.runMatchStrategy = runMatchStrategy;
-		this.matchFactory = matchFactory;
+		this.matches = matchesToPlay;
 	}
 
 	/**
@@ -53,25 +37,14 @@ public class Tournament {
 	 * @return the matches after they have been played.
 	 */
 	public List<Match> startTournament() {
-		// prepare all matches to be played
-		matchups = generateMatchups();
 		// play each match with the given runMatchStrategy
-		for (Match match : matchups) {
+		for (Match match : matches) {
 			match.runMatch(runMatchStrategy);
 		}
-		return matchups;
+		return matches;
 	}
 
-	private List<Match> generateMatchups() {
-		List<Match> matchesToPlay = new ArrayList<>();
-		for (Player playerOne : players) {
-			for (Player playerTwo : players) {
-				if (playerOne != playerTwo) { // players cannot play against themselves
-					Othello othello = this.othelloFactory.createGame(nodesData, Arrays.asList(playerOne, playerTwo));
-					matchesToPlay.add(matchFactory.generateMatch(Arrays.asList(playerOne, playerTwo), othello));
-				}
-			}
-		}
-		return matchesToPlay;
+	public List<Player> getPlayers() {
+		return new ArrayList<Player>(this.players);
 	}
 }

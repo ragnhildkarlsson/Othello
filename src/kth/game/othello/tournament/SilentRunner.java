@@ -22,6 +22,7 @@ public class SilentRunner implements RunMatchStrategy {
 	 */
 	public List<ScoreItem> runMatch(Othello othello) {
 		// run the game till no more moves can be made
+		othello.start();
 		while (othello.isActive()) {
 			othello.move();
 		}

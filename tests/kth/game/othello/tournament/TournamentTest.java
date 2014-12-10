@@ -3,14 +3,10 @@ package kth.game.othello.tournament;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
-import kth.game.othello.Othello;
-import kth.game.othello.OthelloFactory;
-import kth.game.othello.board.factory.NodeData;
 import kth.game.othello.player.Player;
 import kth.game.othello.score.ScoreItem;
 
@@ -45,20 +41,10 @@ public class TournamentTest {
 		Mockito.when(player2.getId()).thenReturn(player2Id);
 		Mockito.when(player2.getName()).thenReturn(player2Id);
 
-		OthelloFactory othelloFactory = Mockito.mock(OthelloFactory.class);
 		SilentRunner gameRunner = Mockito.mock(SilentRunner.class);
-		MatchFactory matchFactory = Mockito.mock(MatchFactory.class);
+		;
 		Match match1 = Mockito.mock(Match.class);
 		Match match2 = Mockito.mock(Match.class);
-		Mockito.when(matchFactory.generateMatch(Mockito.anyListOf(Player.class), Mockito.any(Othello.class)))
-				.thenReturn(match1, match2);
-
-		Othello othello1 = Mockito.mock(Othello.class);
-		Othello othello2 = Mockito.mock(Othello.class);
-
-		Set<NodeData> nodeDatas = new HashSet<NodeData>();
-		Mockito.when(othelloFactory.createGame(Mockito.anySetOf(NodeData.class), Mockito.anyListOf(Player.class)))
-				.thenReturn(othello1, othello2);
 
 		List<ScoreItem> match1Scores = new ArrayList<ScoreItem>();
 		match1Scores.add(new ScoreItem(player1Id, 2));
@@ -71,7 +57,8 @@ public class TournamentTest {
 		Mockito.when(match1.getResults()).thenReturn(Optional.of(match1Scores));
 		Mockito.when(match2.getResults()).thenReturn(Optional.of(match2Scores));
 
-		Tournament tournament = new Tournament(players, othelloFactory, nodeDatas, gameRunner, matchFactory);
+		List<Match> matchesToPlay = new ArrayList<Match>(Arrays.asList(match1, match2));
+		Tournament tournament = new Tournament(players, matchesToPlay, gameRunner);
 
 		List<Match> result = tournament.startTournament();
 		// should been two matches
