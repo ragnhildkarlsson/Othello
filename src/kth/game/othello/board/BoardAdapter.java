@@ -20,6 +20,7 @@ public class BoardAdapter implements Board {
 
 	private ImmutableBoard boardState;
 	private List<NodeAdapter> nodeAdapters;
+    private static boolean printChanges = false;
 
 	/**
 	 * Creates a new board adapter. The passed node adapters are assumed to be
@@ -166,6 +167,10 @@ public class BoardAdapter implements Board {
 
 		this.boardState = newBoardState;
 
+        if (this.printChanges) {
+            System.out.println(newBoardState);
+        }
+
 		return changedNodeAdapters;
 	}
 
@@ -201,4 +206,8 @@ public class BoardAdapter implements Board {
 		return this.boardState;
 	}
 
+    @Override
+    public String toString() {
+        return boardState.toString();
+    }
 }

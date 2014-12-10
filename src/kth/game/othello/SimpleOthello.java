@@ -1,13 +1,13 @@
 package kth.game.othello;
 
-import java.util.*;
+import java.util.List;
+import java.util.Observer;
 
 import kth.game.othello.board.Board;
 import kth.game.othello.board.BoardAdapter;
 import kth.game.othello.board.Node;
-import kth.game.othello.model.GameModel;
-import kth.game.othello.model.GameModelFactory;
 import kth.game.othello.player.Player;
+import kth.game.othello.player.PlayerHandler;
 import kth.game.othello.rules.RulesAdapter;
 import kth.game.othello.score.Score;
 
@@ -20,24 +20,17 @@ public class SimpleOthello implements Othello {
 	private final String id;
 	private final BoardAdapter boardAdapter;
 	private final RulesAdapter rulesAdapter;
-	private final GameModelFactory gameModelFactory;
 	private final MoveCoordinator moveCoordinator;
-	private GameModel gameModel;
 	private final Score score;
-	private final Map<String, Player> playerMap = new HashMap<>();
+	private final PlayerHandler playerHandler;
 
 	/**
 	 * Creates a new SimpleOthello game. Assumes the GameModelFactory to always
 	 * produce game models with the board that the given board adapter is
 	 * pre-configured with.
 	 *
-	 * @param players
-	 *            the players present on the given board.
 	 * @param board
 	 *            the board adaptor that will be used.
-	 * @param gameModelFactory
-	 *            the factory from which the game should produce it's game
-	 *            models.
 	 * @param score
 	 *            the score object that should keep track of the score.
 	 * @param rules
@@ -45,18 +38,14 @@ public class SimpleOthello implements Othello {
 	 * @param moveCoordinator
 	 *            the moveCoordinator to be used for the game.
 	 */
-	protected SimpleOthello(String id, Collection<Player> players, BoardAdapter board, GameModelFactory gameModelFactory,
-			Score score, RulesAdapter rules, MoveCoordinator moveCoordinator) {
-
+	protected SimpleOthello(String id, PlayerHandler playerHandler, BoardAdapter board, Score score,
+			RulesAdapter rules, MoveCoordinator moveCoordinator) {
 		this.id = id;
 		this.score = score;
 		this.rulesAdapter = rules;
 		this.moveCoordinator = moveCoordinator;
-		this.gameModelFactory = gameModelFactory;
-		this.gameModel = gameModelFactory.newEmptyGameModel();
 		this.boardAdapter = board;
-		players.stream().forEach(player -> playerMap.put(player.getId(), player));
-		board.setBoardState(this.gameModel.getGameState().getBoard());
+		this.playerHandler = playerHandler;
 
 	}
 
@@ -68,7 +57,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void addGameFinishedObserver(Observer observer) {
-	    this.moveCoordinator.addGameFinishedObserver(observer);
+		this.moveCoordinator.addGameFinishedObserver(observer);
 	}
 
 	/**
@@ -122,7 +111,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public Player getPlayerInTurn() {
-		return playerMap.get(gameModel.getPlayerInTurn());
+		return moveCoordinator.getPlayerInTurn().orElse(null);
 	}
 
 	/**
@@ -132,7 +121,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Player> getPlayers() {
-		return new ArrayList<>(playerMap.values());
+		return playerHandler.getPlayers();
 	}
 
 	/**
@@ -154,7 +143,6 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean hasValidMove(String playerId) {
-		checkPlayerId(playerId);
 		return rulesAdapter.hasValidMove(playerId);
 	}
 
@@ -179,7 +167,6 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public boolean isMoveValid(String playerId, String nodeId) {
-		checkPlayerId(playerId);
 		return rulesAdapter.isMoveValid(playerId, nodeId);
 	}
 
@@ -194,8 +181,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move() {
-		String playerIdInTurn = gameModel.getPlayerInTurn();
-		return moveCoordinator.move(playerMap.get(playerIdInTurn), gameModel, boardAdapter);
+		return moveCoordinator.move();
 	}
 
 	/**
@@ -213,8 +199,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
-		Node nodeToPlayAt = boardAdapter.getNodeById(nodeId);
-		return moveCoordinator.move(playerId, nodeToPlayAt, gameModel, boardAdapter);
+		return moveCoordinator.move(playerId, nodeId);
 	}
 
 	/**
@@ -222,8 +207,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start() {
-		gameModel = gameModelFactory.newGameModel();
-		boardAdapter.setBoardState(gameModel.getGameState().getBoard());
+		moveCoordinator.start();
 	}
 
 	/**
@@ -234,9 +218,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void start(String playerId) {
-		checkPlayerId(playerId);
-		gameModel = gameModelFactory.newGameModel(playerId);
-		boardAdapter.setBoardState(gameModel.getGameState().getBoard());
+		moveCoordinator.start(playerId);
 	}
 
 	/**
@@ -244,13 +226,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void undo() {
-        gameModel.undo().ifPresent(gameState -> boardAdapter.setBoardState(gameState.getBoard()));
-	}
-
-	private void checkPlayerId(String playerId) {
-		if (!playerMap.containsKey(playerId)) {
-			throw new NoSuchElementException("Player id \"" + playerId + "\" does not exist.");
-		}
+		moveCoordinator.undo();
 	}
 
 }
