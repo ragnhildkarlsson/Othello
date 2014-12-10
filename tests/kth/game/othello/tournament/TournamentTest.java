@@ -96,20 +96,4 @@ public class TournamentTest {
 		assertEquals(3, sumPlayer2);
 
 	}
-
-	private void printPlayerTotalScore(List<Match> completedMatches, List<Player> players) {
-		// Get all score items:
-		List<ScoreItem> scoreItems = new ArrayList<>();
-		for (Match match : completedMatches) {
-			scoreItems.addAll(match.getResults().get());
-		}
-		for (Player player : players) {
-
-			int sum = scoreItems.stream().filter(e -> e.getPlayerId() == player.getId()).map(p -> p.getScore())
-					.reduce(0, (soFar, score) -> score + soFar);
-			System.out.println("Player " + player.getName() + " got a total score of " + sum);
-		}
-
-	}
-
 }

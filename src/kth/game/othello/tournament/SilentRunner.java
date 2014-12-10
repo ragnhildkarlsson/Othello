@@ -7,7 +7,7 @@ import kth.game.othello.score.ScoreItem;
 
 /**
  * A SilentRunner is responsible for running one game between computer players, and then returning the result of the
- * match, without producing any output regarding the games running.
+ * match, without producing any output regarding the games while running.
  *
  */
 public class SilentRunner implements RunMatchStrategy {

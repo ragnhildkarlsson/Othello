@@ -23,6 +23,21 @@ public class Tournament {
 	private final RunMatchStrategy runMatchStrategy;
 	private final MatchFactory matchFactory;
 
+	/**
+	 * Create a new tournament, given its players, the nodes representing the board to play on, a strategy to run each
+	 * match with, and factories to create new Othelllo and Match instances.
+	 * 
+	 * @param players
+	 *            the players of this tournament.
+	 * @param othelloFactory
+	 *            a factory to generate Othello games.
+	 * @param nodesData
+	 *            nodes data representing to board to play the tournament on.
+	 * @param runMatchStrategy
+	 *            the strategy on how to run each match.
+	 * @param matchFactory
+	 *            a factory to generate new matches.
+	 */
 	public Tournament(List<Player> players, OthelloFactory othelloFactory, Set<NodeData> nodesData,
 			RunMatchStrategy runMatchStrategy, MatchFactory matchFactory) {
 		this.players = players;
@@ -59,5 +74,4 @@ public class Tournament {
 		}
 		return matchesToPlay;
 	}
-
 }
