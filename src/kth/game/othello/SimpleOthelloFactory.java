@@ -1,12 +1,7 @@
 package kth.game.othello;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import kth.game.othello.board.BoardAdapter;
@@ -14,12 +9,9 @@ import kth.game.othello.board.Node;
 import kth.game.othello.board.NodeAdapter;
 import kth.game.othello.board.factory.NodeData;
 import kth.game.othello.board.factory.Square;
-import kth.game.othello.model.Coordinates;
-import kth.game.othello.model.GameModelFactory;
-import kth.game.othello.model.ImmutableBoard;
-import kth.game.othello.model.ImmutableNode;
-import kth.game.othello.model.ModelRules;
+import kth.game.othello.model.*;
 import kth.game.othello.player.Player;
+import kth.game.othello.player.PlayerHandler;
 import kth.game.othello.player.SimplePlayer;
 import kth.game.othello.player.movestrategy.MoveStrategy;
 import kth.game.othello.player.movestrategy.SimpleStrategy;
@@ -112,27 +104,27 @@ public class SimpleOthelloFactory implements OthelloFactory {
 		Set<ImmutableNode> immutableNodes = nodesData.stream().map(this::getImmutableNodeFromNodeData)
 				.collect(Collectors.toSet());
 		ImmutableBoard immutableBoard = new ImmutableBoard(immutableNodes);
-
 		List<String> playerIds = players.stream().map(Player::getId).collect(Collectors.toList());
 		ModelRules rules = new ModelRules();
-
-		GameModelFactory gameModelFactory = new GameModelFactory(immutableBoard, playerIds, rules);
+        GameModelFactory gameModelFactory = new GameModelFactory(immutableBoard, playerIds, rules);
 
 		// Create adapters
 		List<NodeAdapter> nodeAdapters = immutableNodes.stream().map(NodeAdapter::new).collect(Collectors.toList());
 		Set<Node> nodeAdapterSet = new HashSet<>(nodeAdapters);
+        SimpleScore score = new SimpleScore(nodeAdapterSet);
+        BoardAdapter boardAdapter = new BoardAdapter(immutableBoard, nodeAdapters);
+        RulesAdapter rulesAdapter = new RulesAdapter(rules, boardAdapter);
 
-		SimpleScore score = new SimpleScore(nodeAdapterSet);
-		BoardAdapter boardAdapter = new BoardAdapter(immutableBoard, nodeAdapters);
-		String othelloId = Instant.now().toString() + Long.toString((new Random()).nextLong());
+        // Create MoveCoordinator
+        PlayerHandler playerHandler = new PlayerHandler(players);
+        MoveNotifier moveNotifier = new MoveNotifier();
+        GameFinishedNotifier gameFinishedNotifier = new GameFinishedNotifier();
+        MoveCoordinator moveCoordinator = new MoveCoordinator(boardAdapter, playerHandler, rulesAdapter,
+				gameFinishedNotifier, moveNotifier, gameModelFactory);
 
-		RulesAdapter rulesAdapter = new RulesAdapter(rules, boardAdapter);
-		MoveNotifier moveNotifier = new MoveNotifier();
-		GameFinishedNotifier gameFinishedNotifier = new GameFinishedNotifier();
-		MoveCoordinator moveCoordinator = new MoveCoordinator(rulesAdapter, gameFinishedNotifier, moveNotifier);
-
-		SimpleOthello simpleOthello = new SimpleOthello(othelloId, players, boardAdapter, gameModelFactory, score,
-				rulesAdapter, moveCoordinator);
+        // Create OthelloFacade
+        String othelloId = Instant.now().toString() + Long.toString((new Random()).nextLong());
+        SimpleOthello simpleOthello = new SimpleOthello(othelloId, boardAdapter, score, rulesAdapter, moveCoordinator);
 		moveNotifier.initiateUnderlyingOthello(simpleOthello);
 		gameFinishedNotifier.initiateUnderlyingOthello(simpleOthello);
 

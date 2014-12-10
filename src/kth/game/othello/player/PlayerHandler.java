@@ -1,21 +1,17 @@
 package kth.game.othello.player;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
- * This class is responsible for keeping the players of the game
+ * This class is responsible for keeping the players of the game and mapping
+ * between their id and object representation.
  */
-
 public class PlayerHandler {
 
 	HashMap<String, Player> players;
 
 	public PlayerHandler(Collection<Player> players) {
-		this.players = new HashMap<String, Player>();
+		this.players = new HashMap<>();
 		players.stream().forEach(player -> this.players.put(player.getId(), player));
 	}
 
@@ -24,6 +20,7 @@ public class PlayerHandler {
 	 * given id is a NoSuchElementException thrown.
 	 * 
 	 * @param playerId
+	 *            the player id of the wanted player object
 	 * @return The player that have given id.
 	 */
 	public Player getPlayer(String playerId) {

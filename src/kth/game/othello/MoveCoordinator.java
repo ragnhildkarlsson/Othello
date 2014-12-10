@@ -2,12 +2,15 @@ package kth.game.othello;
 
 import java.util.List;
 import java.util.Observer;
+import java.util.Optional;
 
 import kth.game.othello.board.BoardAdapter;
 import kth.game.othello.board.Node;
 import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.GameModel;
+import kth.game.othello.model.GameModelFactory;
 import kth.game.othello.player.Player;
+import kth.game.othello.player.PlayerHandler;
 import kth.game.othello.rules.Rules;
 
 /**
@@ -16,9 +19,15 @@ import kth.game.othello.rules.Rules;
  */
 public class MoveCoordinator {
 
+	// MoveCoordinator OWNS the game model and may change model as it pleases.
+	private GameModel gameModel;
+
+	private final BoardAdapter boardAdapter;
+	private final PlayerHandler playerHandler;
 	private final Rules rules;
 	private final GameFinishedNotifier gameFinishedNotifier;
 	private final MoveNotifier moveNotifier;
+	private final GameModelFactory gameModelFactory;
 
 	/**
 	 * Create a new MoveCoordinator instance.
@@ -30,36 +39,38 @@ public class MoveCoordinator {
 	 * @param moveNotifier
 	 *            the notifier of move events.
 	 */
-	protected MoveCoordinator(Rules rules, GameFinishedNotifier gameFinishedNotifier, MoveNotifier moveNotifier) {
+	protected MoveCoordinator(BoardAdapter boardAdapter, PlayerHandler playerHandler, Rules rules,
+			GameFinishedNotifier gameFinishedNotifier, MoveNotifier moveNotifier, GameModelFactory gameModelFactory) {
+		this.boardAdapter = boardAdapter;
+		this.playerHandler = playerHandler;
 		this.rules = rules;
 		this.gameFinishedNotifier = gameFinishedNotifier;
 		this.moveNotifier = moveNotifier;
+		this.gameModelFactory = gameModelFactory;
+
+		this.gameModel = gameModelFactory.newEmptyGameModel();
+		updateBoardState();
 	}
 
 	/**
 	 * If the player in turn is a computer then this computer makes a move and
 	 * updates the player in turn.
 	 *
-	 * @param gameModel
-	 *            the gameModel where the move should be made
-	 * @param boardAdapter
-	 *            the boardAdapter where the move should be reflected
-	 * @param player
-	 *            the player that should make the move
 	 * @return the nodes that where swapped for this move, including the node
 	 *         where the player made the move
 	 * @throws IllegalStateException
 	 *             if there is not a computer in turn
 	 */
-	public List<Node> move(Player player, GameModel gameModel, BoardAdapter boardAdapter) {
+	public List<Node> move() {
+		String playerIdInTurn = gameModel.getPlayerInTurn();
+		Player player = playerHandler.getPlayer(playerIdInTurn);
 		switch (player.getType()) {
 		case HUMAN:
 			throw new IllegalStateException("Tried to do a Computer move using a human player: " + player);
 		case COMPUTER:
-			String playerIdInTurn = gameModel.getPlayerInTurn();
 			Coordinates coordinatesToPlayAt = toCoordinates(player.getMoveStrategy().move(player.getId(), rules,
 					boardAdapter));
-			return synchronizedMove(playerIdInTurn, coordinatesToPlayAt, gameModel, boardAdapter);
+			return synchronizedMove(playerIdInTurn, coordinatesToPlayAt);
 		}
 		throw new IllegalStateException("This should never be reached. There is a bug in move() of SimpleOthello.");
 	}
@@ -70,40 +81,64 @@ public class MoveCoordinator {
 	 *
 	 * @param playerId
 	 *            the id of the player that makes the move
-	 * @param node
-	 *            the node where the player wants to move
-	 * @param gameModel
-	 *            the gameModel where the move should be made
-	 * @param boardAdapter
-	 *            the boardAdapter where the move should be reflected
+	 * @param nodeId
+	 *            the id of the node the player wants to play at
 	 * @return the nodes that where swapped for this move, including the node
 	 *         where the player made the move
 	 * @throws IllegalArgumentException
 	 *             if the move is not valid, or if the player is not in turn
 	 */
-	public List<Node> move(String playerId, Node node, GameModel gameModel, BoardAdapter boardAdapter)
-			throws IllegalArgumentException {
-		Coordinates coordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
-		if (!rules.isMoveValid(playerId, node.getId())) {
+	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
+		Node nodeToPlayAt = boardAdapter.getNodeById(nodeId);
+		Coordinates coordinates = toCoordinates(nodeToPlayAt);
+		if (!rules.isMoveValid(playerId, nodeToPlayAt.getId())) {
 			throw new IllegalArgumentException("The player was not allowed to make a move at the given node.");
-		} else {
-			return synchronizedMove(playerId, coordinates, gameModel, boardAdapter);
 		}
+		return synchronizedMove(playerId, coordinates);
 	}
 
 	/**
 	 * Performs a move that is assured to be reflected both in the game model
 	 * and the board adapter.
 	 */
-	private List<Node> synchronizedMove(String playerId, Coordinates nodeCoordinates, GameModel gameModel,
-			BoardAdapter boardAdapter) {
+	private List<Node> synchronizedMove(String playerId, Coordinates nodeCoordinates) {
 		gameModel.move(playerId, nodeCoordinates);
+		return updateBoardState();
+	}
+
+	private List<Node> updateBoardState() {
 		List<Node> swapped = boardAdapter.setBoardState(gameModel.getGameState().getBoard());
 		moveNotifier.moveWasMade(swapped);
-        if (gameModel.getPlayerInTurn() == null) {
-            gameFinishedNotifier.gameDidFinish();
-        }
+		if (gameModel.getPlayerInTurn() == null) {
+			gameFinishedNotifier.gameDidFinish();
+		}
 		return swapped;
+	}
+
+	/**
+	 * Starts the game. The player in turn will be chosen randomly.
+	 */
+	public void start() {
+		gameModel = gameModelFactory.newGameModel();
+		updateBoardState();
+	}
+
+	/**
+	 * Starts the game.
+	 *
+	 * @param playerId
+	 *            the id of the player that will start the game.
+	 */
+	public void start(String playerId) {
+		gameModel = gameModelFactory.newGameModel(playerId);
+		updateBoardState();
+	}
+
+	/**
+	 * Undo the last move.
+	 */
+	public void undo() {
+		gameModel.undo().ifPresent(gameState -> boardAdapter.setBoardState(gameState.getBoard()));
 	}
 
 	private Coordinates toCoordinates(Node node) {
@@ -129,5 +164,18 @@ public class MoveCoordinator {
 	 */
 	public void addMoveObserver(Observer observer) {
 		this.moveNotifier.addMoveObserver(observer);
+	}
+
+	/**
+	 * @return An optional containing the player in turn iff the game is not
+	 *         game over.
+	 */
+	public Optional<Player> getPlayerInTurn() {
+		Optional<Player> playerInTurn = Optional.empty();
+		String maybePlayerId = gameModel.getPlayerInTurn();
+		if (maybePlayerId.isPresent()) {
+			playerInTurn = playerHandler.getPlayer(maybePlayerId.get());
+		}
+		return playerInTurn;
 	}
 }
