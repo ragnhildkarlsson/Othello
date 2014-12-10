@@ -43,7 +43,7 @@ public class GameModelFactory {
 	 *         player ID first in turn.
 	 */
 	public GameModel newGameModel(String startPlayerId) {
-		return newGameModel(startPlayerId, startBoard);
+		return newGameModel(Optional.of(startPlayerId), startBoard);
 	}
 
 	/**
@@ -60,14 +60,14 @@ public class GameModelFactory {
 
 	public GameModel newEmptyGameModel() {
 		Set<ImmutableNode> emptyNodes = startBoard.getNodes().stream()
-				.map(node -> new ImmutableNode(node.getCoordinates(), null)).collect(Collectors.toSet());
+				.map(node -> new ImmutableNode(node.getCoordinates(), Optional.empty())).collect(Collectors.toSet());
 		ImmutableBoard emptyBoard = new ImmutableBoard(emptyNodes);
-		return newGameModel(null, emptyBoard);
+		return newGameModel(Optional.empty(), emptyBoard);
 	}
 
-	private GameModel newGameModel(String startPlayerId, ImmutableBoard startBoard) {
+	private GameModel newGameModel(Optional<String> startPlayerId, ImmutableBoard startBoard) {
 		TurnCalculator turnCalculator = new TurnCalculator(playerIds);
-		GameState startState = new GameState(startBoard, turnCalculator, rules, Optional.of(startPlayerId));
+		GameState startState = new GameState(startBoard, turnCalculator, rules, startPlayerId);
 		return new GameModel(startState);
 	}
 }
