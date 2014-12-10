@@ -27,11 +27,12 @@ public class GameModel {
 	}
 
 	/**
-	 * Get the id of the player in turn or null if no player can move.
+	 * Get an Optional with the id of the player in turn or an empty optional if
+	 * no player can move.
 	 * 
 	 * @return the id of the player in turn
 	 */
-	public String getPlayerInTurn() {
+	public Optional<String> getPlayerInTurn() {
 		return presentGameState.getPlayerInTurn();
 	}
 

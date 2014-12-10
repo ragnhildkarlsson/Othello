@@ -39,17 +39,16 @@ public class MoveCoordinator {
 	 * @param moveNotifier
 	 *            the notifier of move events.
 	 */
-	protected MoveCoordinator(BoardAdapter boardAdapter, PlayerHandler playerHandler, Rules rules,
-			GameFinishedNotifier gameFinishedNotifier, MoveNotifier moveNotifier, GameModelFactory gameModelFactory) {
+	protected MoveCoordinator(GameModel initGameModel, BoardAdapter boardAdapter, PlayerHandler playerHandler,
+			Rules rules, GameFinishedNotifier gameFinishedNotifier, MoveNotifier moveNotifier,
+			GameModelFactory gameModelFactory) {
 		this.boardAdapter = boardAdapter;
 		this.playerHandler = playerHandler;
 		this.rules = rules;
 		this.gameFinishedNotifier = gameFinishedNotifier;
 		this.moveNotifier = moveNotifier;
 		this.gameModelFactory = gameModelFactory;
-
-		this.gameModel = gameModelFactory.newEmptyGameModel();
-		updateBoardState();
+		this.gameModel = initGameModel;
 	}
 
 	/**
@@ -62,8 +61,14 @@ public class MoveCoordinator {
 	 *             if there is not a computer in turn
 	 */
 	public List<Node> move() {
-		String playerIdInTurn = gameModel.getPlayerInTurn();
+		Optional<String> maybePlayerIdInTurn = gameModel.getPlayerInTurn();
+		if (!maybePlayerIdInTurn.isPresent()) {
+			// Game Over
+			throw new IllegalStateException("Game is over no move is possible");
+		}
+		String playerIdInTurn = maybePlayerIdInTurn.get();
 		Player player = playerHandler.getPlayer(playerIdInTurn);
+
 		switch (player.getType()) {
 		case HUMAN:
 			throw new IllegalStateException("Tried to do a Computer move using a human player: " + player);
@@ -91,7 +96,9 @@ public class MoveCoordinator {
 	public List<Node> move(String playerId, String nodeId) throws IllegalArgumentException {
 		Node nodeToPlayAt = boardAdapter.getNodeById(nodeId);
 		Coordinates coordinates = toCoordinates(nodeToPlayAt);
-		if (!rules.isMoveValid(playerId, nodeToPlayAt.getId())) {
+
+		if (!gameModel.getPlayerInTurn().equals(Optional.of(playerId))
+				|| !rules.isMoveValid(playerId, nodeToPlayAt.getId())) {
 			throw new IllegalArgumentException("The player was not allowed to make a move at the given node.");
 		}
 		return synchronizedMove(playerId, coordinates);
@@ -172,9 +179,9 @@ public class MoveCoordinator {
 	 */
 	public Optional<Player> getPlayerInTurn() {
 		Optional<Player> playerInTurn = Optional.empty();
-		String maybePlayerId = gameModel.getPlayerInTurn();
+		Optional<String> maybePlayerId = gameModel.getPlayerInTurn();
 		if (maybePlayerId.isPresent()) {
-			playerInTurn = playerHandler.getPlayer(maybePlayerId.get());
+			playerInTurn = Optional.of(playerHandler.getPlayer(maybePlayerId.get()));
 		}
 		return playerInTurn;
 	}

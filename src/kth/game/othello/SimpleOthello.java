@@ -1,13 +1,13 @@
 package kth.game.othello;
 
-import java.util.*;
+import java.util.List;
+import java.util.Observer;
 
 import kth.game.othello.board.Board;
 import kth.game.othello.board.BoardAdapter;
 import kth.game.othello.board.Node;
-import kth.game.othello.model.GameModel;
-import kth.game.othello.model.GameModelFactory;
 import kth.game.othello.player.Player;
+import kth.game.othello.player.PlayerHandler;
 import kth.game.othello.rules.RulesAdapter;
 import kth.game.othello.score.Score;
 
@@ -22,7 +22,7 @@ public class SimpleOthello implements Othello {
 	private final RulesAdapter rulesAdapter;
 	private final MoveCoordinator moveCoordinator;
 	private final Score score;
-	private final Map<String, Player> playerMap = new HashMap<>();
+	private final PlayerHandler playerHandler;
 
 	/**
 	 * Creates a new SimpleOthello game. Assumes the GameModelFactory to always
@@ -38,14 +38,14 @@ public class SimpleOthello implements Othello {
 	 * @param moveCoordinator
 	 *            the moveCoordinator to be used for the game.
 	 */
-	protected SimpleOthello(String id, BoardAdapter board,
-			Score score, RulesAdapter rules, MoveCoordinator moveCoordinator) {
-
+	protected SimpleOthello(String id, PlayerHandler playerHandler, BoardAdapter board, Score score,
+			RulesAdapter rules, MoveCoordinator moveCoordinator) {
 		this.id = id;
 		this.score = score;
 		this.rulesAdapter = rules;
 		this.moveCoordinator = moveCoordinator;
 		this.boardAdapter = board;
+		this.playerHandler = playerHandler;
 
 	}
 
@@ -57,7 +57,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void addGameFinishedObserver(Observer observer) {
-	    this.moveCoordinator.addGameFinishedObserver(observer);
+		this.moveCoordinator.addGameFinishedObserver(observer);
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Player> getPlayers() {
-		return new ArrayList<>(playerMap.values());
+		return playerHandler.getPlayers();
 	}
 
 	/**
@@ -226,7 +226,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void undo() {
-        moveCoordinator.undo();
+		moveCoordinator.undo();
 	}
 
 }
