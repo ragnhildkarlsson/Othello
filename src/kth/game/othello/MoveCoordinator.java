@@ -127,7 +127,6 @@ public class MoveCoordinator {
 	 */
 	public void start() {
 		gameModel = gameModelFactory.newGameModel();
-		updateBoardState();
 	}
 
 	/**
@@ -138,7 +137,6 @@ public class MoveCoordinator {
 	 */
 	public void start(String playerId) {
 		gameModel = gameModelFactory.newGameModel(playerId);
-		updateBoardState();
 	}
 
 	/**

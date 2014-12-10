@@ -125,9 +125,8 @@ public class SimpleOthelloFactory implements OthelloFactory {
 		BoardAdapter boardAdapter = new BoardAdapter(immutableBoard, nodeAdapters);
 		RulesAdapter rulesAdapter = new RulesAdapter(rules, boardAdapter);
 
-		// Create empty game model and init the boardAdatpter
+		// Create empty game model and init the boardAdapter
 		GameModel initGameModel = gameModelFactory.newEmptyGameModel();
-		boardAdapter.setBoardState(initGameModel.getGameState().getBoard());
 
 		// Create MoveCoordinator
 		PlayerHandler playerHandler = new PlayerHandler(players);
