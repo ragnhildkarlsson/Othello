@@ -2,6 +2,7 @@ package kth.game.othello;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Observer;
 import java.util.Optional;
 
 import kth.game.othello.board.BoardAdapter;
@@ -17,10 +18,24 @@ import kth.game.othello.rules.Rules;
  */
 public class MoveCoordinator {
 
-	Rules rules;
+	private final Rules rules;
+	private final GameFinishedNotifier gameFinishedNotifier;
+	private final MoveNotifier moveNotifier;
 
-	protected MoveCoordinator(Rules rules) {
+	/**
+	 * Create a new MoveCoordinator instance.
+	 * 
+	 * @param rules
+	 *            the rules the moves have to follow.
+	 * @param gameFinishedNotifier
+	 *            the notifier of gameFinished events.
+	 * @param moveNotifier
+	 *            the notifier of move events.
+	 */
+	protected MoveCoordinator(Rules rules, GameFinishedNotifier gameFinishedNotifier, MoveNotifier moveNotifier) {
 		this.rules = rules;
+		this.gameFinishedNotifier = gameFinishedNotifier;
+		this.moveNotifier = moveNotifier;
 	}
 
 	/**
@@ -90,11 +105,36 @@ public class MoveCoordinator {
 	private List<Node> synchronizedMove(String playerId, Coordinates nodeCoordinates, GameModel gameModel,
 			BoardAdapter boardAdapter) {
 		gameModel.move(playerId, nodeCoordinates);
-		return boardAdapter.setBoardState(gameModel.getGameState().getBoard());
+		List<Node> swapped = boardAdapter.setBoardState(gameModel.getGameState().getBoard());
+		moveNotifier.moveWasMade(swapped);
+		if (gameModel.getPlayerInTurn() == null) {
+			gameFinishedNotifier.gameDidFinish();
+		}
+		return swapped;
 	}
 
 	private Coordinates toCoordinates(Node node) {
 		return new Coordinates(node.getXCoordinate(), node.getYCoordinate());
 	}
 
+	/**
+	 * Adds an observer. The observer will be called when the game has finished.
+	 *
+	 * @param observer
+	 *            the observer
+	 */
+	public void addGameFinishedObserver(Observer observer) {
+		this.gameFinishedNotifier.addGameFinishedObserver(observer);
+	}
+
+	/**
+	 * Adds an observer. The observers update will be called when a move has
+	 * finished including the nodes that have changed by the move.
+	 *
+	 * @param observer
+	 *            the observer
+	 */
+	public void addMoveObserver(Observer observer) {
+		this.moveNotifier.addMoveObserver(observer);
+	}
 }

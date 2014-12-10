@@ -59,14 +59,9 @@ public class GameModel {
 	public Set<Coordinates> move(String playerId, Coordinates nodeCoordinate) throws IllegalArgumentException {
 
 		Optional<GameState> maybeNewGameState = presentGameState.tryMove(playerId, nodeCoordinate);
-		if (!maybeNewGameState.isPresent()) {
-			throw new IllegalArgumentException();
-		}
-
-		GameState newGameState = maybeNewGameState.get();
+		GameState newGameState = maybeNewGameState.orElseThrow(() -> new IllegalArgumentException());
 		history.push(presentGameState);
 		presentGameState = newGameState;
-
 		return getSetOfCoordinatesFromNodes(newGameState.getBoard().getNodes());
 	}
 
@@ -86,9 +81,7 @@ public class GameModel {
 		if (!history.isEmpty()) {
 			presentGameState = history.pop();
 			return Optional.of(presentGameState);
-
 		}
 		return Optional.empty();
-
 	}
 }

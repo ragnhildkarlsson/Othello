@@ -1,9 +1,11 @@
 package kth.game.othello;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,6 +24,7 @@ import kth.game.othello.player.SimplePlayer;
 import kth.game.othello.player.movestrategy.MoveStrategy;
 import kth.game.othello.player.movestrategy.SimpleStrategy;
 import kth.game.othello.rules.RulesAdapter;
+import kth.game.othello.score.SimpleScore;
 
 /**
  * A factory for producing simple Othello games.
@@ -121,20 +124,24 @@ public class SimpleOthelloFactory implements OthelloFactory {
 
 		SimpleScore score = new SimpleScore(nodeAdapterSet);
 		BoardAdapter boardAdapter = new BoardAdapter(immutableBoard, nodeAdapters);
+		String othelloId = Instant.now().toString() + Long.toString((new Random()).nextLong());
 
 		RulesAdapter rulesAdapter = new RulesAdapter(rules, boardAdapter);
-		MoveCoordinator moveCoordinator = new MoveCoordinator(rulesAdapter);
-		return new SimpleOthello(players, boardAdapter, gameModelFactory, score, rulesAdapter, moveCoordinator);
+		MoveNotifier moveNotifier = new MoveNotifier();
+		GameFinishedNotifier gameFinishedNotifier = new GameFinishedNotifier();
+		MoveCoordinator moveCoordinator = new MoveCoordinator(rulesAdapter, gameFinishedNotifier, moveNotifier);
+
+		SimpleOthello simpleOthello = new SimpleOthello(othelloId, players, boardAdapter, gameModelFactory, score,
+				rulesAdapter, moveCoordinator);
+		moveNotifier.initiateUnderlyingOthello(simpleOthello);
+		gameFinishedNotifier.initiateUnderlyingOthello(simpleOthello);
+
+		return simpleOthello;
 
 	}
 
 	private ImmutableNode getImmutableNodeFromNodeData(NodeData nodeData) {
-		Optional<String> occupantPlayerId;
-		if (nodeData.getOccupantPlayerId() == null) {
-			occupantPlayerId = Optional.empty();
-		} else {
-			occupantPlayerId = Optional.of(nodeData.getOccupantPlayerId());
-		}
+		Optional<String> occupantPlayerId = Optional.ofNullable(nodeData.getOccupantPlayerId());
 		return new ImmutableNode(new Coordinates(nodeData.getXCoordinate(), nodeData.getYCoordinate()),
 				occupantPlayerId);
 	}

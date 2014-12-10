@@ -7,18 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Observer;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import kth.game.othello.board.Board;
 import kth.game.othello.board.BoardAdapter;
 import kth.game.othello.board.Node;
-import kth.game.othello.model.Coordinates;
 import kth.game.othello.model.GameModel;
 import kth.game.othello.model.GameModelFactory;
-import kth.game.othello.model.GameState;
-import kth.game.othello.model.ImmutableBoard;
 import kth.game.othello.player.Player;
 import kth.game.othello.rules.RulesAdapter;
 import kth.game.othello.score.Score;
@@ -29,6 +23,7 @@ import kth.game.othello.score.Score;
  */
 public class SimpleOthello implements Othello {
 
+	private final String id;
 	private final BoardAdapter boardAdapter;
 	private final RulesAdapter rulesAdapter;
 	private final GameModelFactory gameModelFactory;
@@ -56,9 +51,10 @@ public class SimpleOthello implements Othello {
 	 * @param moveCoordinator
 	 *            the moveCoordinator to be used for the game.
 	 */
-	protected SimpleOthello(Collection<Player> players, BoardAdapter board, GameModelFactory gameModelFactory,
-			Score score, RulesAdapter rules, MoveCoordinator moveCoordinator) {
+	protected SimpleOthello(String id, Collection<Player> players, BoardAdapter board,
+			GameModelFactory gameModelFactory, Score score, RulesAdapter rules, MoveCoordinator moveCoordinator) {
 
+		this.id = id;
 		this.score = score;
 		this.rulesAdapter = rules;
 		this.moveCoordinator = moveCoordinator;
@@ -78,7 +74,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void addGameFinishedObserver(Observer observer) {
-
+		this.moveCoordinator.addGameFinishedObserver(observer);
 	}
 
 	/**
@@ -90,7 +86,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void addMoveObserver(Observer observer) {
-		// TODO
+		this.moveCoordinator.addMoveObserver(observer);
 	}
 
 	/**
@@ -108,8 +104,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public String getId() {
-		// TODO
-		return null;
+		return id;
 	}
 
 	/**
@@ -123,22 +118,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public List<Node> getNodesToSwap(String playerId, String nodeId) {
-		checkPlayerId(playerId);
-		List<Node> nodesToSwap = new ArrayList<>();
-
-		Node node = boardAdapter.getNodeById(nodeId);
-		Coordinates nodeCoordinates = new Coordinates(node.getXCoordinate(), node.getYCoordinate());
-
-		GameState oldState = gameModel.getGameState();
-		Optional<GameState> maybeNewState = oldState.tryMove(playerId, nodeCoordinates);
-		maybeNewState.ifPresent(newState -> {
-			ImmutableBoard oldBoard = oldState.getBoard();
-			ImmutableBoard newBoard = newState.getBoard();
-			Set<Coordinates> difference = ImmutableBoard.compare(oldBoard, newBoard);
-			nodesToSwap.addAll(difference.stream().map(boardAdapter::getNode).collect(Collectors.toList()));
-		});
-
-		return nodesToSwap;
+		return rulesAdapter.getNodesToSwap(playerId, nodeId);
 	}
 
 	/**
@@ -269,8 +249,7 @@ public class SimpleOthello implements Othello {
 	 */
 	@Override
 	public void undo() {
-		Optional<GameState> maybeGameState = gameModel.undo();
-		maybeGameState.ifPresent(gameState -> boardAdapter.setBoardState(gameState.getBoard()));
+		gameModel.undo().ifPresent(gameState -> boardAdapter.setBoardState(gameState.getBoard()));
 	}
 
 	private void checkPlayerId(String playerId) {

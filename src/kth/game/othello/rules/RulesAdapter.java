@@ -87,7 +87,6 @@ public class RulesAdapter implements Rules {
 	}
 
 	public boolean isGameOver() {
-		// TODO
-		return false;
+		return this.modelRules.isGameOver(boardAdapter.getImmutableBoard());
 	}
 }

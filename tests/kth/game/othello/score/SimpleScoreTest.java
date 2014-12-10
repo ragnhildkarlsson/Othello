@@ -1,4 +1,4 @@
-package kth.game.othello;
+package kth.game.othello.score;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,6 +8,7 @@ import kth.game.othello.board.Node;
 import kth.game.othello.board.NodeAdapter;
 import kth.game.othello.score.ScoreItem;
 
+import kth.game.othello.score.SimpleScore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
